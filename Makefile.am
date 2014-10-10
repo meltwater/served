@@ -6,12 +6,14 @@ AM_CPPFLAGS = -I${top_srcdir}/src ${BOOST_CPPFLAGS}
 
 # Build rules for served library
 pkginclude_HEADERS = \
-	src/served/served.hpp
+	src/served/uri.hpp
 
 lib_LTLIBRARIES = \
 	src/served/libserved.la
 
-src_served_libserved_la_SOURCES =
+src_served_libserved_la_SOURCES = \
+	src/served/uri.cpp \
+	src/served/uri.hpp
 src_served_libserved_la_LDFLAGS = -version-info 0:0:0
 src_served_libserved_la_LIBADD =
 
@@ -33,7 +35,8 @@ check_PROGRAMS=
 UNIT_TESTS += test/served_test
 check_PROGRAMS += test/served_test
 test_served_test_SOURCES = \
-	test/served_test.cpp
+	test/served_test.cpp \
+	test/uri_test.cpp
 test_served_test_CFLAGS = -I$(top_srcdir)/src
 test_served_test_LDADD = $(top_builddir)/src/served/libserved.la $(BOOST_ASIO_LIB) $(LDADD)
 

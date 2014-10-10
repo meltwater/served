@@ -44,7 +44,7 @@ AC_CHECK_COVERAGE
 AX_CXX_COMPILE_STDCXX_11([noext])
 
 # Check for Boost
-AX_BOOST_BASE([1.48],, [AC_MSG_ERROR([This library requires Boost, but it was not found in your system])])
+AX_BOOST_BASE([1.54],, [AC_MSG_ERROR([This library requires Boost, but it was not found in your system])])
 AX_BOOST_ASIO
 
 # Check for the existance of a file in the source directory.
