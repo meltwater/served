@@ -1,0 +1,43 @@
+# http://www.gnu.org/software/automake
+Makefile.in
+
+# http://www.gnu.org/software/autoconf
+/autom4te.cache
+/aclocal.m4
+/compile
+/configure
+/depcomp
+/install-sh
+/missing
+/build-aux
+
+# Generated files
+autoscan.log
+libtool
+ltmain.sh
+stamp-h1
+config.*
+Makefile
+Makefile.in
+.deps
+.libs
+*.o
+*.lo
+*.la
+*_test
+coverage.info
+coverage
+*.gcno
+*.gcda
+Doxyfile
+/doc
+.dirstamp
+*.pc
+*.log
+*.trs
+
+# Hideous eclipse
+.autotools
+.cproject
+.project
+.settings/
