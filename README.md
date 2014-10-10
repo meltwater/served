@@ -37,8 +37,8 @@ Pull requests are welcome.
 
 ## Authors
 
-* @ajeffs
-* @bigdatadev
+* [@bigdatadev](https://github.com/bigdatadev)
+* [@Jeffail](https://github.com/Jeffail)
 
 ## Copyright
 
