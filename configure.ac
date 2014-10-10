@@ -32,7 +32,8 @@ AC_PROG_CXX
 AC_LANG([C++], [C])
 
 # Check for ragel
-AC_CHECK_PROG([RAGEL_FOUND], [ragel], [yes], [no])
+AC_CHECK_PROG([HAVE_RAGEL], [ragel], [true], [false])
+AM_CONDITIONAL([HAVE_RAGEL], [test x$HAVE_RAGEL = xtrue])
 
 # Checks for existence of coverage tools and define variables for reporting coverage
 AC_CHECK_COVERAGE
@@ -80,5 +81,5 @@ Third Party Dependencies:
     CPPFLAGS        : $BOOST_CPPFLAGS
     LDFLAGS         : $BOOST_LDFLAGS
     LIBS            : $BOOST_ASIO_LIB
-  Ragel             : $RAGEL_FOUND
+  Ragel             : $HAVE_RAGEL
 ])

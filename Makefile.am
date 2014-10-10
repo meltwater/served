@@ -53,7 +53,7 @@ check-unit-tests:
 check-unit-tests-with-valgrind:
 	$(MAKE) $(AM_MAKEFLAGS) check TESTS=$(UNIT_TESTS) TESTS_ENVIRONMENT=$(TESTS_ENVIRONMENT_WITH_VALGRIND)
 
-if RAGEL_FOUND
+if HAVE_RAGEL
 .rl.cpp:
 	$(AM_V_GEN)$(RAGEL) $(RAGELFLAGS) -C $< -o $@
 endif
