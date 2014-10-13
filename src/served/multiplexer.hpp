@@ -23,11 +23,11 @@
 #ifndef SERVED_MULTIPLEXER_HPP
 #define SERVED_MULTIPLEXER_HPP
 
-#include <thread>
+#include <functional>
 #include <served/request.hpp>
 #include <served/response.hpp>
 
-namespace net { namespace http {
+namespace served {
 
 typedef std::function<void(response&, request const&)> served_req_handler
 
@@ -61,6 +61,6 @@ private:
 	std::string const _base_path;
 };
 
-} } // net, hpp
+} // served
 
 #endif // SERVED_MULTIPLEXER_HPP

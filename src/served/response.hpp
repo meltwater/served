@@ -23,7 +23,7 @@
 #ifndef SERVED_RESPONSE_HPP
 #define SERVED_RESPONSE_HPP
 
-namespace net { namespace http {
+namespace served {
 
 class response
 {
@@ -31,6 +31,6 @@ public:
 
 };
 
-} } // net, hpp
+} // served
 
 #endif // SERVED_RESPONSE_HPP

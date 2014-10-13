@@ -22,7 +22,7 @@
 
 #include <served/multiplexer.hpp>
 
-namespace net { namespace http {
+namespace served {
 
 multiplexer::multiplexer()
 	: _base_path("")
@@ -64,4 +64,4 @@ multiplexer::stop()
 {
 }
 
-} } // net, hpp
+} // served

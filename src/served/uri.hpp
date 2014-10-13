@@ -23,8 +23,61 @@
 #ifndef SERVED_URI_HPP
 #define SERVED_URI_HPP
 
+#include <string>
+
 namespace served {
 
-}
+class uri
+{
+public:
+	//  -----  constructors  -----
+
+	uri(std::string const& URI);
+	uri() = delete;
+
+	//  -----  URI component selectors  -----
+
+	// For href: "http://localhost:8080/foo/bar?test=one#element"
+	//
+	// "http://localhost:8080/foo/bar?test=one#element"
+	std::string href()     const;
+	//
+	// "http"
+	std::string protocol() const;
+	//
+	// "localhost:8080"
+	std::string host()     const;
+	//
+	// "localhost"
+	std::string hostname() const;
+	//
+	// "8080
+	std::string port()     const;
+	//
+	// "/foo/bar?test=one#element"
+	std::string path()     const;
+	//
+	// "/foo/bar"
+	std::string pathname() const;
+	//
+	// "?test=one"
+	std::string query()    const;
+	//
+	// "#element"
+	std::string hash()     const;
+
+private:
+	std::string const _URI;
+	std::string _protocol;
+	std::string _host;
+	std::string _hostname;
+	std::string _port;
+	std::string _path;
+	std::string _pathname;
+	std::string _query;
+	std::string _hash;
+};
+
+} // served
 
 #endif // SERVED_URI_HPP

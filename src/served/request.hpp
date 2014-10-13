@@ -23,7 +23,9 @@
 #ifndef SERVED_REQUEST_HPP
 #define SERVED_REQUEST_HPP
 
-namespace net { namespace http {
+#include <served/uri.hpp>
+
+namespace served {
 
 class request
 {
@@ -31,6 +33,6 @@ public:
 
 };
 
-} } // net, hpp
+} // served
 
 #endif // SERVED_REQUEST_HPP
