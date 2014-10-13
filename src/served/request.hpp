@@ -20,7 +20,17 @@
  * SOFTWARE.
  */
 
-#include "uri.hpp"
+#ifndef SERVED_REQUEST_HPP
+#define SERVED_REQUEST_HPP
 
-using namespace served;
+namespace net { namespace http {
 
+class request
+{
+public:
+
+};
+
+} } // net, hpp
+
+#endif // SERVED_REQUEST_HPP
