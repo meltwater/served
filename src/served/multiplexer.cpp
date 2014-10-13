@@ -24,6 +24,8 @@
 
 namespace served {
 
+//  -----  constructors  -----
+
 multiplexer::multiplexer()
 	: _base_path("")
 {
@@ -34,8 +36,10 @@ multiplexer::multiplexer(std::string const& base_path)
 {
 }
 
+//  -----  http request handlers  -----
+
 void
-multiplexer::get (std::string const& path, served_req_handler handler)
+multiplexer::get(std::string const& path, served_req_handler handler)
 {
 }
 
@@ -50,9 +54,11 @@ multiplexer::post(std::string const& path, served_req_handler handler)
 }
 
 void
-multiplexer::put (std::string const& path, served_req_handler handler)
+multiplexer::put(std::string const& path, served_req_handler handler)
 {
 }
+
+//  -----  server control  -----
 
 void
 multiplexer::listen(std::string const& address, std::string const& port)

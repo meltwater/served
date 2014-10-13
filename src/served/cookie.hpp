@@ -20,63 +20,60 @@
  * SOFTWARE.
  */
 
-#ifndef SERVED_URI_HPP
-#define SERVED_URI_HPP
+#ifndef SERVED_COOKIE_HPP
+#define SERVED_COOKIE_HPP
 
 #include <string>
 
 namespace served {
 
-class uri
+class cookie
 {
 public:
 	//  -----  constructors  -----
 
-	uri(std::string const& URI);
+	cookie(
+	        std::string const& name
+	      , std::string const& value
+	      , std::string const& domain      = ""
+	      , std::string const& expires     = ""
+	      , int                max_age     = 0
+	      , bool               secure_only = false
+	      , bool               http_only   = false
+	);
 
-	//  -----  URI component selectors  -----
+    //  -----  mutators  -----
 
-	// For href: "http://localhost:8080/foo/bar?test=one#element"
-	//
-	// "http://localhost:8080/foo/bar?test=one#element"
-	const std::string href()     const;
-	//
-	// "http"
-	const std::string protocol() const;
-	//
-	// "localhost:8080"
-	const std::string host()     const;
-	//
-	// "localhost"
-	const std::string hostname() const;
-	//
-	// "8080
-	const std::string port()     const;
-	//
-	// "/foo/bar?test=one#element"
-	const std::string path()     const;
-	//
-	// "/foo/bar"
-	const std::string pathname() const;
-	//
-	// "?test=one"
-	const std::string query()    const;
-	//
-	// "#element"
-	const std::string hash()     const;
+	void set_name       (std::string const& name);
+	void set_value      (std::string const& value);
+	void set_domain     (std::string const& domain);
+	void set_expires    (std::string  const& expires);
+	void set_max_age    (int max_age); // RFC 1123
+	void set_secure_only(bool secure_only);
+	void set_http_only  (bool http_only);
+
+    //  -----  component accessors  -----
+
+	const std::string name   () const;
+	const std::string value  () const;
+	const std::string domain () const;
+	const std::string expires() const;
+
+	int max_age() const;
+
+	bool secure_only() const;
+	bool http_only  () const;
 
 private:
-	std::string _URI;
-	std::string _protocol;
-	std::string _host;
-	std::string _hostname;
-	std::string _port;
-	std::string _path;
-	std::string _pathname;
-	std::string _query;
-	std::string _hash;
+	std::string _name;
+	std::string _value;
+	std::string _domain;
+	std::string _expires;
+	int         _max_age;
+    bool        _secure_only;
+    bool        _http_only;
 };
 
 } // served
 
-#endif // SERVED_URI_HPP
+#endif // SERVED_COOKIE_HPP

@@ -20,9 +20,11 @@
  * SOFTWARE.
  */
 
-#include "uri.hpp"
+#include <served/uri.hpp>
 
 namespace served {
+
+//  -----  constructors  -----
 
 uri::uri(std::string const& URI)
 	: _URI(URI)
@@ -30,55 +32,57 @@ uri::uri(std::string const& URI)
 	// TODO: Parse URI into components
 }
 
-std::string
+//  -----  URI component selectors  -----
+
+const std::string
 uri::href() const
 {
 	return _URI;
 }
 
-std::string
+const std::string
 uri::protocol() const
 {
 	return _protocol;
 }
 
-std::string
+const std::string
 uri::host() const
 {
 	return _host;
 }
 
-std::string
+const std::string
 uri::hostname() const
 {
 	return _hostname;
 }
 
-std::string
+const std::string
 uri::port() const
 {
 	return _port;
 }
 
-std::string
+const std::string
 uri::path() const
 {
 	return _path;
 }
 
-std::string
+const std::string
 uri::pathname() const
 {
 	return _pathname;
 }
 
-std::string
+const std::string
 uri::query() const
 {
 	return _query;
 }
 
-std::string
+const std::string
 uri::hash() const
 {
 	return _hash;

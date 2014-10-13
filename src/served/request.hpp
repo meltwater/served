@@ -23,14 +23,47 @@
 #ifndef SERVED_REQUEST_HPP
 #define SERVED_REQUEST_HPP
 
+#include <string>
+#include <unordered_map>
+
 #include <served/uri.hpp>
+#include <served/cookie.hpp>
 
 namespace served {
 
 class request
 {
 public:
+	//  -----  constructors  -----
 
+	//  -----  mutators  -----
+
+	void set_destination(std::string const& destination);
+	void set_source     (std::string const& source);
+	void set_header     (std::string const& header, std::string const& value);
+	void set_cookie     (cookie const& value);
+	void set_body       (std::string const& body);
+
+	//  -----  component accessors  -----
+
+	const uri url() const;
+
+	const std::string source() const;
+
+	const std::string header(std::string const& header) const;
+	const cookie      cookie(std::string const& key) const;
+	const std::string body  () const;
+
+private:
+	// Appropriate map type for request may differ from response
+	typedef std::unordered_map<std::string, std::string>    header_list;
+	typedef std::unordered_map<std::string, served::cookie> cookie_list;
+
+	uri         _destination;
+	std::string _source;
+	header_list _headers;
+	cookie_list _cookies;
+	std::string _body;
 };
 
 } // served
