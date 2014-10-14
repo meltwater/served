@@ -25,7 +25,7 @@
 namespace served {
 
 cookie::cookie(
-		std::string const& name
+	    std::string const& name
 	  , std::string const& value
 	  , std::string const& domain
 	  , std::string const& expires

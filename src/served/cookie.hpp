@@ -42,7 +42,7 @@ public:
 	      , bool               http_only   = false
 	);
 
-    //  -----  mutators  -----
+	//  -----  mutators  -----
 
 	void set_name       (std::string const& name);
 	void set_value      (std::string const& value);
@@ -52,7 +52,7 @@ public:
 	void set_secure_only(bool secure_only);
 	void set_http_only  (bool http_only);
 
-    //  -----  component accessors  -----
+	//  -----  component accessors  -----
 
 	const std::string name   () const;
 	const std::string value  () const;
@@ -70,8 +70,8 @@ private:
 	std::string _domain;
 	std::string _expires;
 	int         _max_age;
-    bool        _secure_only;
-    bool        _http_only;
+	bool        _secure_only;
+	bool        _http_only;
 };
 
 } // served
