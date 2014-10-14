@@ -51,8 +51,9 @@ public:
 	const std::string source() const;
 
 	const std::string header(std::string const& header) const;
-	const cookie      cookie(std::string const& key) const;
 	const std::string body  () const;
+
+	bool get_cookie(std::string const& key, served::cookie & cookie) const;
 
 private:
 	// Appropriate map type for request may differ from response

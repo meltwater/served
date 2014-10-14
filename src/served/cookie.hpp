@@ -33,8 +33,8 @@ public:
 	//  -----  constructors  -----
 
 	cookie(
-	        std::string const& name
-	      , std::string const& value
+	        std::string const& name        = ""
+	      , std::string const& value       = ""
 	      , std::string const& domain      = ""
 	      , std::string const& expires     = ""
 	      , int                max_age     = 0

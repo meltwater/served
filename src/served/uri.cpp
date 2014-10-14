@@ -28,8 +28,66 @@ namespace served {
 
 uri::uri(std::string const& URI)
 	: _URI(URI)
+	, _protocol("")
+	, _host("")
+	, _hostname("")
+	, _port("")
+	, _path("")
+	, _pathname("")
+	, _query("")
+	, _hash("")
 {
-	// TODO: Parse URI into components
+	// TODO: Parse URI into components?
+}
+
+//  -----  URI component mutators  -----
+
+void
+uri::set_protocol(std::string const& protocol)
+{
+	_protocol = protocol;
+}
+
+void
+uri::set_host(std::string const& host)
+{
+	_host = host;
+}
+
+void
+uri::set_hostname(std::string const& hostname)
+{
+	_hostname = hostname;
+}
+
+void
+uri::set_port(std::string const& port)
+{
+	_port = port;
+}
+
+void
+uri::set_path(std::string const& path)
+{
+	_path = path;
+}
+
+void
+uri::set_pathname(std::string const& pathname)
+{
+	_pathname = pathname;
+}
+
+void
+uri::set_query(std::string const& query)
+{
+	_query = query;
+}
+
+void
+uri::set_hash(std::string const& hash)
+{
+	_hash = hash;
 }
 
 //  -----  URI component selectors  -----

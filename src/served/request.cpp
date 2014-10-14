@@ -98,21 +98,22 @@ request::header(std::string const& header) const
 	return std::string();
 }
 
-const served::cookie
-request::cookie(std::string const& key) const
-{
-	cookie_list::const_iterator it = _cookies.find(key);
-	if ( it != _cookies.end() )
-	{
-		return it->second;
-	}
-	return served::cookie();
-}
-
 const std::string
 request::body() const
 {
 	return _body;
+}
+
+bool
+request::get_cookie(std::string const& key, served::cookie & cookie) const
+{
+	cookie_list::const_iterator it = _cookies.find(key);
+	if ( it != _cookies.end() )
+	{
+		cookie = it->second;
+		return true;
+	}
+	return false;
 }
 
 } // served

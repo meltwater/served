@@ -34,6 +34,17 @@ public:
 
 	uri(std::string const& URI);
 
+	//  -----  URI component mutators  -----
+
+	void set_protocol(std::string const& protocol);
+	void set_host    (std::string const& host);
+	void set_hostname(std::string const& hostname);
+	void set_port    (std::string const& port);
+	void set_path    (std::string const& path);
+	void set_pathname(std::string const& pathname);
+	void set_query   (std::string const& query);
+	void set_hash    (std::string const& hash);
+
 	//  -----  URI component selectors  -----
 
 	// For href: "http://localhost:8080/foo/bar?test=one#element"
