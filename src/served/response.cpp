@@ -24,4 +24,21 @@
 
 namespace served {
 
+//  -----  response mutators  -----
+
+void
+response::set_header(std::string const& header, std::string const& value)
+{
+}
+
+void
+response::set_status(int status_code)
+{
+}
+
+void
+response::operator<<(std::string const& rhs)
+{
+}
+
 } // served

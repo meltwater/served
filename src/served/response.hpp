@@ -23,12 +23,21 @@
 #ifndef SERVED_RESPONSE_HPP
 #define SERVED_RESPONSE_HPP
 
+#include <string>
+#include <iostream>
+
 namespace served {
 
 class response
 {
 public:
 
+	//  -----  response mutators  -----
+
+	void set_header(std::string const& header, std::string const& value);
+	void set_status(int status_code);
+
+	void operator<<(std::string const& rhs);
 };
 
 } // served
