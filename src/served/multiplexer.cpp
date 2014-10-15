@@ -36,6 +36,14 @@ multiplexer::multiplexer(std::string const& base_path)
 {
 }
 
+//  -----  plugin injection  -----
+
+void
+multiplexer::use_plugin(served_plugin_req_handler plugin)
+{
+	_plugin_handlers.push_back(plugin);
+}
+
 //  -----  http request handlers  -----
 
 void

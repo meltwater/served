@@ -23,13 +23,15 @@
 #ifndef SERVED_MULTIPLEXER_HPP
 #define SERVED_MULTIPLEXER_HPP
 
+#include <vector>
 #include <functional>
 #include <served/request.hpp>
 #include <served/response.hpp>
 
 namespace served {
 
-typedef std::function<void(response&, request const&)> served_req_handler
+typedef std::function<void(response&, request&)>       served_plugin_req_handler;
+typedef std::function<void(response&, request const&)> served_req_handler;
 
 class multiplexer
 {
@@ -43,6 +45,10 @@ public:
 	// For example: with a base path "/base" and handler registered at "/foo/bar"
 	// the handler will be called for a request at "/base/foo/bar".
 	multiplexer(std::string const& base_path);
+
+	//  -----  plugin injection  -----
+
+	void use_plugin(served_plugin_req_handler plugin);
 
 	//  -----  http request handlers  -----
 
@@ -58,7 +64,11 @@ public:
 	void stop();
 
 private:
+	typedef std::vector<served_plugin_req_handler> plugin_handler_list;
+
 	std::string const _base_path;
+
+	plugin_handler_list _plugin_handlers;
 };
 
 } // served
