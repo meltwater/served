@@ -26,21 +26,13 @@ namespace served {
 
 //  -----  constructors  -----
 
-uri::uri(std::string const& URI)
-	: _URI(URI)
-	, _protocol("")
-	, _host("")
-	, _hostname("")
-	, _port("")
-	, _path("")
-	, _pathname("")
-	, _query("")
-	, _hash("")
-{
-	// TODO: Parse URI into components?
-}
-
 //  -----  URI component mutators  -----
+
+void
+uri::set_uri(std::string const& uri)
+{
+	_URI = uri;
+}
 
 void
 uri::set_protocol(std::string const& protocol)

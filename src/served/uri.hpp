@@ -32,10 +32,9 @@ class uri
 public:
 	//  -----  constructors  -----
 
-	uri(std::string const& URI);
-
 	//  -----  URI component mutators  -----
 
+	void set_uri     (std::string const& uri);
 	void set_protocol(std::string const& protocol);
 	void set_host    (std::string const& host);
 	void set_hostname(std::string const& hostname);

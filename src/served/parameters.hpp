@@ -20,54 +20,37 @@
  * SOFTWARE.
  */
 
-#ifndef SERVED_REQUEST_HPP
-#define SERVED_REQUEST_HPP
+#ifndef SERVED_PARAMS_HPP
+#define SERVED_PARAMS_HPP
 
-#include <string>
 #include <unordered_map>
-
-#include <served/uri.hpp>
-#include <served/cookie.hpp>
-#include <served/parameters.hpp>
+#include <string>
 
 namespace served {
 
-class request
+class parameters
 {
 public:
 	//  -----  constructors  -----
 
-	//  -----  mutators  -----
+	//  -----  parameter setting  -----
 
-	void set_destination(uri         const& destination);
-	void set_source     (std::string const& source);
-	void set_header     (std::string const& header, std::string const& value);
-	void set_body       (std::string const& body);
+	std::string & operator[](std::string const& key);
 
-	//  -----  component accessors  -----
+	void set(std::string const& key, std::string const& value);
 
-	const uri url() const;
+	//  -----  parameter accessors  -----
 
-	const std::string source() const;
+	const std::string operator[](std::string const& key) const;
 
-	const std::string header(std::string const& header) const;
-	const std::string body  () const;
-
-public:
-	//  -----  public members  -----
-
-	parameters params;
+	const std::string get(std::string const& key) const;
 
 private:
-	// Appropriate map type for request may differ from response
-	typedef std::unordered_map<std::string, std::string>    header_list;
+	typedef std::unordered_map<std::string, std::string> parameter_list;
 
-	uri         _destination;
-	std::string _source;
-	header_list _headers;
-	std::string _body;
+	parameter_list _list;
 };
 
 } // served
 
-#endif // SERVED_REQUEST_HPP
+#endif // SERVED_PARAMS_HPP

@@ -20,47 +20,31 @@
  * SOFTWARE.
  */
 
-#ifndef SERVED_MULTIPLEXER_HPP
-#define SERVED_MULTIPLEXER_HPP
+#ifndef SERVED_REQ_ERROR_HPP
+#define SERVED_REQ_ERROR_HPP
 
-#include <functional>
-#include <served/request.hpp>
-#include <served/response.hpp>
+#include <stdexcept>
 
 namespace served {
 
-typedef std::function<void(response&, request const&)> served_req_handler;
-
-class multiplexer
+class request_error : public std::runtime_error
 {
 public:
-	//  -----  constructors  -----
+	request_error(int status_code, std::string const& message)
+		: std::runtime_error(message)
+		, _status_code(status_code)
+	{
+	}
 
-	multiplexer();
-
-	// Provides a base path that is listened for but ignored when selecting path
-	// handlers.
-	// For example: with a base path "/base" and handler registered at "/foo/bar"
-	// the handler will be called for a request at "/base/foo/bar".
-	multiplexer(std::string const& base_path);
-
-	//  -----  http request handlers  -----
-
-	void get (std::string const& path, served_req_handler handler);
-	void head(std::string const& path, served_req_handler handler);
-	void post(std::string const& path, served_req_handler handler);
-	void put (std::string const& path, served_req_handler handler);
-
-	//  -----  server control  -----
-	//  TODO: move to server class?
-
-	void listen(std::string const& address, std::string const& port);
-	void stop();
+	int get_status_code()
+	{
+		return _status_code;
+	}
 
 private:
-	std::string const _base_path;
+	int _status_code;
 };
 
 } // served
 
-#endif // SERVED_MULTIPLEXER_HPP
+#endif // SERVED_REQ_ERROR_HPP
