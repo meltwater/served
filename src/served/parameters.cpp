@@ -20,72 +20,31 @@
  * SOFTWARE.
  */
 
-#include <algorithm>
-#include <locale>
-
-#include <served/request.hpp>
+#include <served/parameters.hpp>
 
 namespace served {
 
-//  -----  constructors  -----
+//  -----  parameter setting  -----
 
-//  -----  mutators  -----
-
-void
-request::set_destination(uri const& destination)
+std::string &
+parameters::operator[](std::string const& key)
 {
-	_destination = destination;
+	return _list[key];
 }
 
 void
-request::set_source(std::string const& source)
+parameters::set(std::string const& key, std::string const& value)
 {
-	_source = source;
+	_list[key] = value;
 }
 
-void
-request::set_header(std::string const& header, std::string const& value)
-{
-	// All headers set to lower case.
-	std::string mut_header;
-	mut_header.resize(header.size());
-
-	std::transform(header.begin(), header.end(), mut_header.begin(), ::tolower);
-
-	_headers[mut_header] = value;
-}
-
-void
-request::set_body(std::string const& body)
-{
-	_body = body;
-}
-
-//  -----  component accessors  -----
-
-const uri
-request::url() const
-{
-	return _destination;
-}
+//  -----  parameter accessors  -----
 
 const std::string
-request::source() const
+parameters::operator[](std::string const& key) const
 {
-	return _source;
-}
-
-const std::string
-request::header(std::string const& header) const
-{
-	// All headers set to lower case.
-	std::string mut_header;
-	mut_header.resize(header.size());
-
-	std::transform(header.begin(), header.end(), mut_header.begin(), ::tolower);
-
-	header_list::const_iterator it = _headers.find(mut_header);
-	if ( it != _headers.end() )
+	auto it = _list.find(key);
+	if ( it != _list.end() )
 	{
 		return it->second;
 	}
@@ -93,9 +52,14 @@ request::header(std::string const& header) const
 }
 
 const std::string
-request::body() const
+parameters::get(std::string const& key) const
 {
-	return _body;
+	auto it = _list.find(key);
+	if ( it != _list.end() )
+	{
+		return it->second;
+	}
+	return std::string();
 }
 
 } // served
