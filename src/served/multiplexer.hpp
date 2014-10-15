@@ -29,7 +29,7 @@
 
 namespace served {
 
-typedef std::function<void(response&, request const&)> served_req_handler
+typedef std::function<void(response&, request const&)> served_req_handler;
 
 class multiplexer
 {

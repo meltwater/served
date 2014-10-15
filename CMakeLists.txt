@@ -1,0 +1,102 @@
+# Copyright (C) 2014 MediaSift Ltd.
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+#
+# Project Properties
+#
+CMAKE_MINIMUM_REQUIRED (VERSION 2.6.2)
+PROJECT (served)
+SET (APPLICATION_NAME "Served HTTP REST Library")
+SET (APPLICATION_CODENAME "${PROJECT_NAME}")
+SET (APPLICATION_COPYRIGHT_YEARS "2014")
+SET (APPLICATION_VERSION_MAJOR 1)
+SET (APPLICATION_VERSION_MINOR 0)
+SET (APPLICATION_VERSION_PATCH 0)
+SET (APPLICATION_VERSION_TYPE DS1)
+SET (APPLICATION_VERSION_STRING "${APPLICATION_VERSION_MAJOR}.${APPLICATION_VERSION_MINOR}.${APPLICATION_VERSION_PATCH}-${APPLICATION_VERSION_TYPE}")
+SET (APPLICATION_VENDOR_ID "com.datasift")
+SET (APPLICATION_VENDOR_NAME "DataSift")
+SET (APPLICATION_VENDOR_URL "datasift.com")
+SET (APPLICATION_ID "${APPLICATION_VENDOR_ID}.${PROJECT_NAME}")
+
+#
+# Configurable Options
+#
+OPTION (SERVED_BUILD_SHARED "Build shared object" ON)
+OPTION (SERVED_BUILD_STATIC "Build static library" OFF)
+OPTION (SERVED_BUILD_TESTS "Build unit test suite" ON)
+
+#
+# Debugging Options
+#
+SET (CMAKE_VERBOSE_MAKEFILE 0) # Use 1 for debugging, 0 for release
+
+#
+# Project Output Paths
+#
+SET (MAINFOLDER ${PROJECT_SOURCE_DIR})
+SET (EXECUTABLE_OUTPUT_PATH "${MAINFOLDER}/bin")
+SET (LIBRARY_OUTPUT_PATH "${MAINFOLDER}/lib")
+
+#
+# Project Search Paths
+#
+LIST (APPEND CMAKE_PREFIX_PATH "${MAINFOLDER}")
+SET (CMAKE_MODULE_PATH "${MAINFOLDER}/cmake")
+INCLUDE_DIRECTORIES ("${MAINFOLDER}/src")
+
+#
+# Locate Project Prerequisites 
+#
+FIND_PACKAGE (Boost 1.53 COMPONENTS "system" REQUIRED)
+INCLUDE_DIRECTORIES (${Boost_INCLUDE_DIRS})
+LINK_DIRECTORIES (${Boost_LIBRARY_DIRS})
+
+INCLUDE (FindRAGEL)
+FIND_PACKAGE (RAGEL)
+
+INCLUDE (EnableStdCXX11)
+ENABLE_STDCXX11 ()
+
+#
+# Configure Files
+#
+FILE (GLOB_RECURSE CONFIGINPUTS1 src/served/*.hpp.in.cmake)
+LIST (APPEND CONFIGINPUTS "${CONFIGINPUTS1}")
+FOREACH (CONFIGINPUT ${CONFIGINPUTS})
+    STRING (REPLACE ".hpp.in.cmake" ".hpp" CONFIGOUTPUT "${CONFIGINPUT}")
+    CONFIGURE_FILE ("${CONFIGINPUT}" "${CONFIGOUTPUT}")
+ENDFOREACH (CONFIGINPUT ${CONFIGINPUTS})
+
+#
+# Add Build Targets
+#
+ADD_SUBDIRECTORY (src)
+IF (SERVED_BUILD_TESTS)
+    ENABLE_TESTING (true)
+    ADD_SUBDIRECTORY (test)
+ENDIF (SERVED_BUILD_TESTS)
+
+#
+# Add Install Targets
+#
+IF (EXISTS "${MAINFOLDER}/src/${PROJECT_NAME}" AND IS_DIRECTORY "${MAINFOLDER}/src/${PROJECT_NAME}")
+    INSTALL (DIRECTORY "${MAINFOLDER}/src/${PROJECT_NAME}" DESTINATION "${PROJECT_NAME}")
+ENDIF (EXISTS "${MAINFOLDER}/src/${PROJECT_NAME}" AND IS_DIRECTORY "${MAINFOLDER}/src/${PROJECT_NAME}")
