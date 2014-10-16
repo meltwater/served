@@ -87,6 +87,10 @@ private:
 	std::string _hash;
 };
 
+std::string query_escape(const std::string& s);
+
+std::string query_unescape(const std::string& s);
+
 } // served
 
 #endif // SERVED_URI_HPP

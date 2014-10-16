@@ -110,3 +110,15 @@ TEST_CASE("Test uri const, ref and copy handling", "[uri]")
 	test_const_copy(uri);
 	test_const_ref (uri);
 }
+
+TEST_CASE("query escape and unescape", "[uri]") {
+	const char* unescaped_query = "you got served";
+	const char* escaped_query   = "you%20got%20served";
+
+	SECTION("escape") {
+		REQUIRE(served::query_escape(unescaped_query) == escaped_query);
+	}
+	SECTION("unescape") {
+		REQUIRE(served::query_unescape(escaped_query) == unescaped_query);
+	}
+}
