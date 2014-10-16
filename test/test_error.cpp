@@ -7,10 +7,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,6 +22,20 @@
 
 #include "catch.hpp"
 
-#include <served/uri.hpp>
+#include <served/status.hpp>
+#include <served/request_error.hpp>
 
-TEST_CASE("ash is new", "[uri]") {}
+TEST_CASE("Test request error", "[request_error]")
+{
+	try
+	{
+		throw served::request_error(
+			served::status_5XX::INTERNAL_SERVER_ERROR,
+			"internal error");
+	}
+	catch (served::request_error const& e)
+	{
+		REQUIRE( std::string(e.what()) == "internal error" );
+		REQUIRE( e.get_status_code() == served::status_5XX::INTERNAL_SERVER_ERROR);
+	}
+}

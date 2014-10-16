@@ -29,9 +29,9 @@ namespace served {
 //  -----  URI component mutators  -----
 
 void
-uri::set_uri(std::string const& uri)
+uri::set_href(std::string const& href)
 {
-	_URI = uri;
+	_href = href;
 }
 
 void
@@ -87,7 +87,7 @@ uri::set_hash(std::string const& hash)
 const std::string
 uri::href() const
 {
-	return _URI;
+	return _href;
 }
 
 const std::string

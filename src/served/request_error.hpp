@@ -36,7 +36,7 @@ public:
 	{
 	}
 
-	int get_status_code()
+	int get_status_code() const
 	{
 		return _status_code;
 	}

@@ -23,16 +23,16 @@
 #ifndef SERVED_STATUS_HPP
 #define SERVED_STATUS_HPP
 
-namespace served { namespace status {
+namespace served {
 
-namespace info {
+namespace status_1XX {
 	// 1XX - Informational
 	const int CONTINUE            = 100;
 	const int SWITCHING_PROTOCOLS = 101;
 	const int PROCESSING          = 102;
 }
 
-namespace success {
+namespace status_2XX {
 	// 2XX - Success
 	const int OK                   = 200;
 	const int CREATED              = 201;
@@ -46,7 +46,7 @@ namespace success {
 	const int IM_USED              = 226;
 }
 
-namespace redirect {
+namespace status_3XX {
 	// 3XX - Redirectional
 	const int MULTI_CHOICES     = 300;
 	const int MOVED_PERMANENTLY = 301;
@@ -59,7 +59,7 @@ namespace redirect {
 	const int PERM_REDIRECT     = 308;
 }
 
-namespace client_error {
+namespace status_4XX {
 	// 4XX - Client error
 	const int BAD_REQUEST                 = 400;
 	const int UNAUTHORIZED                = 401;
@@ -90,7 +90,7 @@ namespace client_error {
 	const int REQ_HEADER_FIELDS_TOO_LARGE = 431;
 }
 
-namespace server_error {
+namespace status_5XX {
 	// 5XX - Server error
 	const int INTERNAL_SERVER_ERROR       = 500;
 	const int NOT_IMPLEMENTED             = 501;
@@ -107,7 +107,6 @@ namespace server_error {
 	const int NETWORK_CONNECT_TIMEOUT_ERR = 599;
 }
 
-} // status
 } // served
 
 #endif // SERVED_STATUS_HPP
