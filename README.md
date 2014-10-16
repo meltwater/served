@@ -7,23 +7,31 @@
 Served is a C++ library for building high performance HTTP web servers using [Boost ASIO](http://www.boost.org/).
 
 Features:
-* [x] this is a complete item
-* [ ] this is an incomplete item
+* [x] HTTP 1.1 compatible request parser.
+* [x] Enhanced C++11 compatible API.
 
 ## Installation
 
 ### Requirements
 
-* [Boost 1.56](http://www.boost.org/)
-* [Ragel](http://www.complang.org/ragel/)
+* [Required] - [Boost 1.56](http://www.boost.org/)
+* [Optional] - [Ragel](http://www.complang.org/ragel/)
 
 ### Building
 
 ```bash
 $ git clone git@github.com:datasift/served.git
-$ ./autogen.sh
-$ ./configure && make && make check && make install
+$ mkdir served.build && cd served.build
+$ ccmake ../served && make -j8
 ```
+
+### Compile Options
+
+Option              | Purpose
+------------------- | -----------------------------------
+SERVED_BUILD_SHARED | Build shared library
+SERVED_BUILD_STATIC | Build static library
+SERVED_BUILD_TESTS  | Build unit test suite
 
 ## System Compatibility
 
