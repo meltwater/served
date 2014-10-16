@@ -29,15 +29,19 @@
 
 using namespace std;
 
+struct uri_t {
+	string uri;
+	string path;
+	string query;
+	string fragment;
+};
+
 struct http_request_header {
 	vector<tuple<string, string>> fields;
-	string method;
-	string uri;
-	string fragment;
-	string request_path;
-	string query_string;
-	string http_version;
-	string content;
+	string                        method;
+	uri_t                         uri;
+	string                        http_version;
+	string                        content;
 };
 
 class mock_request_parser : public served::request_parser {
@@ -68,26 +72,26 @@ protected:
 
 	virtual void request_uri(const char *data, const char *at,
 			size_t length) override {
-		d_header.uri = string(at, length);
-		CAPTURE(d_header.uri);
+		d_header.uri.uri = string(at, length);
+		CAPTURE(d_header.uri.uri);
 	}
 
 	virtual void fragment(const char *data, const char *at,
 			size_t length) override {
-		d_header.fragment = string(at, length);
-		CAPTURE(d_header.fragment);
+		d_header.uri.fragment = string(at, length);
+		CAPTURE(d_header.uri.fragment);
 	}
 
 	virtual void request_path(const char *data, const char *at,
 			size_t length) override {
-		d_header.request_path = string(at, length);
-		CAPTURE(d_header.request_path);
+		d_header.uri.path = string(at, length);
+		CAPTURE(d_header.uri.path);
 	}
 
 	virtual void query_string(const char *data, const char *at,
 			size_t length) override {
-		d_header.query_string = string(at, length);
-		CAPTURE(d_header.query_string);
+		d_header.uri.query = string(at, length);
+		CAPTURE(d_header.uri.query);
 	}
 
 	virtual void http_version(const char *data, const char *at,
@@ -106,7 +110,7 @@ protected:
 TEST_CASE("request parser can parse http requests", "[request_parser]") {
 	mock_request_parser parser;
 	const char* request =
-		"POST /served/test.html HTTP/1.1\r\n"
+		"POST /you/got/served?reason=science#idet HTTP/1.1\r\n"
 		"Host: api.datasift.com\r\n"
 		"Content-Type: text/xml; charset=utf-8\r\n"
 		"Content-Length: 15\r\n"
@@ -115,7 +119,7 @@ TEST_CASE("request parser can parse http requests", "[request_parser]") {
 	size_t read_bytes = parser.execute(request, strlen(request));
 
 	SECTION("parser behaviour") {
-		SECTION("will parse valid header without errors") {
+		SECTION("will parse header without errors") {
 			REQUIRE(served::request_parser::FINISHED == parser.get_status());
 		}
 		SECTION("parse returns offset to beginning of content") {
@@ -127,10 +131,14 @@ TEST_CASE("request parser can parse http requests", "[request_parser]") {
 
 		SECTION("check request") {
 			REQUIRE(header.method       == "POST");
-			REQUIRE(header.request_path == "/served/test.html");
-			REQUIRE(header.uri          == "/served/test.html");
 			REQUIRE(header.http_version == "HTTP/1.1");
 			REQUIRE(header.content      == "you got served!\r\n");
+		}
+		SECTION("check uri") {
+			REQUIRE(header.uri.uri      == "/you/got/served?reason=science");
+			REQUIRE(header.uri.path     == "/you/got/served");
+			REQUIRE(header.uri.query    == "reason=science");
+			REQUIRE(header.uri.fragment == "idet");
 		}
 		SECTION("check fields") {
 			for (auto& field : header.fields) {
@@ -140,6 +148,53 @@ TEST_CASE("request parser can parse http requests", "[request_parser]") {
 					REQUIRE(get<1>(field) == "text/xml; charset=utf-8");
 				} else if (get<0>(field) == "Content-Length") {
 					REQUIRE(get<1>(field) == "15");
+				}
+			}
+		}
+	}
+}
+
+TEST_CASE("request parser can handle utf-8", "[request_parser]") {
+	mock_request_parser parser;
+	const char* request =
+		u8"POST /you/got/served?reason=science#idet HTTP/1.1\r\n"
+		u8"Host: api.datasift.com\r\n"
+		u8"Content-Type: text/xml; charset=utf-8\r\n"
+		u8"Content-Length: 15\r\n"
+		u8"\r\n"
+		u8"Unicode character: \u2018\r\n";
+	size_t read_bytes = parser.execute(request, strlen(request));
+
+	SECTION("parser behaviour") {
+		SECTION("will parse header without errors") {
+			REQUIRE(served::request_parser::FINISHED == parser.get_status());
+		}
+		SECTION("parse returns offset to beginning of content") {
+			REQUIRE(string(&request[read_bytes], strlen(request)-read_bytes) == u8"Unicode character: \u2018\r\n");
+		}
+	}
+	SECTION("header is parsed correctly") {
+		http_request_header header = parser.get_header();
+
+		SECTION("check request") {
+			REQUIRE(header.method       == u8"POST");
+			REQUIRE(header.http_version == u8"HTTP/1.1");
+			REQUIRE(header.content      == u8"Unicode character: \u2018\r\n");
+		}
+		SECTION("check uri") {
+			REQUIRE(header.uri.uri      == u8"/you/got/served?reason=science");
+			REQUIRE(header.uri.path     == u8"/you/got/served");
+			REQUIRE(header.uri.query    == u8"reason=science");
+			REQUIRE(header.uri.fragment == u8"idet");
+		}
+		SECTION("check fields") {
+			for (auto& field : header.fields) {
+				if (get<0>(field) == u8"Host") {
+					REQUIRE(get<1>(field) == u8"api.datasift.com");
+				} else if (get<0>(field) == u8"Content-Type") {
+					REQUIRE(get<1>(field) == u8"text/xml; charset=utf-8");
+				} else if (get<0>(field) == u8"Content-Length") {
+					REQUIRE(get<1>(field) == u8"15");
 				}
 			}
 		}
