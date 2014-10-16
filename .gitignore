@@ -1,6 +1,7 @@
 # Generated files
 src/served/version.hpp
 *.o
+build
 
 # Hideous eclipse
 .autotools

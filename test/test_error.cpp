@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 MediaSift Ltd.
+ * Copyright (C) MediaSift Ltd.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,31 +20,22 @@
  * SOFTWARE.
  */
 
-#ifndef SERVED_REQ_ERROR_HPP
-#define SERVED_REQ_ERROR_HPP
+#include "catch.hpp"
 
-#include <stdexcept>
+#include <served/status.hpp>
+#include <served/request_error.hpp>
 
-namespace served {
-
-class request_error : public std::runtime_error
+TEST_CASE("Test request error", "[request_error]")
 {
-public:
-	request_error(int status_code, std::string const& message)
-		: std::runtime_error(message)
-		, _status_code(status_code)
+	try
 	{
+		throw served::request_error(
+			served::status_5XX::INTERNAL_SERVER_ERROR,
+			"internal error");
 	}
-
-	int get_status_code() const
+	catch (served::request_error const& e)
 	{
-		return _status_code;
+		REQUIRE( std::string(e.what()) == "internal error" );
+		REQUIRE( e.get_status_code() == served::status_5XX::INTERNAL_SERVER_ERROR);
 	}
-
-private:
-	int _status_code;
-};
-
-} // served
-
-#endif // SERVED_REQ_ERROR_HPP
+}
