@@ -34,7 +34,7 @@ public:
 
 	//  -----  URI component mutators  -----
 
-	void set_uri     (std::string const& uri);
+	void set_href    (std::string const& href);
 	void set_protocol(std::string const& protocol);
 	void set_host    (std::string const& host);
 	void set_hostname(std::string const& hostname);
@@ -76,7 +76,7 @@ public:
 	const std::string hash()     const;
 
 private:
-	std::string _URI;
+	std::string _href;
 	std::string _protocol;
 	std::string _host;
 	std::string _hostname;
