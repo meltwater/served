@@ -23,15 +23,20 @@
 #ifndef SERVED_MULTIPLEXER_HPP
 #define SERVED_MULTIPLEXER_HPP
 
+#include <map>
+#include <tuple>
 #include <vector>
 #include <functional>
+#include <served/methods.hpp>
 #include <served/request.hpp>
 #include <served/response.hpp>
+#include <served/mux/segment_matcher.hpp>
 
 namespace served {
 
-typedef std::function<void(response&, request&)>       served_plugin_req_handler;
-typedef std::function<void(response&, request const&)> served_req_handler;
+typedef std::function<void(response &, const request &)> served_req_handler;
+typedef std::function<void(response &, request &)>       served_plugin_req_handler;
+typedef std::vector<served_plugin_req_handler>           plugin_handler_list;
 
 class multiplexer
 {
@@ -44,7 +49,7 @@ public:
 	// handlers.
 	// For example: with a base path "/base" and handler registered at "/foo/bar"
 	// the handler will be called for a request at "/base/foo/bar".
-	multiplexer(std::string const& base_path);
+	multiplexer(const std::string & base_path);
 
 	//  -----  plugin injection  -----
 
@@ -52,23 +57,33 @@ public:
 
 	//  -----  http request handlers  -----
 
-	void get (std::string const& path, served_req_handler handler);
-	void head(std::string const& path, served_req_handler handler);
-	void post(std::string const& path, served_req_handler handler);
-	void put (std::string const& path, served_req_handler handler);
+	void get (const std::string & path, served_req_handler handler);
+	void head(const std::string & path, served_req_handler handler);
+	void post(const std::string & path, served_req_handler handler);
+	void put (const std::string & path, served_req_handler handler);
 
 	//  -----  server control  -----
 	//  TODO: move to server class?
 
-	void listen(std::string const& address, std::string const& port);
+	void listen(const std::string & address, const std::string & port);
 	void stop();
 
 private:
-	typedef std::vector<served_plugin_req_handler> plugin_handler_list;
+	//  -----  path parsing/compiling  -----
 
-	std::string const _base_path;
+	typedef std::vector<served::mux::segment_matcher_ptr>          path_compiled_segments;
 
-	plugin_handler_list _plugin_handlers;
+	typedef std::tuple<path_compiled_segments, served_req_handler> path_handler_candidate;
+	typedef std::vector<path_handler_candidate>                    path_handler_candidates;
+	typedef std::map<served::method, path_handler_candidates>      path_method_handler_candidates;
+
+	path_compiled_segments get_segments(const std::string & path);
+
+private:
+	const std::string _base_path;
+
+	path_method_handler_candidates _method_handler_candidates;
+	plugin_handler_list            _plugin_handlers;
 };
 
 } // served

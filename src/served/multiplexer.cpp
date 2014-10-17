@@ -20,7 +20,10 @@
  * SOFTWARE.
  */
 
+#include <cstring>
+
 #include <served/multiplexer.hpp>
+#include <served/mux/matchers.hpp>
 
 namespace served {
 
@@ -31,7 +34,7 @@ multiplexer::multiplexer()
 {
 }
 
-multiplexer::multiplexer(std::string const& base_path)
+multiplexer::multiplexer(const std::string & base_path)
 	: _base_path(base_path)
 {
 }
@@ -44,32 +47,54 @@ multiplexer::use_plugin(served_plugin_req_handler plugin)
 	_plugin_handlers.push_back(plugin);
 }
 
+//  -----  path parsing  -----
+
+multiplexer::path_compiled_segments
+multiplexer::get_segments(const std::string & path)
+{
+	// TODO
+
+	path_compiled_segments segments;
+	segments.push_back(
+		mux::segment_matcher_ptr((mux::segment_matcher *) new mux::empty_matcher())
+	);
+	return segments;
+}
+
 //  -----  http request handlers  -----
 
 void
-multiplexer::get(std::string const& path, served_req_handler handler)
+multiplexer::get(const std::string & path, served_req_handler handler)
 {
+	_method_handler_candidates[served::method::GET]
+		.push_back(path_handler_candidate(get_segments(path), handler));
 }
 
 void
-multiplexer::head(std::string const& path, served_req_handler handler)
+multiplexer::head(const std::string & path, served_req_handler handler)
 {
+	_method_handler_candidates[served::method::HEAD]
+		.push_back(path_handler_candidate(get_segments(path), handler));
 }
 
 void
-multiplexer::post(std::string const& path, served_req_handler handler)
+multiplexer::post(const std::string & path, served_req_handler handler)
 {
+	_method_handler_candidates[served::method::POST]
+		.push_back(path_handler_candidate(get_segments(path), handler));
 }
 
 void
-multiplexer::put(std::string const& path, served_req_handler handler)
+multiplexer::put(const std::string & path, served_req_handler handler)
 {
+	_method_handler_candidates[served::method::PUT]
+		.push_back(path_handler_candidate(get_segments(path), handler));
 }
 
 //  -----  server control  -----
 
 void
-multiplexer::listen(std::string const& address, std::string const& port)
+multiplexer::listen(const std::string & address, const std::string & port)
 {
 }
 
