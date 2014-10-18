@@ -21,20 +21,23 @@
 # 
 # Locate test sources
 #
-FILE (GLOB_RECURSE test_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp)
+FILE (GLOB_RECURSE test_SRCS ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+FILE (GLOB_RECURSE test_HDRS ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp)
 
 #
 # Configure common test settings
 #
 SET (test_LIBS ${Boost_LIBRARIES} ${PROJECT_NAME})
-SET (test_BIN ${PROJECT_NAME}_test)
 
 #
 # Test build rules
 #
 IF (NOT CMAKE_CROSSCOMPILING)
     LINK_DIRECTORIES (${MAINFOLDER}/lib)
-    ADD_EXECUTABLE (${test_BIN} ${test_SRCS})
-    TARGET_LINK_LIBRARIES (${test_BIN} ${test_LIBS})
-    ADD_TEST (${test_BIN} ${MAINFOLDER}/bin/${test_BIN})
+    FOREACH (T_FILE ${test_SRCS})
+        GET_FILENAME_COMPONENT (T_NAME ${T_FILE} NAME_WE)
+        ADD_EXECUTABLE (${T_NAME} ${T_FILE} ${test_HDRS})
+        TARGET_LINK_LIBRARIES (${T_NAME} ${test_LIBS})
+        ADD_TEST (${T_NAME} ${MAINFOLDER}/bin/${T_NAME})
+    ENDFOREACH (T_FILE ${test_SRCS})
 ENDIF (NOT CMAKE_CROSSCOMPILING)
