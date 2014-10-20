@@ -21,7 +21,7 @@
 #
 # Process ragel files
 #
-IF (${RAGEL_FOUND})
+IF (RAGEL_FOUND)
   FILE (GLOB_RECURSE served_RL ${CMAKE_CURRENT_SOURCE_DIR}/*.rl)
 
   FOREACH (R_FILE ${served_RL})
@@ -30,7 +30,7 @@ IF (${RAGEL_FOUND})
     RAGEL_TARGET (${R_NAME} ${R_FILE} ${R_OUTFILE})
     LIST (APPEND served_RLSOURCES ${RAGEL_${R_NAME}_OUTPUTS})
   ENDFOREACH (R_FILE ${served_RL})
-ENDIF (${RAGEL_FOUND})
+ENDIF (RAGEL_FOUND)
 
 # 
 # Locate project sources
