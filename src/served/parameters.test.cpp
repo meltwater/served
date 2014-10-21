@@ -21,9 +21,9 @@
  */
 
 #define CATCH_CONFIG_MAIN
-#include "catch.hpp"
+#include "../test/catch.hpp"
 
-#include <served/parameters.hpp>
+#include "served/parameters.hpp"
 
 TEST_CASE("Test param const, ref and copy handling", "[parameters]")
 {

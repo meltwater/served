@@ -21,9 +21,9 @@
  */
 
 #define CATCH_CONFIG_MAIN
-#include "catch.hpp"
+#include "../test/catch.hpp"
 
-#include <served/request.hpp>
+#include "served/request.hpp"
 
 TEST_CASE("Test req const, ref and copy handling", "[request]")
 {

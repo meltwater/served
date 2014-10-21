@@ -21,9 +21,9 @@
  */
 
 #define CATCH_CONFIG_MAIN
-#include "catch.hpp"
+#include "../test/catch.hpp"
  
-#include <served/request_parser.hpp>
+#include "served/request_parser.hpp"
 #include <cstring>
 #include <string>
 #include <vector>
