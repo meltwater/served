@@ -20,15 +20,43 @@
  * SOFTWARE.
  */
 
-#ifndef SERVED_METHODS_HPP
-#define SERVED_METHODS_HPP
+#include <served/methods_handler.hpp>
 
 namespace served {
 
-enum method {
-	GET, POST, HEAD, PUT, DEL
-};
+methods_handler &
+methods_handler::get (served_req_handler handler)
+{
+	_handlers[served::method::GET] = handler;
+	return *this;
+}
+
+methods_handler &
+methods_handler::post(served_req_handler handler)
+{
+	_handlers[served::method::POST] = handler;
+	return *this;
+}
+
+methods_handler &
+methods_handler::head(served_req_handler handler)
+{
+	_handlers[served::method::HEAD] = handler;
+	return *this;
+}
+
+methods_handler &
+methods_handler::put (served_req_handler handler)
+{
+	_handlers[served::method::PUT] = handler;
+	return *this;
+}
+
+methods_handler &
+methods_handler::del (served_req_handler handler)
+{
+	_handlers[served::method::DEL] = handler;
+	return *this;
+}
 
 } // served
-
-#endif // SERVED_METHODS_HPP

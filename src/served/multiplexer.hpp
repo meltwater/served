@@ -28,15 +28,15 @@
 #include <vector>
 #include <functional>
 #include <served/methods.hpp>
+#include <served/methods_handler.hpp>
 #include <served/request.hpp>
 #include <served/response.hpp>
 #include <served/mux/segment_matcher.hpp>
 
 namespace served {
 
-typedef std::function<void(response &, const request &)> served_req_handler;
-typedef std::function<void(response &, request &)>       served_plugin_req_handler;
-typedef std::vector<served_plugin_req_handler>           plugin_handler_list;
+typedef std::function<void(response &, request &)> served_plugin_req_handler;
+typedef std::vector<served_plugin_req_handler>     plugin_handler_list;
 
 class multiplexer
 {
@@ -57,10 +57,11 @@ public:
 
 	//  -----  http request handlers  -----
 
-	void get (const std::string & path, served_req_handler handler);
-	void head(const std::string & path, served_req_handler handler);
-	void post(const std::string & path, served_req_handler handler);
-	void put (const std::string & path, served_req_handler handler);
+	served::methods_handler & handle(const std::string & path);
+
+	//  ----- request forwarding  -----
+
+	void forward_to_handler(served::request & req, served::response & res);
 
 	//  -----  server control  -----
 	//  TODO: move to server class?
@@ -71,19 +72,17 @@ public:
 private:
 	//  -----  path parsing/compiling  -----
 
-	typedef std::vector<served::mux::segment_matcher_ptr>          path_compiled_segments;
-
-	typedef std::tuple<path_compiled_segments, served_req_handler> path_handler_candidate;
-	typedef std::vector<path_handler_candidate>                    path_handler_candidates;
-	typedef std::map<served::method, path_handler_candidates>      path_method_handler_candidates;
+	typedef std::vector<served::mux::segment_matcher_ptr>               path_compiled_segments;
+	typedef std::tuple<path_compiled_segments, served::methods_handler> path_handler_candidate;
+	typedef std::vector<path_handler_candidate>                         path_handler_candidates;
 
 	path_compiled_segments get_segments(const std::string & path);
 
 private:
 	const std::string _base_path;
 
-	path_method_handler_candidates _method_handler_candidates;
-	plugin_handler_list            _plugin_handlers;
+	path_handler_candidates _handler_candidates;
+	plugin_handler_list     _plugin_handlers;
 };
 
 } // served

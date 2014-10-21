@@ -32,6 +32,12 @@ namespace served {
 //  -----  mutators  -----
 
 void
+request::set_method(enum method const& method)
+{
+	_method = method;
+}
+
+void
 request::set_destination(uri const& destination)
 {
 	_destination = destination;
@@ -62,6 +68,12 @@ request::set_body(std::string const& body)
 }
 
 //  -----  component accessors  -----
+
+const enum method
+request::method() const
+{
+	return _method;
+}
 
 const uri
 request::url() const

@@ -20,58 +20,42 @@
  * SOFTWARE.
  */
 
-#ifndef SERVED_REQUEST_HPP
-#define SERVED_REQUEST_HPP
+#ifndef SERVED_METHODS_HANDLER_HPP
+#define SERVED_METHODS_HANDLER_HPP
 
-#include <string>
-#include <unordered_map>
-
+#include <map>
+#include <functional>
 #include <served/methods.hpp>
-#include <served/uri.hpp>
-#include <served/cookie.hpp>
-#include <served/parameters.hpp>
+#include <served/request.hpp>
+#include <served/response.hpp>
 
 namespace served {
 
-class request
+typedef std::function<void(response &, const request &)> served_req_handler;
+
+class methods_handler
 {
 public:
-	//  -----  constructors  -----
+	methods_handler & get (served_req_handler);
+	methods_handler & post(served_req_handler);
+	methods_handler & head(served_req_handler);
+	methods_handler & put (served_req_handler);
+	methods_handler & del (served_req_handler);
 
-	//  -----  mutators  -----
+	bool method_supported(const served::method method)
+	{
+		return ( _handlers.find(method) != _handlers.end() );
+	}
 
-	void set_method     (enum method const& method);
-	void set_destination(uri         const& destination);
-	void set_source     (std::string const& source);
-	void set_header     (std::string const& header, std::string const& value);
-	void set_body       (std::string const& body);
-
-	//  -----  component accessors  -----
-
-	const enum method method() const;
-	const uri         url() const;
-
-	const std::string source() const;
-
-	const std::string header(std::string const& header) const;
-	const std::string body  () const;
-
-public:
-	//  -----  public members  -----
-
-	parameters params;
+	served_req_handler operator[](const served::method method)
+	{
+		return _handlers[method];
+	}
 
 private:
-	// Appropriate map type for request may differ from response
-	typedef std::unordered_map<std::string, std::string>    header_list;
-
-	enum method _method;
-	uri         _destination;
-	std::string _source;
-	header_list _headers;
-	std::string _body;
+	std::map<served::method, served_req_handler> _handlers;
 };
 
 } // served
 
-#endif // SERVED_REQUEST_HPP
+#endif // SERVED_METHODS_HANDLER_HPP
