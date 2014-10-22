@@ -61,7 +61,7 @@ public:
 
 	//  ----- request forwarding  -----
 
-	void forward_to_handler(served::request & req, served::response & res);
+	void forward_to_handler(served::response & res, served::request & req);
 
 	//  -----  server control  -----
 	//  TODO: move to server class?

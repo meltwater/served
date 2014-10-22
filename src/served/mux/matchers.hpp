@@ -23,9 +23,42 @@
 #ifndef SERVED_MATCHERS_HPP
 #define SERVED_MATCHERS_HPP
 
+#include <string>
+
+#include <served/mux/segment_matcher.hpp>
 #include <served/mux/empty_matcher.hpp>
 #include <served/mux/static_matcher.hpp>
 #include <served/mux/regex_matcher.hpp>
 #include <served/mux/variable_matcher.hpp>
+
+namespace served { namespace mux {
+
+inline segment_matcher_ptr
+compile_to_matcher(const std::string & path_segment)
+{
+	if ( path_segment.empty() )
+	{
+		return segment_matcher_ptr(new empty_matcher());
+	}
+	if ( path_segment[0] == '{' && path_segment[path_segment.length() - 1] == '}' )
+	{
+		size_t colon_index = path_segment.find(':');
+		if ( colon_index == std::string::npos )
+		{
+			return segment_matcher_ptr(
+				new variable_matcher(
+					path_segment.substr(1, path_segment.length() - 2)
+				));
+		}
+		return segment_matcher_ptr(
+			new regex_matcher(
+				path_segment.substr(1, colon_index - 1),
+				path_segment.substr(colon_index, path_segment.length() - 2)
+			));
+	}
+	return segment_matcher_ptr(new static_matcher(path_segment));
+}
+
+} }
 
 #endif // SERVED_MATCHERS_HPP

@@ -98,9 +98,7 @@ multiplexer::get_segments(const std::string & path)
 
 	for ( const auto & chunk : split_path(path) )
 	{
-		segments.push_back(
-			mux::segment_matcher_ptr((mux::segment_matcher *) new mux::static_matcher(chunk))
-		);
+		segments.push_back(mux::compile_to_matcher(chunk));
 	}
 
 	return segments;
@@ -120,7 +118,7 @@ multiplexer::handle(const std::string & path)
 //  -----  request forwarding  -----
 
 void
-multiplexer::forward_to_handler(served::request & req, served::response & res)
+multiplexer::forward_to_handler(served::response & res, served::request & req)
 {
 	bool pattern_matched = false;
 
