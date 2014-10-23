@@ -25,6 +25,7 @@
 
 #include <vector>
 
+#include <served/status.hpp>
 #include <served/request_error.hpp>
 #include <served/multiplexer.hpp>
 #include <served/methods.hpp>
@@ -150,6 +151,80 @@ TEST_CASE("multiplexer path routing", "[mux]")
 			{
 				CHECK( story.expected_200s[i] == story.received[i] );
 			}
+		}
+	}
+}
+
+TEST_CASE("multiplexer method routing", "[mux]")
+{
+	SECTION("Confirm not accept GET")
+	{
+		request_router_story s1;
+		s1.pattern = "/foo/bar";
+
+		// This route should be disregarded in favour of a 405 error from the previous route.
+		request_router_story s2;
+		s2.pattern = "/foo/bar";
+
+		served::multiplexer mux;
+		mux.handle(s1.pattern)
+			.post(path_collecting_functor(s1))
+			.head(path_collecting_functor(s1))
+			.put(path_collecting_functor(s1))
+			.del(path_collecting_functor(s1));
+
+		// Should be disregarded even for a /GET
+		mux.handle(s2.pattern).get(path_collecting_functor(s2));
+
+		try
+		{
+			INFO("Confirming exception was 405 NOT ALLOWED");
+
+			served::response res;
+			served::request req;
+			served::uri url;
+
+			url.set_pathname(s1.pattern);
+			req.set_destination(url);
+			req.set_method(served::method::GET);
+
+			mux.forward_to_handler( res, req );
+
+			// Should have thrown by this point.
+			CHECK(false);
+		}
+		catch (const served::request_error & e)
+		{
+			INFO("Confirming exception was 405 NOT ALLOWED");
+			CHECK(e.get_status_code() == served::status_4XX::METHOD_NOT_ALLOWED);
+		}
+
+		{
+			served::response res;
+			served::request req;
+			served::uri url;
+
+			url.set_pathname(s1.pattern);
+			req.set_destination(url);
+
+			INFO("Checking accepts PUT");
+			req.set_method(served::method::PUT);
+			CHECK_NOTHROW(mux.forward_to_handler( res, req ));
+
+			INFO("Checking accepts DEL");
+			req.set_method(served::method::DEL);
+			CHECK_NOTHROW(mux.forward_to_handler( res, req ));
+
+			INFO("Checking accepts HEAD");
+			req.set_method(served::method::HEAD);
+			CHECK_NOTHROW(mux.forward_to_handler( res, req ));
+
+			INFO("Checking accepts POST");
+			req.set_method(served::method::POST);
+			CHECK_NOTHROW(mux.forward_to_handler( res, req ));
+
+			INFO("Checking for correct routing (4 requests)");
+			CHECK(s1.received.size() == 4);
 		}
 	}
 }
