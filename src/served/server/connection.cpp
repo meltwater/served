@@ -92,7 +92,7 @@ connection::do_write()
 {
 	auto self(shared_from_this());
 
-	boost::asio::async_write(d_socket, d_response.to_buffers(),
+	boost::asio::async_write(d_socket, boost::asio::buffer(d_response.to_buffer()),
 		[this, self](boost::system::error_code ec, std::size_t) {
 			if (!ec)
 			{

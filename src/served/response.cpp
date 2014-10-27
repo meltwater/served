@@ -20,6 +20,8 @@
  * SOFTWARE.
  */
 
+#include <sstream>
+
 #include <served/response.hpp>
 
 namespace served {
@@ -29,16 +31,32 @@ namespace served {
 void
 response::set_header(std::string const& header, std::string const& value)
 {
+	// TODO
 }
 
 void
 response::set_status(int status_code)
 {
+	// TODO
 }
 
 void
 response::operator<<(std::string const& rhs)
 {
+	// TODO
+}
+
+//  -----  serialization  -----
+
+const std::string
+response::to_buffer()
+{
+	std::stringstream ss;
+
+	// TODO
+
+	d_buffer = ss.str();
+	return d_buffer;
 }
 
 //  -----  stock reply  -----
@@ -79,6 +97,7 @@ response::stock_reply(int status_code, response & res)
 		break;
 	default:
 		// TODO: Maybe throw exception here?
+		break;
 	}
 }
 

@@ -23,28 +23,28 @@
 #ifndef SERVED_CONNECTION_MANAGER_HPP
 #define SERVED_CONNECTION_MANAGER_HPP
 
-// #include <set>
-// #include "connection.hpp"
+#include <set>
+#include "connection.hpp"
 
-// namespace served { namespace server {
+namespace served { namespace server {
 
-// class connection_manager
-// {
-// 	std::set<connection_ptr> d_connections;
+class connection_manager
+{
+	std::set<connection_ptr> d_connections;
 
-// public:
-// 	connection_manager(const connection_manager&) = delete;
-// 	connection_manager& operator=(const connection_manager&) = delete;
+public:
+	connection_manager(const connection_manager&) = delete;
+	connection_manager& operator=(const connection_manager&) = delete;
 
-// 	connection_manager();
+	connection_manager();
 
-// 	void start(connection_ptr c);
+	void start(connection_ptr c);
 
-// 	void stop(connection_ptr c);
+	void stop(connection_ptr c);
 
-// 	void stop_all();
-// };
+	void stop_all();
+};
 
-// } } // server, served
+} } // server, served
 
 #endif // SERVED_CONNECTION_MANAGER_HPP

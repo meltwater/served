@@ -47,7 +47,7 @@ LIST (REMOVE_ITEM served_SRCS ${test_SRCS})
 #
 # Configure common project settings
 #
-SET (served_LIBS ${Boost_LIBRARIES})
+SET (served_LIBS ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 SET (served_BIN ${PROJECT_NAME})
 
 IF (NOT DEFINED SERVED_BUILD_SHARED)

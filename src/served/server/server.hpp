@@ -23,39 +23,38 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
-// #include <boost/asio.hpp>
-// #include <string>
-// #include "connection.hpp"
-// #include "connection_manager.hpp"
-// #include "request_handler.hpp"
+#include <boost/asio.hpp>
+#include <string>
+#include <served/server/connection_manager.hpp>
+#include <served/multiplexer.hpp>
 
-// namespace served {
-// namespace server {
+namespace served { namespace server {
 
-// class server
-// {
-// 	boost::asio::io_service        d_io_service;
-// 	boost::asio::signal_set        d_signals;
-// 	boost::asio::ip::tcp::acceptor d_acceptor;
-// 	connection_manager             d_connection_manager;
-// 	boost::asio::ip::tcp::socket   d_socket;
-// 	request_handler                d_request_handler;
+class server
+{
+	boost::asio::io_service        d_io_service;
+	boost::asio::signal_set        d_signals;
+	boost::asio::ip::tcp::acceptor d_acceptor;
+	connection_manager             d_connection_manager;
+	boost::asio::ip::tcp::socket   d_socket;
+	multiplexer                    d_request_handler;
 
-// public:
-// 	server(const server&) = delete;
-// 	server& operator=(const server&) = delete;
+public:
+	server(const server&) = delete;
+	server& operator=(const server&) = delete;
 
-// 	explicit server(const std::string& address, const std::string& port,
-// 			const std::string& doc_root);
+	explicit server( const std::string & address
+	               , const std::string & port
+	               , const std::string & doc_root );
 
-// 	void run();
+	void run();
 
-// private:
-// 	void do_accept();
+private:
+	void do_accept();
 
-// 	void do_await_stop();
-// };
+	void do_await_stop();
+};
 
-// } } // server, served
+} } // server, served
 
 #endif // SERVER_HPP

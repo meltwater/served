@@ -22,26 +22,28 @@
 
 #include "connection_manager.hpp"
 
-// using namespace served::server;
+using namespace served::server;
 
-// connection_manager::connection_manager()
-// {}
+connection_manager::connection_manager()
+{}
 
-// void
-// connection_manager::start(connection_ptr c) {
-// 	d_connections.insert(c);
-// 	c->start();
-// }
+void
+connection_manager::start(connection_ptr c) {
+	d_connections.insert(c);
+	c->start();
+}
 
-// void
-// connection_manager::stop(connection_ptr c) {
-// 	d_connections.erase(c);
-// 	c->stop();
-// }
+void
+connection_manager::stop(connection_ptr c) {
+	d_connections.erase(c);
+	c->stop();
+}
 
-// void
-// connection_manager::stop_all() {
-// 	for (auto c: d_connections)
-// 		c->stop();
-// 	d_connections.clear();
-// }
+void
+connection_manager::stop_all() {
+	for (auto c: d_connections)
+	{
+		c->stop();
+	}
+	d_connections.clear();
+}

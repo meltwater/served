@@ -32,6 +32,8 @@ namespace served {
 
 class response
 {
+	std::string d_buffer;
+
 public:
 
 	//  -----  response mutators  -----
@@ -40,6 +42,10 @@ public:
 	void set_status(int status_code);
 
 	void operator<<(std::string const& rhs);
+
+	//  -----  serializer  -----
+
+	const std::string to_buffer();
 
 	//  -----  stock reply  -----
 
