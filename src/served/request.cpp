@@ -32,25 +32,31 @@ namespace served {
 //  -----  mutators  -----
 
 void
-request::set_method(enum method const& method)
+request::set_method(const enum method & method)
 {
 	_method = method;
 }
 
 void
-request::set_destination(uri const& destination)
+request::set_destination(const uri & destination)
 {
 	_destination = destination;
 }
 
 void
-request::set_source(std::string const& source)
+request::set_HTTP_version(const std::string & HTTP_version)
+{
+	_HTTP_version = HTTP_version;
+}
+
+void
+request::set_source(const std::string & source)
 {
 	_source = source;
 }
 
 void
-request::set_header(std::string const& header, std::string const& value)
+request::set_header(const std::string & header, const std::string & value)
 {
 	// All headers set to lower case.
 	std::string mut_header;
@@ -62,9 +68,15 @@ request::set_header(std::string const& header, std::string const& value)
 }
 
 void
-request::set_body(std::string const& body)
+request::set_body(const std::string & body)
 {
 	_body = body;
+}
+
+uri &
+request::url()
+{
+	return _destination;
 }
 
 //  -----  component accessors  -----
@@ -79,6 +91,12 @@ const uri
 request::url() const
 {
 	return _destination;
+}
+
+const std::string
+request::HTTP_version() const
+{
+	return _HTTP_version;
 }
 
 const std::string

@@ -20,52 +20,51 @@
  * SOFTWARE.
  */
 
-#ifndef SERVED_URI_HPP
-#define SERVED_URI_HPP
+#ifndef SERVED_REQUEST_PARSER_IMPL_HPP
+#define SERVED_REQUEST_PARSER_IMPL_HPP
 
-#include <string>
+#include <served/request_parser.hpp>
+#include <served/request.hpp>
 
 namespace served {
 
-class uri
-{
+class request_parser_impl : public served::request_parser {
+	request d_request;
+
 public:
-	//  -----  constructors  -----
+	request_parser_impl()
+		: served::request_parser()
+		, d_request()
+	{}
 
-	//  -----  URI component mutators  -----
+	request get_request();
 
-	void set_URI      (std::string const& uri);
-	void set_path     (std::string const& path);
-	void set_query    (std::string const& query);
-	void set_fragment (std::string const& fragment);
+protected:
+	virtual void http_field(const char *data, const char *field, size_t flen,
+		const char *value, size_t vlen) override;
 
-	//  -----  URI component selectors  -----
+	virtual void request_method(const char *data, const char *at,
+		size_t length) override;
 
-	// For uri: "/foo/bar?test=one#element"
-	//
-	// "/foo/bar?test=one"
-	const std::string URI()      const;
-	//
-	// "/foo/bar"
-	const std::string path()     const;
-	//
-	// "test=one"
-	const std::string query()    const;
-	//
-	// "element"
-	const std::string fragment() const;
+	virtual void request_uri(const char *data, const char *at,
+		size_t length) override;
 
-private:
-	std::string _uri;
-	std::string _path;
-	std::string _query;
-	std::string _fragment;
+	virtual void fragment(const char *data, const char *at,
+		size_t length) override;
+
+	virtual void request_path(const char *data, const char *at,
+		size_t length) override;
+
+	virtual void query_string(const char *data, const char *at,
+		size_t length) override;
+
+	virtual void http_version(const char *data, const char *at,
+		size_t length) override;
+
+	virtual void header_done(const char *data, const char *at,
+		size_t length) override;
 };
 
-std::string query_escape(const std::string& s);
+} // served namespace
 
-std::string query_unescape(const std::string& s);
-
-} // served
-
-#endif // SERVED_URI_HPP
+#endif // SERVED_REQUEST_PARSER_IMPL_HPP

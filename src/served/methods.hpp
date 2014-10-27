@@ -23,11 +23,59 @@
 #ifndef SERVED_METHODS_HPP
 #define SERVED_METHODS_HPP
 
+#include <string>
+#include <stdexcept>
+
 namespace served {
 
 enum method {
 	GET, POST, HEAD, PUT, DEL
 };
+
+inline std::string
+method_to_string(enum method m)
+{
+	switch(m)
+	{
+		case method::GET:
+			return "GET";
+		case method::POST:
+			return "POST";
+		case method::HEAD:
+			return "HEAD";
+		case method::PUT:
+			return "PUT";
+		case method::DEL:
+			return "DEL";
+	}
+	return "";
+}
+
+inline enum method
+method_from_string(const std::string & str)
+{
+	if ( "GET" == str )
+	{
+		return method::GET;
+	}
+	if ( "POST" == str )
+	{
+		return method::POST;
+	}
+	if ( "HEAD" == str )
+	{
+		return method::HEAD;
+	}
+	if ( "PUT" == str )
+	{
+		return method::PUT;
+	}
+	if ( "DEL" == str )
+	{
+		return method::DEL;
+	}
+	throw std::runtime_error("method string not recognised");
+}
 
 } // served
 

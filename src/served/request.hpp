@@ -40,18 +40,22 @@ public:
 
 	//  -----  mutators  -----
 
-	void set_method     (enum method const& method);
-	void set_destination(uri         const& destination);
-	void set_source     (std::string const& source);
-	void set_header     (std::string const& header, std::string const& value);
-	void set_body       (std::string const& body);
+	void set_method      (const enum method & method);
+	void set_destination (const uri         & destination);
+	void set_HTTP_version(const std::string & http_version);
+	void set_source      (const std::string & source);
+	void set_header      (const std::string & header, const std::string & value);
+	void set_body        (const std::string & body);
+
+	uri & url();
 
 	//  -----  component accessors  -----
 
 	const enum method method() const;
 	const uri         url() const;
 
-	const std::string source() const;
+	const std::string HTTP_version() const;
+	const std::string source      () const;
 
 	const std::string header(std::string const& header) const;
 	const std::string body  () const;
@@ -67,6 +71,7 @@ private:
 
 	enum method _method;
 	uri         _destination;
+	std::string _HTTP_version;
 	std::string _source;
 	header_list _headers;
 	std::string _body;

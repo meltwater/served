@@ -123,7 +123,7 @@ multiplexer::forward_to_handler(served::response & res, served::request & req)
 	bool pattern_matched = false;
 
 	// Split request path into segments
-	const auto request_segments = split_path(req.url().pathname());
+	const auto request_segments = split_path(req.url().path());
 	const int  r_size           = request_segments.size();
 
 	// For each candidate

@@ -28,83 +28,48 @@
 TEST_CASE("Test uri const, ref and copy handling", "[uri]")
 {
 	served::uri uri;
-	uri.set_hash    ("hash1");
-	uri.set_host    ("host1");
-	uri.set_href    ("href1");
-	uri.set_path    ("path1");
-	uri.set_port    ("port1");
+	uri.set_fragment("fragment1");
+	uri.set_URI     ("path1");
 	uri.set_query   ("query1");
-	uri.set_hostname("hostname1");
-	uri.set_pathname("pathname1");
-	uri.set_protocol("protocol1");
+	uri.set_path    ("path1");
 
-	REQUIRE( uri.hash()     == "hash1" );
-	REQUIRE( uri.host()     == "host1" );
-	REQUIRE( uri.href()     == "href1" );
-	REQUIRE( uri.path()     == "path1" );
-	REQUIRE( uri.port()     == "port1" );
+	REQUIRE( uri.fragment() == "fragment1" );
+	REQUIRE( uri.URI()      == "path1" );
 	REQUIRE( uri.query()    == "query1" );
-	REQUIRE( uri.hostname() == "hostname1" );
-	REQUIRE( uri.pathname() == "pathname1" );
-	REQUIRE( uri.protocol() == "protocol1" );
+	REQUIRE( uri.path()     == "path1" );
 
 	auto test_copy = [](served::uri u)
 	{
-		REQUIRE( u.hash()     == "hash1" );
-		REQUIRE( u.host()     == "host1" );
-		REQUIRE( u.href()     == "href1" );
-		REQUIRE( u.path()     == "path1" );
-		REQUIRE( u.port()     == "port1" );
+		REQUIRE( u.fragment() == "fragment1" );
+		REQUIRE( u.URI()      == "path1" );
 		REQUIRE( u.query()    == "query1" );
-		REQUIRE( u.hostname() == "hostname1" );
-		REQUIRE( u.pathname() == "pathname1" );
-		REQUIRE( u.protocol() == "protocol1" );
+		REQUIRE( u.path()     == "path1" );
 
-		u.set_hash    ("hash2");
-		u.set_host    ("host2");
-		u.set_href    ("href2");
-		u.set_path    ("path2");
-		u.set_port    ("port2");
+		u.set_fragment("fragment2");
+		u.set_URI     ("path2");
 		u.set_query   ("query2");
-		u.set_hostname("hostname2");
-		u.set_pathname("pathname2");
-		u.set_protocol("protocol2");
+		u.set_path    ("path2");
 
-		REQUIRE( u.hash()     == "hash2" );
-		REQUIRE( u.host()     == "host2" );
-		REQUIRE( u.href()     == "href2" );
-		REQUIRE( u.path()     == "path2" );
-		REQUIRE( u.port()     == "port2" );
+		REQUIRE( u.fragment() == "fragment2" );
+		REQUIRE( u.URI()      == "path2" );
 		REQUIRE( u.query()    == "query2" );
-		REQUIRE( u.hostname() == "hostname2" );
-		REQUIRE( u.pathname() == "pathname2" );
-		REQUIRE( u.protocol() == "protocol2" );
+		REQUIRE( u.path()     == "path2" );
 	};
 
 	auto test_const_copy = [](const served::uri u)
 	{
-		REQUIRE( u.hash()     == "hash1" );
-		REQUIRE( u.host()     == "host1" );
-		REQUIRE( u.href()     == "href1" );
-		REQUIRE( u.path()     == "path1" );
-		REQUIRE( u.port()     == "port1" );
+		REQUIRE( u.fragment() == "fragment1" );
+		REQUIRE( u.URI()      == "path1" );
 		REQUIRE( u.query()    == "query1" );
-		REQUIRE( u.hostname() == "hostname1" );
-		REQUIRE( u.pathname() == "pathname1" );
-		REQUIRE( u.protocol() == "protocol1" );
+		REQUIRE( u.path()     == "path1" );
 	};
 
 	auto test_const_ref = [](served::uri const& u)
 	{
-		REQUIRE( u.hash()     == "hash1" );
-		REQUIRE( u.host()     == "host1" );
-		REQUIRE( u.href()     == "href1" );
-		REQUIRE( u.path()     == "path1" );
-		REQUIRE( u.port()     == "port1" );
+		REQUIRE( u.fragment() == "fragment1" );
+		REQUIRE( u.URI()      == "path1" );
 		REQUIRE( u.query()    == "query1" );
-		REQUIRE( u.hostname() == "hostname1" );
-		REQUIRE( u.pathname() == "pathname1" );
-		REQUIRE( u.protocol() == "protocol1" );
+		REQUIRE( u.path()     == "path1" );
 	};
 
 	test_copy      (uri);

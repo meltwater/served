@@ -28,30 +28,31 @@
 TEST_CASE("Test req const, ref and copy handling", "[request]")
 {
 	served::uri uri;
-	uri.set_href("http://localhost:8080/base/path?id=1#test");
+	uri.set_URI("/base/path?id=1");
 
 	served::request req;
 	req.set_destination(uri);
+	req.set_HTTP_version("HTTP/1.1");
 	req.set_source("127.0.0.1");
 	req.set_header("header1", "header one");
 	req.set_body("hello world");
 
 	auto test_copy = [](served::request r)
 	{
-		REQUIRE( r.url().href()      == "http://localhost:8080/base/path?id=1#test" );
+		REQUIRE( r.url().URI()       == "/base/path?id=1" );
 		REQUIRE( r.source()          == "127.0.0.1" );
 		REQUIRE( r.header("header1") == "header one" );
 		REQUIRE( r.body()            == "hello world" );
 
 		served::uri uri2;
-		uri2.set_href("http://localhost:8181/foo/bar?id=2#test2");
+		uri2.set_URI("/foo/bar?id=2");
 
 		r.set_destination(uri2);
 		r.set_source("192.168.0.45");
 		r.set_header("header1", "new header one");
 		r.set_body("hello second world");
 
-		REQUIRE( r.url().href()      == "http://localhost:8181/foo/bar?id=2#test2" );
+		REQUIRE( r.url().URI()       == "/foo/bar?id=2" );
 		REQUIRE( r.source()          == "192.168.0.45" );
 		REQUIRE( r.header("header1") == "new header one" );
 		REQUIRE( r.body()            == "hello second world" );
@@ -59,7 +60,7 @@ TEST_CASE("Test req const, ref and copy handling", "[request]")
 
 	auto test_const_copy = [](const served::request r)
 	{
-		REQUIRE( r.url().href()      == "http://localhost:8080/base/path?id=1#test" );
+		REQUIRE( r.url().URI()       == "/base/path?id=1" );
 		REQUIRE( r.source()          == "127.0.0.1" );
 		REQUIRE( r.header("header1") == "header one" );
 		REQUIRE( r.body()            == "hello world" );
@@ -67,7 +68,7 @@ TEST_CASE("Test req const, ref and copy handling", "[request]")
 
 	auto test_const_ref = [](served::request const& r)
 	{
-		REQUIRE( r.url().href()      == "http://localhost:8080/base/path?id=1#test" );
+		REQUIRE( r.url().URI()       == "/base/path?id=1" );
 		REQUIRE( r.source()          == "127.0.0.1" );
 		REQUIRE( r.header("header1") == "header one" );
 		REQUIRE( r.body()            == "hello world" );

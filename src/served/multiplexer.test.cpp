@@ -48,7 +48,7 @@ public:
 
 	void operator()(served::response & response, const served::request & request)
 	{
-		_story_obj.received.push_back(request.url().pathname());
+		_story_obj.received.push_back(request.url().path());
 	}
 };
 
@@ -118,7 +118,7 @@ TEST_CASE("multiplexer path routing", "[mux]")
 			for ( const auto & path : story.expected_200s )
 			{
 				served::uri url;
-				url.set_pathname(path);
+				url.set_path(path);
 
 				served::request req;
 				req.set_destination(url);
@@ -133,7 +133,7 @@ TEST_CASE("multiplexer path routing", "[mux]")
 			for ( const auto & path : story.expected_404s )
 			{
 				served::uri url;
-				url.set_pathname(path);
+				url.set_path(path);
 
 				served::request req;
 				req.set_destination(url);
@@ -184,7 +184,7 @@ TEST_CASE("multiplexer method routing", "[mux]")
 			served::request req;
 			served::uri url;
 
-			url.set_pathname(s1.pattern);
+			url.set_path(s1.pattern);
 			req.set_destination(url);
 			req.set_method(served::method::GET);
 
@@ -204,7 +204,7 @@ TEST_CASE("multiplexer method routing", "[mux]")
 			served::request req;
 			served::uri url;
 
-			url.set_pathname(s1.pattern);
+			url.set_path(s1.pattern);
 			req.set_destination(url);
 
 			INFO("Checking accepts PUT");

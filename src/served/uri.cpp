@@ -113,33 +113,9 @@ query_unescape(const std::string& s) {
 //  -----  URI component mutators  -----
 
 void
-uri::set_href(std::string const& href)
+uri::set_URI(std::string const& uri)
 {
-	_href = href;
-}
-
-void
-uri::set_protocol(std::string const& protocol)
-{
-	_protocol = protocol;
-}
-
-void
-uri::set_host(std::string const& host)
-{
-	_host = host;
-}
-
-void
-uri::set_hostname(std::string const& hostname)
-{
-	_hostname = hostname;
-}
-
-void
-uri::set_port(std::string const& port)
-{
-	_port = port;
+	_uri = uri;
 }
 
 void
@@ -149,53 +125,23 @@ uri::set_path(std::string const& path)
 }
 
 void
-uri::set_pathname(std::string const& pathname)
-{
-	_pathname = pathname;
-}
-
-void
 uri::set_query(std::string const& query)
 {
 	_query = query;
 }
 
 void
-uri::set_hash(std::string const& hash)
+uri::set_fragment(std::string const& fragment)
 {
-	_hash = hash;
+	_fragment = fragment;
 }
 
 //  -----  URI component selectors  -----
 
 const std::string
-uri::href() const
+uri::URI() const
 {
-	return _href;
-}
-
-const std::string
-uri::protocol() const
-{
-	return _protocol;
-}
-
-const std::string
-uri::host() const
-{
-	return _host;
-}
-
-const std::string
-uri::hostname() const
-{
-	return _hostname;
-}
-
-const std::string
-uri::port() const
-{
-	return _port;
+	return _uri;
 }
 
 const std::string
@@ -205,21 +151,15 @@ uri::path() const
 }
 
 const std::string
-uri::pathname() const
-{
-	return _pathname;
-}
-
-const std::string
 uri::query() const
 {
 	return _query;
 }
 
 const std::string
-uri::hash() const
+uri::fragment() const
 {
-	return _hash;
+	return _fragment;
 }
 
 } // served
