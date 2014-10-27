@@ -27,7 +27,8 @@
 #include <served/request_parser_impl.hpp>
 
 TEST_CASE("request parser impl can parse http requests", "[request_parser_impl]") {
-	served::request_parser_impl parser;
+	served::request req;
+	served::request_parser_impl parser(req);
 	const char* request =
 		"POST /you/got/served?reason=science#idet HTTP/1.1\r\n"
 		"Host: api.datasift.com\r\n"
@@ -36,17 +37,7 @@ TEST_CASE("request parser impl can parse http requests", "[request_parser_impl]"
 		"\r\n"
 		"you got served!\r\n";
 	size_t read_bytes = parser.execute(request, strlen(request));
-
-	SECTION("parser behaviour") {
-		SECTION("will parse header without errors") {
-			REQUIRE(served::request_parser::FINISHED == parser.get_status());
-		}
-		SECTION("parse returns offset to beginning of content") {
-			REQUIRE(std::string(&request[read_bytes], strlen(request)-read_bytes) == "you got served!\r\n");
-		}
-	}
 	SECTION("header is parsed correctly") {
-		served::request req(parser.get_request());
 		SECTION("check request") {
 			REQUIRE(req.method()       == served::method::POST);
 			REQUIRE(req.HTTP_version() == "HTTP/1.1");
@@ -67,7 +58,8 @@ TEST_CASE("request parser impl can parse http requests", "[request_parser_impl]"
 }
 
 TEST_CASE("request parser impl can handle utf-8", "[request_parser_impl]") {
-	served::request_parser_impl parser;
+	served::request req;
+	served::request_parser_impl parser(req);
 	const char* request =
 		u8"POST /you/got/served?reason=science#idet HTTP/1.1\r\n"
 		u8"Host: api.datasift.com\r\n"
@@ -77,16 +69,7 @@ TEST_CASE("request parser impl can handle utf-8", "[request_parser_impl]") {
 		u8"Unicode character: \u2018\r\n";
 	size_t read_bytes = parser.execute(request, strlen(request));
 
-	SECTION("parser behaviour") {
-		SECTION("will parse header without errors") {
-			REQUIRE(served::request_parser::FINISHED == parser.get_status());
-		}
-		SECTION("parse returns offset to beginning of content") {
-			REQUIRE(std::string(&request[read_bytes], strlen(request)-read_bytes) == u8"Unicode character: \u2018\r\n");
-		}
-	}
 	SECTION("header is parsed correctly") {
-		served::request req(parser.get_request());
 		SECTION("check request") {
 			REQUIRE(req.method()       == served::method::POST);
 			REQUIRE(req.HTTP_version() == u8"HTTP/1.1");

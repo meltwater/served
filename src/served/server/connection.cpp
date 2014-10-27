@@ -20,73 +20,91 @@
  * SOFTWARE.
  */
 
-#include "connection.hpp"
-// #include "connection_manager.hpp"
-// //#include "request_handler.hpp"
+#include <served/status.hpp>
+#include <served/server/connection.hpp>
+#include <served/server/connection_manager.hpp>
 
-// #include <utility>
-// #include <vector>
+#include <utility>
+#include <vector>
 
-// using namespace served::server;
+using namespace served::server;
 
-// connection::connection(boost::asio::ip::tcp::socket socket,
-// 		connection_manager& manager, request_handler& handler)
-// 	: d_socket(std::move(socket))
-// 	, d_connection_manager(manager)
-// 	//, d_request_handler(handler)
-// {}
+connection::connection( boost::asio::ip::tcp::socket socket
+                      , connection_manager &         manager
+                      , multiplexer        &         handler )
+	: d_socket(std::move(socket))
+	, d_connection_manager(manager)
+	, d_request_handler(handler)
+	, d_request()
+	, d_request_parser(d_request)
+{}
 
-// void
-// connection::start() {
-// 	do_read();
-// }
+void
+connection::start()
+{
+	do_read();
+}
 
-// void
-// connection::stop() {
-// 	d_socket.close();
-// }
+void
+connection::stop()
+{
+	d_socket.close();
+}
 
-// void
-// connection::do_read() {
-// 	auto self(shared_from_this());
-// 	d_socket.async_read_some(boost::asio::buffer(buffer_),
-// 		[this, self](boost::system::error_code ec, std::size_t bytes_transferred) {
-// 			if (!ec) {
-// 				request_parser::result_type result;
-// 				std::tie(result, std::ignore) = request_parser_.parse(
-// 						request_, buffer_.data(), buffer_.data() + bytes_transferred);
+void
+connection::do_read()
+{
+	auto self(shared_from_this());
 
-// 				if (result == request_parser::good) {
-// 					//d_request_handler.handle_request(request_, reply_);
-// 					do_write();
-// 				} else if (result == request_parser::bad) {
-// 					reply_ = reply::stock_reply(reply::bad_request);
-// 					do_write();
-// 				} else {
-// 					do_read();
-// 				}
-// 			} else if (ec != boost::asio::error::operation_aborted) {
-// 				d_connection_manager.stop(shared_from_this());
-// 			}
-// 		}
-// 	);
-// }
+	d_socket.async_read_some(boost::asio::buffer(d_buffer.data(), d_buffer.size()),
+		[this, self](boost::system::error_code ec, std::size_t bytes_transferred) {
+			if (!ec)
+			{
+				request_parser::status result;
+				std::tie(result, std::ignore) = d_request_parser.parse(
+					d_buffer.data(), bytes_transferred);
 
-// void
-// connection::do_write() {
-// 	auto self(shared_from_this());
-// 	boost::asio::async_write(d_socket, reply_.to_buffers(),
-// 		[this, self](boost::system::error_code ec, std::size_t) {
-// 			if (!ec) {
-// 				// Initiate graceful connection closure.
-// 				boost::system::error_code ignored_ec;
-// 				d_socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both,
-// 					ignored_ec);
-// 			}
+				if ( result == request_parser::status::FINISHED )
+				{
+					d_request_handler.forward_to_handler(d_response, d_request);
+					do_write();
+				}
+				else if ( result == request_parser::ERROR )
+				{
+					response::stock_reply(served::status_4XX::BAD_REQUEST, d_response);
+					do_write();
+				}
+				else
+				{
+					do_read();
+				}
+			}
+			else if (ec != boost::asio::error::operation_aborted)
+			{
+				d_connection_manager.stop(shared_from_this());
+			}
+		}
+	);
+}
 
-// 			if (ec != boost::asio::error::operation_aborted) {
-// 				d_connection_manager.stop(shared_from_this());
-// 			}
-// 		}
-// 	);
-// }
+void
+connection::do_write()
+{
+	auto self(shared_from_this());
+
+	boost::asio::async_write(d_socket, d_response.to_buffers(),
+		[this, self](boost::system::error_code ec, std::size_t) {
+			if (!ec)
+			{
+				// Initiate graceful connection closure.
+				boost::system::error_code ignored_ec;
+				d_socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both,
+					ignored_ec);
+			}
+			if (ec != boost::asio::error::operation_aborted)
+			{
+				d_connection_manager.stop(shared_from_this());
+			}
+		}
+	);
+}

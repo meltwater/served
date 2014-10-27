@@ -29,15 +29,15 @@
 namespace served {
 
 class request_parser_impl : public served::request_parser {
-	request d_request;
+	request & d_request;
 
 public:
-	request_parser_impl()
+	request_parser_impl(request & req)
 		: served::request_parser()
-		, d_request()
+		, d_request(req)
 	{}
 
-	request get_request();
+	std::tuple<request_parser::status, size_t> parse(const char *data, size_t len);
 
 protected:
 	virtual void http_field(const char *data, const char *field, size_t flen,

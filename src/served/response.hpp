@@ -26,6 +26,8 @@
 #include <string>
 #include <iostream>
 
+#include <served/status.hpp>
+
 namespace served {
 
 class response
@@ -38,6 +40,10 @@ public:
 	void set_status(int status_code);
 
 	void operator<<(std::string const& rhs);
+
+	//  -----  stock reply  -----
+
+	static void stock_reply(int status_code, response & res);
 };
 
 } // served

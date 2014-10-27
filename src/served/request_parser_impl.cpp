@@ -35,10 +35,11 @@ request_parser_impl::http_field( const char * data
 	d_request.set_header(std::string(field, flen), std::string(value, vlen));
 }
 
-request
-request_parser_impl::get_request()
+std::tuple<request_parser::status, size_t>
+request_parser_impl::parse(const char *data, size_t len)
 {
-	return d_request;
+	size_t d_len = execute(data, len);
+	return std::tuple<request_parser::status, size_t>(get_status(), d_len);
 }
 
 void

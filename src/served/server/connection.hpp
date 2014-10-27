@@ -23,50 +23,49 @@
 #ifndef SERVED_CONNECTION_HPP
 #define SERVED_CONNECTION_HPP
 
-//#include "reply.hpp"
-//#include "request.hpp"
-//#include "request_handler.hpp"
-//#include "request_parser.hpp"
+#include <boost/asio.hpp>
 
-// #include <boost/asio.hpp>
- 
-// #include <array>
-// #include <memory>
+#include <served/multiplexer.hpp>
+#include <served/response.hpp>
+#include <served/request.hpp>
+#include <served/request_parser_impl.hpp>
 
-// namespace served { namespace server {
+#include <array>
+#include <memory>
 
-// class connection_manager;
+namespace served { namespace server {
 
-// class connection
-// 	: public std::enable_shared_from_this<connection>
-// {
-// 	boost::asio::ip::tcp::socket d_socket;
-// 	connection_manager&          d_connection_manager;
-// 	//request_handler&             d_request_handler;
-// 	std::array<char, 8192>       d_buffer;
-// 	//request                      d_request;
-// 	//request_parser               d_request_parser;
-// 	//reply                        d_reply;
+class connection_manager;
 
-// public:
-// 	connection(const connection&) = delete;
-// 	connection& operator=(const connection&) = delete;
+class connection
+	: public std::enable_shared_from_this<connection>
+{
+	boost::asio::ip::tcp::socket d_socket;
+	connection_manager &         d_connection_manager;
+	multiplexer        &         d_request_handler;
+	std::array<char, 8192>       d_buffer;
+	request                      d_request;
+	request_parser_impl          d_request_parser;
+	response                     d_response;
 
-// 	explicit connection(boost::asio::ip::tcp::socket socket,
-// 			connection_manager& manager, request_handler& handler);
+public:
+	connection(const connection&) = delete;
+	connection& operator=(const connection&) = delete;
 
-// 	void start();
+	explicit connection( boost::asio::ip::tcp::socket socket
+	                   , connection_manager &         manager
+	                   , multiplexer        &         handler );
 
-// 	void stop();
+	void start();
+	void stop();
 
-// private:
-// 	void do_read();
+private:
+	void do_read();
+	void do_write();
+};
 
-// 	void do_write();
-// };
+typedef std::shared_ptr<connection> connection_ptr;
 
-// typedef std::shared_ptr<connection> connection_ptr;
-
-// } } // server, served
+} } // server, served
 
 #endif // SERVED_CONNECTION_HPP

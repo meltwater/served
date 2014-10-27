@@ -41,4 +41,45 @@ response::operator<<(std::string const& rhs)
 {
 }
 
+//  -----  stock reply  -----
+
+void
+response::stock_reply(int status_code, response & res)
+{
+	res.set_status(status_code);
+	res.set_header("content-type", "text/plain");
+
+	switch (status_code)
+	{
+	// 4XX
+	case served::status_4XX::BAD_REQUEST:
+		res << "Detected a bad request";
+		break;
+	case served::status_4XX::NOT_FOUND:
+		res << "Resource not found";
+		break;
+	case served::status_4XX::REQUEST_TIMEOUT:
+		res << "The request timed out";
+		break;
+	case served::status_4XX::METHOD_NOT_ALLOWED:
+		res << "Method is not supported for this resource";
+		break;
+	case served::status_4XX::UNAUTHORIZED:
+		res << "Client is unauthorized to access this resource";
+		break;
+	case served::status_4XX::FORBIDDEN:
+		res << "Access to this resource is forbidden";
+		break;
+	case served::status_4XX::TOO_MANY_REQUESTS:
+		res << "Too many requests have been detected from this client";
+		break;
+	// 5XX
+	case served::status_5XX::INTERNAL_SERVER_ERROR:
+		res << "Encountered an internal server error";
+		break;
+	default:
+		// TODO: Maybe throw exception here?
+	}
+}
+
 } // served
