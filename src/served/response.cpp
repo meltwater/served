@@ -76,8 +76,8 @@ response::to_buffer()
 	}
 	if ( d_headers.find("content-length") == d_headers.end() )
 	{
-		ss.seekp(0, std::ios::end);
-		std::stringstream::pos_type offset = ss.tellp();
+		d_body.seekp(0, std::ios::end);
+		std::stringstream::pos_type offset = d_body.tellp();
 		ss << "content-length: " << offset;
 	}
 
