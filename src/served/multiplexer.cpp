@@ -141,7 +141,7 @@ multiplexer::forward_to_handler(served::response & res, served::request & req)
 
 		// Check if each segment matches
 		int seg_index = 0;
-		for (; seg_index < h_size; seg_index++ )
+		for ( ; seg_index < h_size; seg_index++ )
 		{
 			if ( ! handler_segments[seg_index]->check_match(request_segments[seg_index]) )
 			{
@@ -159,6 +159,12 @@ multiplexer::forward_to_handler(served::response & res, served::request & req)
 			if ( ! method_handler.method_supported( req.method() ) )
 			{
 				throw served::request_error(served::status_4XX::METHOD_NOT_ALLOWED, "Method not allowed");
+			}
+
+			// Collect parameters from REST path segments
+			for ( seg_index = 0; seg_index < h_size; seg_index++ )
+			{
+				handler_segments[seg_index]->get_param(req.params, request_segments[seg_index]);
 			}
 
 			method_handler[ req.method() ](res, req);

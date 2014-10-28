@@ -29,6 +29,7 @@
 #include <served/request_error.hpp>
 #include <served/multiplexer.hpp>
 #include <served/methods.hpp>
+#include <served/parameters.hpp>
 
 struct request_router_story
 {
@@ -37,6 +38,8 @@ struct request_router_story
 	std::vector<std::string> expected_404s;
 
 	std::vector<std::string> received;
+
+	served::parameters       params;
 };
 
 class path_collecting_functor
@@ -49,6 +52,7 @@ public:
 	void operator()(served::response & response, const served::request & request)
 	{
 		_story_obj.received.push_back(request.url().path());
+		_story_obj.params = request.params;
 	}
 };
 
@@ -226,5 +230,28 @@ TEST_CASE("multiplexer method routing", "[mux]")
 			INFO("Checking for correct routing (4 requests)");
 			CHECK(s1.received.size() == 4);
 		}
+	}
+}
+
+TEST_CASE("multiplexer REST params test", "[mux]")
+{
+	SECTION("Confirm params created")
+	{
+		request_router_story s;
+
+		served::multiplexer mux;
+		mux.handle("/base/{TEST}/end").get(path_collecting_functor(s));
+
+		served::response res;
+		served::request req;
+		served::uri url;
+
+		url.set_path("/base/expected_123/end");
+		req.set_destination(url);
+		req.set_method(served::method::GET);
+
+		mux.forward_to_handler( res, req );
+
+		CHECK(s.params.get("TEST") == "expected_123");
 	}
 }

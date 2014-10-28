@@ -31,7 +31,7 @@ namespace served { namespace mux {
 
 class variable_matcher : public segment_matcher
 {
-	const std::string & _variable_name;
+	const std::string _variable_name;
 
 public:
 	//  -----  constructors  -----
