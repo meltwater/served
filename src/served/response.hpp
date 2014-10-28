@@ -23,8 +23,9 @@
 #ifndef SERVED_RESPONSE_HPP
 #define SERVED_RESPONSE_HPP
 
-#include <string>
+#include <sstream>
 #include <iostream>
+#include <map>
 
 #include <served/status.hpp>
 
@@ -32,7 +33,12 @@ namespace served {
 
 class response
 {
-	std::string d_buffer;
+	typedef std::map<std::string, std::string> header_list;
+
+	int               d_status;
+	header_list       d_headers;
+	std::stringstream d_body;
+	std::string       d_buffer;
 
 public:
 
@@ -40,6 +46,7 @@ public:
 
 	void set_header(std::string const& header, std::string const& value);
 	void set_status(int status_code);
+	void set_body(const std::string & body);
 
 	void operator<<(std::string const& rhs);
 

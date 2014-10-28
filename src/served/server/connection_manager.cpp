@@ -29,18 +29,25 @@ connection_manager::connection_manager()
 
 void
 connection_manager::start(connection_ptr c) {
-	d_connections.insert(c);
+	{
+		std::lock_guard<std::mutex> lock(d_connections_mutex);
+		d_connections.insert(c);
+	}
 	c->start();
 }
 
 void
 connection_manager::stop(connection_ptr c) {
-	d_connections.erase(c);
+	{
+		std::lock_guard<std::mutex> lock(d_connections_mutex);
+		d_connections.erase(c);
+	}
 	c->stop();
 }
 
 void
 connection_manager::stop_all() {
+	std::lock_guard<std::mutex> lock(d_connections_mutex);
 	for (auto c: d_connections)
 	{
 		c->stop();

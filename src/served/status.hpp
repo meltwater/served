@@ -23,6 +23,8 @@
 #ifndef SERVED_STATUS_HPP
 #define SERVED_STATUS_HPP
 
+#include <string>
+
 namespace served {
 
 namespace status_1XX {
@@ -107,6 +109,15 @@ namespace status_5XX {
 	const int NETWORK_CONNECT_TIMEOUT_ERR = 599;
 }
 
-} // served
+namespace status {
+
+inline const std::string
+status_to_reason(int status_code)
+{
+	// TODO
+	return "-";
+}
+
+} } // status served
 
 #endif // SERVED_STATUS_HPP

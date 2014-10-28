@@ -20,8 +20,10 @@
  * SOFTWARE.
  */
 
+#include <algorithm>
 #include <sstream>
 
+#include <served/version.hpp>
 #include <served/response.hpp>
 
 namespace served {
@@ -31,19 +33,32 @@ namespace served {
 void
 response::set_header(std::string const& header, std::string const& value)
 {
-	// TODO
+	// All headers set to lower case.
+	std::string mut_header;
+	mut_header.resize(header.size());
+
+	std::transform(header.begin(), header.end(), mut_header.begin(), ::tolower);
+
+	d_headers[mut_header] = value;
 }
 
 void
 response::set_status(int status_code)
 {
-	// TODO
+	d_status = status_code;
+}
+
+void
+response::set_body(const std::string & body)
+{
+	d_body.clear();
+	d_body.str(body);
 }
 
 void
 response::operator<<(std::string const& rhs)
 {
-	// TODO
+	d_body << rhs;
 }
 
 //  -----  serialization  -----
@@ -53,7 +68,26 @@ response::to_buffer()
 {
 	std::stringstream ss;
 
-	// TODO
+	ss << "HTTP/1.1 " << d_status << " " << status::status_to_reason(d_status) << "\r\n";
+
+	if ( d_headers.find("server") == d_headers.end() )
+	{
+		ss << "server: served-v" << APPLICATION_VERSION_STRING << "\r\n";
+	}
+	if ( d_headers.find("content-length") == d_headers.end() )
+	{
+		ss.seekp(0, std::ios::end);
+		std::stringstream::pos_type offset = ss.tellp();
+		ss << "content-length: " << offset;
+	}
+
+	for ( const auto & header : d_headers )
+	{
+		ss << header.first << ": " << header.second << "\r\n";
+	}
+
+	ss << "\r\n";
+	ss << d_body.str() << "\r\n";
 
 	d_buffer = ss.str();
 	return d_buffer;

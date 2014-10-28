@@ -63,12 +63,6 @@ public:
 
 	void forward_to_handler(served::response & res, served::request & req);
 
-	//  -----  server control  -----
-	//  TODO: move to server class?
-
-	void listen(const std::string & address, const std::string & port);
-	void stop();
-
 private:
 	//  -----  path parsing/compiling  -----
 

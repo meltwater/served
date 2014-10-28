@@ -24,6 +24,8 @@
 #define SERVED_CONNECTION_MANAGER_HPP
 
 #include <set>
+#include <mutex>
+
 #include "connection.hpp"
 
 namespace served { namespace server {
@@ -31,6 +33,7 @@ namespace served { namespace server {
 class connection_manager
 {
 	std::set<connection_ptr> d_connections;
+	std::mutex               d_connections_mutex;
 
 public:
 	connection_manager(const connection_manager&) = delete;

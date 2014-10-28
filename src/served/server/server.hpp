@@ -47,7 +47,7 @@ public:
 	               , const std::string & port
 	               , const std::string & doc_root );
 
-	void run();
+	void run(int n_threads = 1);
 
 private:
 	void do_accept();

@@ -173,16 +173,4 @@ multiplexer::forward_to_handler(served::response & res, served::request & req)
 	}
 }
 
-//  -----  server control  -----
-
-void
-multiplexer::listen(const std::string & address, const std::string & port)
-{
-}
-
-void
-multiplexer::stop()
-{
-}
-
 } // served

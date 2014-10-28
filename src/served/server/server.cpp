@@ -24,6 +24,7 @@
 
 #include <signal.h>
 #include <utility>
+#include <thread>
 
 using namespace served::server;
 
@@ -63,7 +64,7 @@ server::server( const std::string & address
 }
 
 void
-server::run()
+server::run(int n_threads /* = 1 */)
 {
 	/*
 	 * The io_service::run() call will block until all asynchronous operations
@@ -71,7 +72,24 @@ server::run()
 	 * asynchronous operation outstanding: the asynchronous accept call waiting
 	 * for new incoming connections.
 	 */
-	d_io_service.run();
+	if ( n_threads > 1 )
+	{
+		std::vector<std::thread> v_threads(n_threads);
+		for ( int i = 0; i < n_threads; i++ )
+		{
+			v_threads.push_back(std::thread([&](){
+				d_io_service.run();
+			}));
+		}
+		for ( auto & thread : v_threads )
+		{
+			thread.join();
+		}
+	}
+	else
+	{
+		d_io_service.run();
+	}
 }
 
 void
