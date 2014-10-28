@@ -42,6 +42,7 @@ SET (APPLICATION_ID "${APPLICATION_VENDOR_ID}.${PROJECT_NAME}")
 OPTION (SERVED_BUILD_SHARED "Build shared object" ON)
 OPTION (SERVED_BUILD_STATIC "Build static library" OFF)
 OPTION (SERVED_BUILD_TESTS "Build unit test suite" ON)
+OPTION (SERVED_BUILD_EXAMPLES "Build examples" ON)
 
 #
 # Debugging Options
