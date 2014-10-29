@@ -68,6 +68,21 @@ response::operator<<(std::string const& rhs)
 	d_body << rhs;
 }
 
+//  -----  accessors  -----
+
+const int
+response::status()
+{
+	return d_status;
+}
+
+const int
+response::body_size()
+{
+	d_body.seekp(0, std::ios::end);
+	return d_body.tellp();
+}
+
 //  -----  serialization  -----
 
 const std::string
@@ -83,9 +98,7 @@ response::to_buffer()
 	}
 	if ( d_headers.find("content-length") == d_headers.end() )
 	{
-		d_body.seekp(0, std::ios::end);
-		std::stringstream::pos_type offset = d_body.tellp();
-		ss << "content-length: " << offset << "\r\n";
+		ss << "content-length: " << body_size() << "\r\n";
 	}
 	for ( const auto & header : d_headers )
 	{

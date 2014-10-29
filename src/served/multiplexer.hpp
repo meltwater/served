@@ -53,7 +53,8 @@ public:
 
 	//  -----  plugin injection  -----
 
-	void use_plugin(served_plugin_req_handler plugin);
+	void use_before(served_plugin_req_handler plugin);
+	void use_after (served_plugin_req_handler plugin);
 
 	//  -----  http request handlers  -----
 
@@ -76,7 +77,8 @@ private:
 	const std::string _base_path;
 
 	path_handler_candidates _handler_candidates;
-	plugin_handler_list     _plugin_handlers;
+	plugin_handler_list     _plugin_pre_handlers;
+	plugin_handler_list     _plugin_post_handlers;
 };
 
 } // served

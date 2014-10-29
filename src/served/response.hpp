@@ -53,6 +53,11 @@ public:
 
 	void operator<<(std::string const& rhs);
 
+	//  -----  accessors  -----
+
+	const int status();
+	const int body_size();
+
 	//  -----  serializer  -----
 
 	const std::string to_buffer();

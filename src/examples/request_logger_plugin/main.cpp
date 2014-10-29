@@ -43,7 +43,7 @@ int main(int argc, char const* argv[])
 		});
 
 	// register middleware / plugin
-	mux.use_plugin([](served::response & res, const served::request & req) {
+	mux.use_before([](served::response & res, const served::request & req) {
 		std::cout << "request: " << req.url().URI() << std::endl;
 	});
 

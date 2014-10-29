@@ -42,9 +42,15 @@ multiplexer::multiplexer(const std::string & base_path)
 //  -----  plugin injection  -----
 
 void
-multiplexer::use_plugin(served_plugin_req_handler plugin)
+multiplexer::use_before(served_plugin_req_handler plugin)
 {
-	_plugin_handlers.push_back(plugin);
+	_plugin_pre_handlers.push_back(plugin);
+}
+
+void
+multiplexer::use_after(served_plugin_req_handler plugin)
+{
+	_plugin_post_handlers.push_back(plugin);
 }
 
 //  -----  path parsing  -----
@@ -167,7 +173,17 @@ multiplexer::forward_to_handler(served::response & res, served::request & req)
 				handler_segments[seg_index]->get_param(req.params, request_segments[seg_index]);
 			}
 
+			for ( const auto & handler : _plugin_pre_handlers )
+			{
+				handler(res, req);
+			}
+
 			method_handler[ req.method() ](res, req);
+
+			for ( const auto & handler : _plugin_post_handlers )
+			{
+				handler(res, req);
+			}
 			break;
 		}
 	}
