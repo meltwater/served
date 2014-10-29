@@ -24,26 +24,30 @@
 #include <served/request_error.hpp>
 #include <served/status.hpp>
 
-#include <zmq.h>
-
 #include <iostream>
-#include <unistd.h>
 
-void init_zmq() {
-	// TODO: create push socket
-	// TODO: create sub socket
-}
+#include <unistd.h>
 
 int main(int argc, char const* argv[])
 {
 	served::multiplexer mux;
-	mux.handle("/{part1}")
+
+	// register one or more handlers
+	mux.handle("/served")
 		.get([](served::response & res, const served::request & req) {
-			// TODO: convert to zmq message
-			// TODO: convert to http response
+			res << "You got served!";
+		});
+	mux.handle("/itson")
+		.get([](served::response & res, const served::request & req) {
+			res << "Oh, it's on!";
 		});
 
-	served::net::server server("127.0.0.1", "8080", mux);
+	// register middleware / plugin
+	mux.use_plugin([](served::response & res, const served::request & req) {
+		std::cout << "request: " << req.url().URI() << std::endl;
+	});
+
+	served::net::server server("127.0.0.1", "1337", mux);
 	server.run(10);
 
 	return (EXIT_SUCCESS);
