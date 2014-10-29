@@ -20,8 +20,26 @@
  * SOFTWARE.
  */
 
-#include <iostream>
+#include <served/served.hpp>
+#include <served/request_error.hpp>
+#include <served/status.hpp>
 
-int main(int argc, char const* argv[]) {
-	return EXIT_SUCCESS;
+#include <zmq.h>
+
+#include <iostream>
+#include <unistd.h>
+
+int main(int argc, char const* argv[])
+{
+	served::multiplexer mux;
+	mux.handle("/{part1}")
+		.get([](served::response & res, const served::request & req) {
+			// TODO: convert to zmq message
+			// TODO: convert to http response
+		});
+
+	served::net::server server("127.0.0.1", "8080", mux);
+	server.run(10);
+
+	return (EXIT_SUCCESS);
 }

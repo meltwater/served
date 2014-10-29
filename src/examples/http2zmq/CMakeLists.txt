@@ -26,7 +26,7 @@ FILE (GLOB_RECURSE http2zmq_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CU
 #
 # Configure common project settings
 #
-SET (http2zmq_LIBS ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+SET (http2zmq_LIBS ${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${ZeroMQ_LIBRARIES})
 
 #
 # Executable build rules
