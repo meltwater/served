@@ -33,7 +33,7 @@
 #include <array>
 #include <memory>
 
-namespace served { namespace server {
+namespace served { namespace net {
 
 class connection_manager;
 
@@ -66,6 +66,6 @@ private:
 
 typedef std::shared_ptr<connection> connection_ptr;
 
-} } // server, served
+} } // net, served
 
 #endif // SERVED_CONNECTION_HPP

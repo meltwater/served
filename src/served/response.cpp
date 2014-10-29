@@ -28,6 +28,13 @@
 
 namespace served {
 
+//  -----  constructors  -----
+
+response::response()
+	: d_status(status_2XX::OK)
+{
+}
+
 //  -----  response mutators  -----
 
 void
@@ -78,16 +85,15 @@ response::to_buffer()
 	{
 		d_body.seekp(0, std::ios::end);
 		std::stringstream::pos_type offset = d_body.tellp();
-		ss << "content-length: " << offset;
+		ss << "content-length: " << offset << "\r\n";
 	}
-
 	for ( const auto & header : d_headers )
 	{
 		ss << header.first << ": " << header.second << "\r\n";
 	}
 
 	ss << "\r\n";
-	ss << d_body.str() << "\r\n";
+	ss << d_body.str();
 
 	d_buffer = ss.str();
 	return d_buffer;

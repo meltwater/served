@@ -21,13 +21,14 @@
  */
 
 #include <served/status.hpp>
-#include <served/server/connection.hpp>
-#include <served/server/connection_manager.hpp>
+#include <served/net/connection.hpp>
+#include <served/net/connection_manager.hpp>
+#include <served/request_error.hpp>
 
 #include <utility>
 #include <vector>
 
-using namespace served::server;
+using namespace served::net;
 
 connection::connection( boost::asio::ip::tcp::socket socket
                       , connection_manager &         manager
@@ -66,7 +67,19 @@ connection::do_read()
 
 				if ( result == request_parser::status::FINISHED )
 				{
-					d_request_handler.forward_to_handler(d_response, d_request);
+					try
+					{
+						d_request_handler.forward_to_handler(d_response, d_request);
+					}
+					catch (const served::request_error & e)
+					{
+						d_response.set_status(e.get_status_code());
+						d_response.set_body(e.what());
+					}
+					catch (...)
+					{
+						response::stock_reply(status_5XX::INTERNAL_SERVER_ERROR, d_response);
+					}
 					do_write();
 				}
 				else if ( result == request_parser::ERROR )

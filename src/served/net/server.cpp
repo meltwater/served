@@ -20,23 +20,23 @@
  * SOFTWARE.
  */
 
-#include "server.hpp"
-
 #include <signal.h>
 #include <utility>
 #include <thread>
 
-using namespace served::server;
+#include <served/net/server.hpp>
+
+using namespace served::net;
 
 server::server( const std::string & address
               , const std::string & port
-              , const std::string & doc_root )
+              , multiplexer       & mux     )
 	: d_io_service()
 	, d_signals(d_io_service)
 	, d_acceptor(d_io_service)
 	, d_connection_manager()
 	, d_socket(d_io_service)
-	, d_request_handler(doc_root)
+	, d_request_handler(mux)
 {
 	/*
 	 * Register to handle the signals that indicate when the server should exit.
@@ -74,21 +74,33 @@ server::run(int n_threads /* = 1 */)
 	 */
 	if ( n_threads > 1 )
 	{
-		std::vector<std::thread> v_threads(n_threads);
+		std::vector<std::thread> v_threads;
 		for ( int i = 0; i < n_threads; i++ )
 		{
-			v_threads.push_back(std::thread([&](){
+			v_threads.push_back(std::thread([this](){
 				d_io_service.run();
 			}));
 		}
 		for ( auto & thread : v_threads )
 		{
-			thread.join();
+			if ( thread.joinable() )
+			{
+				thread.join();
+			}
 		}
 	}
 	else
 	{
 		d_io_service.run();
+	}
+}
+
+void
+server::stop()
+{
+	if ( ! d_io_service.stopped() )
+	{
+		d_io_service.stop();
 	}
 }
 

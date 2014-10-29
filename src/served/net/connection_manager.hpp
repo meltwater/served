@@ -20,48 +20,34 @@
  * SOFTWARE.
  */
 
-#ifndef SERVED_RESPONSE_HPP
-#define SERVED_RESPONSE_HPP
+#ifndef SERVED_CONNECTION_MANAGER_HPP
+#define SERVED_CONNECTION_MANAGER_HPP
 
-#include <sstream>
-#include <iostream>
-#include <map>
+#include <set>
+#include <mutex>
 
-#include <served/status.hpp>
+#include "connection.hpp"
 
-namespace served {
+namespace served { namespace net {
 
-class response
+class connection_manager
 {
-	typedef std::map<std::string, std::string> header_list;
-
-	int               d_status;
-	header_list       d_headers;
-	std::stringstream d_body;
-	std::string       d_buffer;
+	std::set<connection_ptr> d_connections;
+	std::mutex               d_connections_mutex;
 
 public:
-	//  -----  constructors  -----
+	connection_manager(const connection_manager&) = delete;
+	connection_manager& operator=(const connection_manager&) = delete;
 
-	response();
+	connection_manager();
 
-	//  -----  response mutators  -----
+	void start(connection_ptr c);
 
-	void set_header(std::string const& header, std::string const& value);
-	void set_status(int status_code);
-	void set_body(const std::string & body);
+	void stop(connection_ptr c);
 
-	void operator<<(std::string const& rhs);
-
-	//  -----  serializer  -----
-
-	const std::string to_buffer();
-
-	//  -----  stock reply  -----
-
-	static void stock_reply(int status_code, response & res);
+	void stop_all();
 };
 
-} // served
+} } // net, served
 
-#endif // SERVED_RESPONSE_HPP
+#endif // SERVED_CONNECTION_MANAGER_HPP

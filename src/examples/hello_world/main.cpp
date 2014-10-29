@@ -20,37 +20,43 @@
  * SOFTWARE.
  */
 
-#include "connection_manager.hpp"
+#include <served/served.hpp>
+#include <served/request_error.hpp>
+#include <served/status.hpp>
 
-using namespace served::server;
+#include <iostream>
 
-connection_manager::connection_manager()
-{}
+#include <unistd.h>
 
-void
-connection_manager::start(connection_ptr c) {
-	{
-		std::lock_guard<std::mutex> lock(d_connections_mutex);
-		d_connections.insert(c);
-	}
-	c->start();
-}
+int main(int argc, char const* argv[])
+{
+	std::function<void()> stop_call;
 
-void
-connection_manager::stop(connection_ptr c) {
-	{
-		std::lock_guard<std::mutex> lock(d_connections_mutex);
-		d_connections.erase(c);
-	}
-	c->stop();
-}
+	served::multiplexer mux;
+	mux.handle("/hello")
+		.get([](served::response & res, const served::request & req) {
+			std::cout << "Received request" << std::endl;
+			res << "Hello world";
+		});
 
-void
-connection_manager::stop_all() {
-	std::lock_guard<std::mutex> lock(d_connections_mutex);
-	for (auto c: d_connections)
-	{
-		c->stop();
-	}
-	d_connections.clear();
+	mux.handle("/throw/{variable}")
+		.get([](served::response & res, const served::request & req) {
+			throw served::request_error(served::status_4XX::BAD_REQUEST, req.params["variable"]);
+		});
+
+	mux.handle("/shutdown")
+		.get([&](served::response & res, const served::request & req) {
+			std::cout << "Received shutdown request" << std::endl;
+			stop_call();
+		});
+
+	served::net::server server("127.0.0.1", "8080", mux);
+	stop_call = [&](){
+		server.stop();
+	};
+
+	// Run with a thread pool of 10 threads.
+	server.run(10);
+
+	return 0;
 }

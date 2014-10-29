@@ -20,48 +20,10 @@
  * SOFTWARE.
  */
 
-#ifndef SERVED_RESPONSE_HPP
-#define SERVED_RESPONSE_HPP
+#ifndef SERVED_HPP
+#define SERVED_HPP
 
-#include <sstream>
-#include <iostream>
-#include <map>
+#include <served/net/server.hpp>
+#include <served/multiplexer.hpp>
 
-#include <served/status.hpp>
-
-namespace served {
-
-class response
-{
-	typedef std::map<std::string, std::string> header_list;
-
-	int               d_status;
-	header_list       d_headers;
-	std::stringstream d_body;
-	std::string       d_buffer;
-
-public:
-	//  -----  constructors  -----
-
-	response();
-
-	//  -----  response mutators  -----
-
-	void set_header(std::string const& header, std::string const& value);
-	void set_status(int status_code);
-	void set_body(const std::string & body);
-
-	void operator<<(std::string const& rhs);
-
-	//  -----  serializer  -----
-
-	const std::string to_buffer();
-
-	//  -----  stock reply  -----
-
-	static void stock_reply(int status_code, response & res);
-};
-
-} // served
-
-#endif // SERVED_RESPONSE_HPP
+#endif // SERVED_HPP

@@ -20,34 +20,42 @@
  * SOFTWARE.
  */
 
-#ifndef SERVED_CONNECTION_MANAGER_HPP
-#define SERVED_CONNECTION_MANAGER_HPP
+#ifndef SERVER_HPP
+#define SERVER_HPP
 
-#include <set>
-#include <mutex>
+#include <boost/asio.hpp>
+#include <string>
+#include <served/net/connection_manager.hpp>
+#include <served/multiplexer.hpp>
 
-#include "connection.hpp"
+namespace served { namespace net {
 
-namespace served { namespace server {
-
-class connection_manager
+class server
 {
-	std::set<connection_ptr> d_connections;
-	std::mutex               d_connections_mutex;
+	boost::asio::io_service        d_io_service;
+	boost::asio::signal_set        d_signals;
+	boost::asio::ip::tcp::acceptor d_acceptor;
+	connection_manager             d_connection_manager;
+	boost::asio::ip::tcp::socket   d_socket;
+	multiplexer &                  d_request_handler;
 
 public:
-	connection_manager(const connection_manager&) = delete;
-	connection_manager& operator=(const connection_manager&) = delete;
+	server(const server&) = delete;
+	server& operator=(const server&) = delete;
 
-	connection_manager();
+	explicit server( const std::string & address
+	               , const std::string & port
+	               , multiplexer       & mux     );
 
-	void start(connection_ptr c);
+	void run(int n_threads = 1);
+	void stop();
 
-	void stop(connection_ptr c);
+private:
+	void do_accept();
 
-	void stop_all();
+	void do_await_stop();
 };
 
-} } // server, served
+} } // net, served
 
-#endif // SERVED_CONNECTION_MANAGER_HPP
+#endif // SERVER_HPP

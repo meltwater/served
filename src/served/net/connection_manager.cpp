@@ -20,41 +20,37 @@
  * SOFTWARE.
  */
 
-#ifndef SERVER_HPP
-#define SERVER_HPP
+#include "connection_manager.hpp"
 
-#include <boost/asio.hpp>
-#include <string>
-#include <served/server/connection_manager.hpp>
-#include <served/multiplexer.hpp>
+using namespace served::net;
 
-namespace served { namespace server {
+connection_manager::connection_manager()
+{}
 
-class server
-{
-	boost::asio::io_service        d_io_service;
-	boost::asio::signal_set        d_signals;
-	boost::asio::ip::tcp::acceptor d_acceptor;
-	connection_manager             d_connection_manager;
-	boost::asio::ip::tcp::socket   d_socket;
-	multiplexer                    d_request_handler;
+void
+connection_manager::start(connection_ptr c) {
+	{
+		std::lock_guard<std::mutex> lock(d_connections_mutex);
+		d_connections.insert(c);
+	}
+	c->start();
+}
 
-public:
-	server(const server&) = delete;
-	server& operator=(const server&) = delete;
+void
+connection_manager::stop(connection_ptr c) {
+	{
+		std::lock_guard<std::mutex> lock(d_connections_mutex);
+		d_connections.erase(c);
+	}
+	c->stop();
+}
 
-	explicit server( const std::string & address
-	               , const std::string & port
-	               , const std::string & doc_root );
-
-	void run(int n_threads = 1);
-
-private:
-	void do_accept();
-
-	void do_await_stop();
-};
-
-} } // server, served
-
-#endif // SERVER_HPP
+void
+connection_manager::stop_all() {
+	std::lock_guard<std::mutex> lock(d_connections_mutex);
+	for (auto c: d_connections)
+	{
+		c->stop();
+	}
+	d_connections.clear();
+}

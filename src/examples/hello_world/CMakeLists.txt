@@ -18,5 +18,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-ADD_SUBDIRECTORY (http2zmq)
-ADD_SUBDIRECTORY (hello_world)
+#
+# Locate project sources
+#
+FILE (GLOB_RECURSE hello_world_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp)
+
+#
+# Configure common project settings
+#
+SET (hello_world_LIBS ${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+
+#
+# Executable build rules
+#
+ADD_EXECUTABLE (hello_world ${hello_world_SRCS})
+TARGET_LINK_LIBRARIES (hello_world ${hello_world_LIBS})
+INSTALL (TARGETS hello_world DESTINATION bin)
