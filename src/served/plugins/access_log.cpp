@@ -20,45 +20,27 @@
  * SOFTWARE.
  */
 
-#include <served/served.hpp>
-#include <served/request_error.hpp>
-#include <served/status.hpp>
+#include <sstream>
+#include <iostream>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/date_time/posix_time/posix_time_io.hpp>
+
 #include <served/plugins.hpp>
 
-#include <iostream>
+namespace served { namespace plugin {
 
-#include <unistd.h>
-
-int main(int argc, char const* argv[])
+void access_log(served::response & res, served::request & req)
 {
-	std::function<void()> stop_call;
+	std::stringstream ss;
 
-	served::multiplexer mux;
+	boost::posix_time::time_facet *facet = new boost::posix_time::time_facet("%d/%b/%Y:%H:%M:%S");
+	ss.imbue(std::locale(ss.getloc(), facet));
 
-	mux.use_after(served::plugin::access_log);
+	ss << "- - - [" << boost::posix_time::second_clock::local_time() << " -0000]";
+	ss << " \"" << method_to_string(req.method()) << " " << req.url().path() << " " << req.HTTP_version() << "\"";
+	ss << " " << res.status() << " " << res.body_size();
 
-	mux.handle("/hello")
-		.get([](served::response & res, const served::request & req) {
-			res << "Hello world";
-		});
-
-	mux.handle("/throw/{variable}")
-		.get([](served::response & res, const served::request & req) {
-			throw served::request_error(served::status_4XX::BAD_REQUEST, req.params["variable"]);
-		});
-
-	mux.handle("/shutdown")
-		.get([&](served::response & res, const served::request & req) {
-			stop_call();
-		});
-
-	served::net::server server("127.0.0.1", "8080", mux);
-	stop_call = [&](){
-		server.stop();
-	};
-
-	// Run with a thread pool of 10 threads.
-	server.run(10);
-
-	return 0;
+	std::cout << ss.str() << std::endl;
 }
+
+} } // plugin, served

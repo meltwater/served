@@ -20,45 +20,16 @@
  * SOFTWARE.
  */
 
-#include <served/served.hpp>
-#include <served/request_error.hpp>
-#include <served/status.hpp>
-#include <served/plugins.hpp>
+#ifndef SERVED_PLUGINS_HPP
+#define SERVED_PLUGINS_HPP
 
-#include <iostream>
+#include <served/response.hpp>
+#include <served/request.hpp>
 
-#include <unistd.h>
+namespace served { namespace plugin {
 
-int main(int argc, char const* argv[])
-{
-	std::function<void()> stop_call;
+void access_log(served::response & res, served::request & request);
 
-	served::multiplexer mux;
+} } // plugin, served
 
-	mux.use_after(served::plugin::access_log);
-
-	mux.handle("/hello")
-		.get([](served::response & res, const served::request & req) {
-			res << "Hello world";
-		});
-
-	mux.handle("/throw/{variable}")
-		.get([](served::response & res, const served::request & req) {
-			throw served::request_error(served::status_4XX::BAD_REQUEST, req.params["variable"]);
-		});
-
-	mux.handle("/shutdown")
-		.get([&](served::response & res, const served::request & req) {
-			stop_call();
-		});
-
-	served::net::server server("127.0.0.1", "8080", mux);
-	stop_call = [&](){
-		server.stop();
-	};
-
-	// Run with a thread pool of 10 threads.
-	server.run(10);
-
-	return 0;
-}
+#endif // SERVED_PLUGINS_HPP
