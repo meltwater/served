@@ -80,7 +80,16 @@ connection::do_read()
 					{
 						response::stock_reply(status_5XX::INTERNAL_SERVER_ERROR, d_response);
 					}
+
 					do_write();
+
+					try
+					{
+						d_request_handler.on_request_handled(d_response, d_request);
+					}
+					catch (...)
+					{
+					}
 				}
 				else if ( result == request_parser::ERROR )
 				{

@@ -63,6 +63,7 @@ public:
 	//  ----- request forwarding  -----
 
 	void forward_to_handler(served::response & res, served::request & req);
+	void on_request_handled(served::response & res, served::request & req);
 
 private:
 	//  -----  path parsing/compiling  -----

@@ -255,3 +255,44 @@ TEST_CASE("multiplexer REST params test", "[mux]")
 		CHECK(s.params.get("TEST") == "expected_123");
 	}
 }
+
+TEST_CASE("multiplexer test plugins", "[mux]")
+{
+	SECTION("Before plugin")
+	{
+		int touches = 0;
+		served::multiplexer mux;
+		mux.handle("/test")
+			.get([&](served::response & res, const served::request & req) {
+				if ( touches == 1 )
+				{
+					touches++;
+				}
+			});
+		mux.use_before([&](served::response & res, const served::request & req) {
+			if ( touches == 0 )
+			{
+				touches++;
+			}
+		});
+		mux.use_after([&](served::response & res, const served::request & req) {
+			if ( touches == 2 )
+			{
+				touches++;
+			}
+		});
+
+		served::response res;
+		served::request req;
+		served::uri url;
+
+		url.set_path("/test");
+		req.set_destination(url);
+		req.set_method(served::method::GET);
+
+		mux.forward_to_handler(res, req);
+		mux.on_request_handled(res, req);
+
+		CHECK(touches == 3);
+	}
+}

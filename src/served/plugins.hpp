@@ -28,7 +28,7 @@
 
 namespace served { namespace plugin {
 
-void access_log(served::response & res, served::request & request);
+void access_log(served::response & res, const served::request & request);
 
 } } // plugin, served
 

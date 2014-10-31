@@ -25,10 +25,6 @@
 #include <served/status.hpp>
 #include <served/plugins.hpp>
 
-#include <iostream>
-
-#include <unistd.h>
-
 int main(int argc, char const* argv[])
 {
 	std::function<void()> stop_call;

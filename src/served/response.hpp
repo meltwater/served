@@ -55,7 +55,7 @@ public:
 
 	//  -----  accessors  -----
 
-	const int status();
+	const int status   ();
 	const int body_size();
 
 	//  -----  serializer  -----

@@ -29,7 +29,7 @@
 
 namespace served { namespace plugin {
 
-void access_log(served::response & res, served::request & req)
+void access_log(served::response & res, const served::request & req)
 {
 	std::stringstream ss;
 

@@ -128,6 +128,12 @@ multiplexer::forward_to_handler(served::response & res, served::request & req)
 {
 	bool pattern_matched = false;
 
+	// Iterate plugin pre request handlers
+	for ( const auto & handler : _plugin_pre_handlers )
+	{
+		handler(res, req);
+	}
+
 	// Split request path into segments
 	const auto request_segments = split_path(req.url().path());
 	const int  r_size           = request_segments.size();
@@ -173,17 +179,8 @@ multiplexer::forward_to_handler(served::response & res, served::request & req)
 				handler_segments[seg_index]->get_param(req.params, request_segments[seg_index]);
 			}
 
-			for ( const auto & handler : _plugin_pre_handlers )
-			{
-				handler(res, req);
-			}
-
 			method_handler[ req.method() ](res, req);
 
-			for ( const auto & handler : _plugin_post_handlers )
-			{
-				handler(res, req);
-			}
 			break;
 		}
 	}
@@ -192,6 +189,15 @@ multiplexer::forward_to_handler(served::response & res, served::request & req)
 	if ( ! pattern_matched )
 	{
 		throw served::request_error(served::status_4XX::NOT_FOUND, "Path not found");
+	}
+}
+
+void
+multiplexer::on_request_handled(served::response & res, served::request & req)
+{
+	for ( const auto & handler : _plugin_post_handlers )
+	{
+		handler(res, req);
 	}
 }
 
