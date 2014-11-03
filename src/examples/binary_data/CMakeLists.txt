@@ -18,14 +18,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-FIND_PACKAGE (ZeroMQ)
+#
+# Locate project sources
+#
+FILE (GLOB_RECURSE binary_data_plugin_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp)
 
-IF (ZEROMQ_FOUND)
-	INCLUDE_DIRECTORIES (${ZeroMQ_INCLUDE_DIR})
-	ADD_SUBDIRECTORY (http2zmq)
-ENDIF (ZEROMQ_FOUND)
+#
+# Configure common project settings
+#
+SET (binary_data_plugin_LIBS ${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
-ADD_SUBDIRECTORY (hello_world)
-ADD_SUBDIRECTORY (request_logger_plugin)
-ADD_SUBDIRECTORY (rest_resource)
-ADD_SUBDIRECTORY (binary_data)
+#
+# Executable build rules
+#
+ADD_EXECUTABLE (binary_data_plugin ${binary_data_plugin_SRCS})
+TARGET_LINK_LIBRARIES (binary_data_plugin ${binary_data_plugin_LIBS})
+INSTALL (TARGETS binary_data_plugin DESTINATION bin)
