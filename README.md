@@ -68,6 +68,8 @@ SERVED_BUILD_SHARED    | Build shared library
 SERVED_BUILD_STATIC    | Build static library
 SERVED_BUILD_TESTS     | Build unit test suite
 SERVED_BUILD_EXAMPLES  | Build bundled examples
+SERVED_BUILD_DEB       | Build DEB package (note: you must also have dpkg installed)
+SERVED_BUILD_RPM       | Build RPM package (note: you must also have rpmbuild installed)
 
 ## System Compatibility
 
