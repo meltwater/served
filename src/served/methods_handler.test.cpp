@@ -23,7 +23,24 @@
 #define CATCH_CONFIG_MAIN
 #include "../test/catch.hpp"
 
+#include <served/methods_handler.hpp>
+
 TEST_CASE("test methods handling", "[methods_handler]")
 {
-	CHECK( false != true );
+	SECTION("create handlers")
+	{
+		auto dummy = [](served::response & res, const served::request & req) {};
+
+		served::methods_handler h;
+		h.post(dummy).get(dummy).method(served::method::CONNECT, dummy).put(dummy);
+
+		CHECK(h.method_supported(served::method::POST) == true);
+		CHECK(h.method_supported(served::method::GET) == true);
+		CHECK(h.method_supported(served::method::CONNECT) == true);
+		CHECK(h.method_supported(served::method::PUT) == true);
+
+		CHECK(h.method_supported(served::method::DEL) == false);
+		CHECK(h.method_supported(served::method::HEAD) == false);
+		CHECK(h.method_supported(served::method::BREW) == false);
+	}
 }

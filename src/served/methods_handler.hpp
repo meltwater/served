@@ -42,6 +42,8 @@ public:
 	methods_handler & put (served_req_handler);
 	methods_handler & del (served_req_handler);
 
+	methods_handler & method(const served::method, served_req_handler);
+
 	bool method_supported(const served::method method)
 	{
 		return ( _handlers.find(method) != _handlers.end() );

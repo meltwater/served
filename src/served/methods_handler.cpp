@@ -59,4 +59,11 @@ methods_handler::del (served_req_handler handler)
 	return *this;
 }
 
+methods_handler &
+methods_handler::method(const served::method method, served_req_handler handler)
+{
+	_handlers[method] = handler;
+	return *this;
+}
+
 } // served

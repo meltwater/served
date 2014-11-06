@@ -29,7 +29,7 @@
 namespace served {
 
 enum method {
-	GET, POST, HEAD, PUT, DEL
+	GET, POST, HEAD, PUT, DEL, OPTIONS, TRACE, CONNECT, BREW
 };
 
 inline std::string
@@ -47,6 +47,14 @@ method_to_string(enum method m)
 			return "PUT";
 		case method::DEL:
 			return "DEL";
+		case method::OPTIONS:
+			return "OPTIONS";
+		case method::TRACE:
+			return "TRACE";
+		case method::CONNECT:
+			return "CONNECT";
+		case method::BREW:
+			return "BREW";
 	}
 	return "";
 }
@@ -73,6 +81,22 @@ method_from_string(const std::string & str)
 	if ( "DEL" == str )
 	{
 		return method::DEL;
+	}
+	if ( "OPTIONS" == str )
+	{
+		return method::OPTIONS;
+	}
+	if ( "TRACE" == str )
+	{
+		return method::TRACE;
+	}
+	if ( "CONNECT" == str )
+	{
+		return method::CONNECT;
+	}
+	if ( "BREW" == str )
+	{
+		return method::BREW;
 	}
 	throw std::runtime_error("method string not recognised");
 }

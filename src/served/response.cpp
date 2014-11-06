@@ -122,6 +122,12 @@ response::stock_reply(int status_code, response & res)
 
 	switch (status_code)
 	{
+	// 2XX
+	case served::status_2XX::OK:
+		res << "Successful";
+		break;
+	case served::status_2XX::NO_CONTENT:
+		break;
 	// 4XX
 	case served::status_4XX::BAD_REQUEST:
 		res << "Detected a bad request";
@@ -140,6 +146,9 @@ response::stock_reply(int status_code, response & res)
 		break;
 	case served::status_4XX::FORBIDDEN:
 		res << "Access to this resource is forbidden";
+		break;
+	case served::status_4XX::IM_A_TEAPOT:
+		res << "I'm a teapot";
 		break;
 	case served::status_4XX::TOO_MANY_REQUESTS:
 		res << "Too many requests have been detected from this client";

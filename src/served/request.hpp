@@ -28,7 +28,6 @@
 
 #include <served/methods.hpp>
 #include <served/uri.hpp>
-#include <served/cookie.hpp>
 #include <served/parameters.hpp>
 
 namespace served {
