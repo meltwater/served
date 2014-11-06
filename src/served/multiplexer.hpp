@@ -75,7 +75,7 @@ private:
 	path_compiled_segments get_segments(const std::string & path);
 
 private:
-	const std::string _base_path;
+	path_compiled_segments _base_path;
 
 	path_handler_candidates _handler_candidates;
 	plugin_handler_list     _plugin_pre_handlers;

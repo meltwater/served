@@ -256,6 +256,76 @@ TEST_CASE("multiplexer REST params test", "[mux]")
 	}
 }
 
+TEST_CASE("multiplexer test base path", "[mux]")
+{
+	SECTION("Use base path")
+	{
+		served::multiplexer mux("/base/path");
+		mux.handle("/end").get([](served::response & res, const served::request & req){
+			res.set_status(served::status_2XX::ACCEPTED);
+		});
+		mux.handle("/").get([](served::response & res, const served::request & req){
+			res.set_status(served::status_2XX::NO_CONTENT);
+		});
+
+		{
+			served::response res;
+			served::request req;
+			served::uri url;
+
+			url.set_path("/base/path/end");
+			req.set_destination(url);
+			req.set_method(served::method::GET);
+
+			mux.forward_to_handler( res, req );
+			CHECK( res.status() == served::status_2XX::ACCEPTED );
+		}
+		{
+			served::response res;
+			served::request req;
+			served::uri url;
+
+			url.set_path("/base/path/");
+			req.set_destination(url);
+			req.set_method(served::method::GET);
+
+			mux.forward_to_handler( res, req );
+			CHECK( res.status() == served::status_2XX::NO_CONTENT );
+		}
+		{
+			served::response res;
+			served::request req;
+			served::uri url;
+
+			url.set_path("/base/not/end");
+			req.set_destination(url);
+			req.set_method(served::method::GET);
+
+			CHECK_THROWS_AS(mux.forward_to_handler(res, req), served::request_error);
+		}
+	}
+
+	SECTION("Confirm params created")
+	{
+		served::multiplexer mux("/base/{TEST}");
+		mux.handle("/end").get([](served::response & res, const served::request & req) {
+			res.set_status(served::status_2XX::OK);
+		});
+
+		served::response res;
+		served::request req;
+		served::uri url;
+
+		url.set_path("/base/expected_123/end");
+		req.set_destination(url);
+		req.set_method(served::method::GET);
+
+		mux.forward_to_handler( res, req );
+
+		CHECK(req.params["TEST"] == "expected_123");
+	}
+}
+
 TEST_CASE("multiplexer test plugins", "[mux]")
 {
 	SECTION("Before plugin")
