@@ -216,7 +216,7 @@ TEST_CASE("multiplexer method routing", "[mux]")
 			CHECK_NOTHROW(mux.forward_to_handler( res, req ));
 
 			INFO("Checking accepts DEL");
-			req.set_method(served::method::DEL);
+			req.set_method(served::method::DELETE);
 			CHECK_NOTHROW(mux.forward_to_handler( res, req ));
 
 			INFO("Checking accepts HEAD");
@@ -364,5 +364,122 @@ TEST_CASE("multiplexer test plugins", "[mux]")
 		mux.on_request_handled(res, req);
 
 		CHECK(touches == 3);
+	}
+}
+
+TEST_CASE("multiplexer test endpoint list", "[mux]")
+{
+	SECTION("without base path")
+	{
+		auto dummy = [](served::response & res, const served::request & req){};
+
+		served::multiplexer mux;
+		mux.handle("/first/test").get(dummy).post(dummy).del(dummy);
+		mux.handle("/second/test").get(dummy).del(dummy);
+		mux.handle("/third/test").put(dummy);
+
+		auto list = mux.get_endpoint_list();
+
+		auto search = [](std::vector<std::string> & vec, std::string s) {
+			for ( auto & v : vec )
+			{
+				if ( v == s )
+				{
+					return true;
+				}
+			}
+			return false;
+		};
+
+		{
+			auto target = list.find("/first/test");
+			REQUIRE(target != list.end());
+
+			auto methods = target->second;
+
+			CHECK(methods.size() == 3);
+
+			CHECK(search(methods, "GET"));
+			CHECK(search(methods, "POST"));
+			CHECK(search(methods, "DELETE"));
+		}
+		{
+			auto target = list.find("/second/test");
+			REQUIRE(target != list.end());
+
+			auto methods = target->second;
+
+			CHECK(methods.size() == 2);
+
+			CHECK(search(methods, "GET"));
+			CHECK(search(methods, "DELETE"));
+		}
+		{
+			auto target = list.find("/third/test");
+			REQUIRE(target != list.end());
+
+			auto methods = target->second;
+
+			CHECK(methods.size() == 1);
+
+			CHECK(search(methods, "PUT"));
+		}
+	}
+
+	SECTION("with base path")
+	{
+		auto dummy = [](served::response & res, const served::request & req){};
+
+		served::multiplexer mux("/base/path");
+		mux.handle("/first/test").get(dummy).post(dummy).del(dummy);
+		mux.handle("/second/test").get(dummy).del(dummy);
+		mux.handle("/third/test").put(dummy);
+
+		auto list = mux.get_endpoint_list();
+
+		auto search = [](std::vector<std::string> & vec, std::string s) {
+			for ( auto & v : vec )
+			{
+				if ( v == s )
+				{
+					return true;
+				}
+			}
+			return false;
+		};
+
+		{
+			auto target = list.find("/base/path/first/test");
+			REQUIRE(target != list.end());
+
+			auto methods = target->second;
+
+			CHECK(methods.size() == 3);
+
+			CHECK(search(methods, "GET"));
+			CHECK(search(methods, "POST"));
+			CHECK(search(methods, "DELETE"));
+		}
+		{
+			auto target = list.find("/base/path/second/test");
+			REQUIRE(target != list.end());
+
+			auto methods = target->second;
+
+			CHECK(methods.size() == 2);
+
+			CHECK(search(methods, "GET"));
+			CHECK(search(methods, "DELETE"));
+		}
+		{
+			auto target = list.find("/base/path/third/test");
+			REQUIRE(target != list.end());
+
+			auto methods = target->second;
+
+			CHECK(methods.size() == 1);
+
+			CHECK(search(methods, "PUT"));
+		}
 	}
 }

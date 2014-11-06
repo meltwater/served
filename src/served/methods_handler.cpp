@@ -24,6 +24,15 @@
 
 namespace served {
 
+//  -----  constructors  -----
+
+methods_handler::methods_handler(const std::string path)
+	: _path(path)
+{
+}
+
+//  -----  method registering  -----
+
 methods_handler &
 methods_handler::get (served_req_handler handler)
 {
@@ -55,7 +64,7 @@ methods_handler::put (served_req_handler handler)
 methods_handler &
 methods_handler::del (served_req_handler handler)
 {
-	_handlers[served::method::DEL] = handler;
+	_handlers[served::method::DELETE] = handler;
 	return *this;
 }
 
@@ -64,6 +73,19 @@ methods_handler::method(const served::method method, served_req_handler handler)
 {
 	_handlers[method] = handler;
 	return *this;
+}
+
+//  -----  endpoint propagation  -----
+
+void
+methods_handler::propagate_endpoint(served_endpoint_list & endpoints) const
+{
+	std::vector<std::string> methods;
+	for ( const auto & m_handler : _handlers )
+	{
+		methods.push_back(served::method_to_string(m_handler.first));
+	}
+	endpoints[_path] = methods;
 }
 
 } // served

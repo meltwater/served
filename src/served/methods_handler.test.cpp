@@ -31,7 +31,7 @@ TEST_CASE("test methods handling", "[methods_handler]")
 	{
 		auto dummy = [](served::response & res, const served::request & req) {};
 
-		served::methods_handler h;
+		served::methods_handler h("/dummy");
 		h.post(dummy).get(dummy).method(served::method::CONNECT, dummy).put(dummy);
 
 		CHECK(h.method_supported(served::method::POST) == true);
@@ -39,8 +39,42 @@ TEST_CASE("test methods handling", "[methods_handler]")
 		CHECK(h.method_supported(served::method::CONNECT) == true);
 		CHECK(h.method_supported(served::method::PUT) == true);
 
-		CHECK(h.method_supported(served::method::DEL) == false);
+		CHECK(h.method_supported(served::method::DELETE) == false);
 		CHECK(h.method_supported(served::method::HEAD) == false);
 		CHECK(h.method_supported(served::method::BREW) == false);
+	}
+
+	SECTION("check endpoint propagation")
+	{
+		auto dummy = [](served::response & res, const served::request & req) {};
+
+		served::methods_handler h("/this/path/is/great");
+		h.post(dummy).get(dummy).method(served::method::CONNECT, dummy).put(dummy);
+
+		served::served_endpoint_list list;
+		h.propagate_endpoint(list);
+
+		auto target = list.find("/this/path/is/great");
+		REQUIRE(target != list.end());
+
+		auto search = [](std::vector<std::string> & vec, std::string s) {
+			for ( auto & v : vec )
+			{
+				if ( v == s )
+				{
+					return true;
+				}
+			}
+			return false;
+		};
+
+		auto methods = target->second;
+
+		CHECK(methods.size() == 4);
+
+		CHECK(search(methods, "POST"));
+		CHECK(search(methods, "GET"));
+		CHECK(search(methods, "CONNECT"));
+		CHECK(search(methods, "PUT"));
 	}
 }

@@ -30,12 +30,14 @@ namespace served {
 //  -----  constructors  -----
 
 multiplexer::multiplexer()
-	: _base_path()
+	: _base_path("")
+	, _base_path_segments()
 {
 }
 
 multiplexer::multiplexer(const std::string & base_path)
-	: _base_path(get_segments(base_path))
+	: _base_path(base_path)
+	, _base_path_segments(get_segments(_base_path))
 {
 }
 
@@ -116,7 +118,7 @@ served::methods_handler &
 multiplexer::handle(const std::string & path)
 {
 	_handler_candidates.push_back(
-		path_handler_candidate(get_segments(path), served::methods_handler()));
+		path_handler_candidate(get_segments(path), served::methods_handler(_base_path + path)));
 
 	return std::get<1>(_handler_candidates.back());
 }
@@ -139,7 +141,7 @@ multiplexer::forward_to_handler(served::response & res, served::request & req)
 	size_t r_size           = request_segments.size();
 
 	// If a base path was specified check for a match
-	const size_t b_size = _base_path.size();
+	const size_t b_size = _base_path_segments.size();
 	if ( 0 != b_size )
 	{
 		if ( b_size > r_size )
@@ -151,7 +153,7 @@ multiplexer::forward_to_handler(served::response & res, served::request & req)
 		size_t seg_index = 0;
 		for ( ; seg_index < b_size; seg_index++ )
 		{
-			if ( ! _base_path[seg_index]->check_match(request_segments[seg_index]) )
+			if ( ! _base_path_segments[seg_index]->check_match(request_segments[seg_index]) )
 			{
 				throw served::request_error(served::status_4XX::NOT_FOUND, "Path not found");
 			}
@@ -160,7 +162,7 @@ multiplexer::forward_to_handler(served::response & res, served::request & req)
 		// Collect parameters from REST path segments
 		for ( seg_index = 0; seg_index < b_size; seg_index++ )
 		{
-			_base_path[seg_index]->get_param(req.params, request_segments[seg_index]);
+			_base_path_segments[seg_index]->get_param(req.params, request_segments[seg_index]);
 		}
 
 		request_segments.erase(request_segments.begin(), request_segments.begin() + b_size);
@@ -228,6 +230,19 @@ multiplexer::on_request_handled(served::response & res, served::request & req)
 	{
 		handler(res, req);
 	}
+}
+
+//  -----  accessors  -----
+
+const served_endpoint_list
+multiplexer::get_endpoint_list()
+{
+	served_endpoint_list list;
+	for ( const auto & handler : _handler_candidates )
+	{
+		std::get<1>(handler).propagate_endpoint(list);
+	}
+	return list;
 }
 
 } // served

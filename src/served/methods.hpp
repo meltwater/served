@@ -29,7 +29,7 @@
 namespace served {
 
 enum method {
-	GET, POST, HEAD, PUT, DEL, OPTIONS, TRACE, CONNECT, BREW
+	GET, POST, HEAD, PUT, DELETE, OPTIONS, TRACE, CONNECT, BREW
 };
 
 inline std::string
@@ -45,8 +45,8 @@ method_to_string(enum method m)
 			return "HEAD";
 		case method::PUT:
 			return "PUT";
-		case method::DEL:
-			return "DEL";
+		case method::DELETE:
+			return "DELETE";
 		case method::OPTIONS:
 			return "OPTIONS";
 		case method::TRACE:
@@ -78,9 +78,9 @@ method_from_string(const std::string & str)
 	{
 		return method::PUT;
 	}
-	if ( "DEL" == str )
+	if ( "DELETE" == str )
 	{
-		return method::DEL;
+		return method::DELETE;
 	}
 	if ( "OPTIONS" == str )
 	{

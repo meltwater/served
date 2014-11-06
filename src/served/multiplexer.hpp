@@ -36,7 +36,6 @@
 namespace served {
 
 typedef std::function<void(response &, request &)> served_plugin_req_handler;
-typedef std::vector<served_plugin_req_handler>     plugin_handler_list;
 
 class multiplexer
 {
@@ -65,8 +64,14 @@ public:
 	void forward_to_handler(served::response & res, served::request & req);
 	void on_request_handled(served::response & res, served::request & req);
 
+	//  -----  accessors  -----
+
+	const served_endpoint_list get_endpoint_list();
+
 private:
 	//  -----  path parsing/compiling  -----
+
+	typedef std::vector<served_plugin_req_handler>                      plugin_handler_list;
 
 	typedef std::vector<served::mux::segment_matcher_ptr>               path_compiled_segments;
 	typedef std::tuple<path_compiled_segments, served::methods_handler> path_handler_candidate;
@@ -75,7 +80,8 @@ private:
 	path_compiled_segments get_segments(const std::string & path);
 
 private:
-	path_compiled_segments _base_path;
+	const std::string       _base_path;
+	path_compiled_segments  _base_path_segments;
 
 	path_handler_candidates _handler_candidates;
 	plugin_handler_list     _plugin_pre_handlers;
