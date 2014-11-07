@@ -20,33 +20,42 @@
  * SOFTWARE.
  */
 
-#ifndef SERVED_PATH_REGEX_MATCHER_HPP
-#define SERVED_PATH_REGEX_MATCHER_HPP
+#include <served/served.hpp>
+#include <served/request_error.hpp>
+#include <served/status.hpp>
 
-#include <string>
+#include <iostream>
 
-#include <re2/re2.h>
+#include <unistd.h>
 
-#include <served/mux/segment_matcher.hpp>
-
-namespace served { namespace mux {
-
-class regex_matcher : public segment_matcher
+int main(int argc, char const* argv[])
 {
-	const std::string _variable_name;
-	re2::RE2 _regex;
+	served::multiplexer mux;
 
-public:
-	//  -----  constructors  -----
-	regex_matcher(const std::string & variable_name, const std::string & regex);
+	// GET /handlers
+	mux.handle("/handlers")
+		.get([](served::response & res, const served::request & req) {
+			res << "You got served";
+		});
 
-	//  -----  matching logic  -----
-	bool check_match(const std::string & path_segment);
+	// GET /handlers/{id}
+	mux.handle("/handlers/{id}")
+		.get([](served::response & res, const served::request & req) {
+			res << "id: ";
+			res << req.params["id"];
+		});
 
-	//  -----  REST param collecting  -----
-	void get_param(served::parameters & params, const std::string & path_segment);
-};
+	// GET /handlers/{id}/{number:[0-9]+}
+	mux.handle("/handlers/{id}/{number:[0-9]+}")
+		.get([](served::response & res, const served::request & req) {
+			res << "id: ";
+			res << req.params["id"];
+			res << ", number: ";
+			res << req.params["number"];
+		});
 
-} } // mux, served
+	served::net::server server("127.0.0.1", "8000", mux);
+	server.run(10);
 
-#endif // SERVED_PATH_REGEX_MATCHER_HPP
+	return (EXIT_SUCCESS);
+}

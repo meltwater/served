@@ -1,5 +1,5 @@
 
-#line 1 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 1 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 /*
  * Copyright (C) 2014 MediaSift Ltd.
  *
@@ -33,7 +33,7 @@ using namespace served;
 /** Machine **/
 
 
-#line 37 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 37 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 static const int request_parser_start = 1;
 static const int request_parser_first_final = 348;
 static const int request_parser_error = 0;
@@ -41,7 +41,7 @@ static const int request_parser_error = 0;
 static const int request_parser_en_main = 1;
 
 
-#line 238 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 238 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 
 
 request_parser::request_parser()
@@ -49,12 +49,12 @@ request_parser::request_parser()
     , d_offset(0)
 {
     
-#line 53 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 53 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	{
 	cs = request_parser_start;
 	}
 
-#line 245 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 245 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 }
 
 request_parser::~request_parser()
@@ -78,7 +78,7 @@ request_parser::execute(const char *buffer, size_t len) {
     const char *pe = buffer+len;
 
     
-#line 82 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 82 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	{
 	if ( p == pe )
 		goto _test_eof;
@@ -99,7 +99,7 @@ st0:
 cs = 0;
 	goto _out;
 tr0:
-#line 36 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(mark, p);
     }
@@ -108,7 +108,7 @@ st2:
 	if ( ++p == pe )
 		goto _test_eof2;
 case 2:
-#line 112 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 112 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	if ( (*p) == 32 )
 		goto tr4;
 	if ( (*p) > 57 ) {
@@ -118,7 +118,7 @@ case 2:
 		goto st175;
 	goto st0;
 tr4:
-#line 56 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 56 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         request_method(buffer, PTR_TO(mark), LEN(mark, p));
     }
@@ -127,7 +127,7 @@ st3:
 	if ( ++p == pe )
 		goto _test_eof3;
 case 3:
-#line 131 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 131 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
 		case 32: goto tr6;
 		case 33: goto tr7;
@@ -151,65 +151,65 @@ case 3:
 		goto tr12;
 	goto st0;
 tr6:
-#line 36 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(mark, p);
     }
-#line 80 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 80 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         request_path(buffer, PTR_TO(mark), LEN(mark,p));
     }
-#line 60 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 60 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{ 
         request_uri(buffer, PTR_TO(mark), LEN(mark, p));
     }
 	goto st4;
 tr37:
-#line 80 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 80 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         request_path(buffer, PTR_TO(mark), LEN(mark,p));
     }
-#line 60 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 60 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{ 
         request_uri(buffer, PTR_TO(mark), LEN(mark, p));
     }
 	goto st4;
 tr43:
-#line 36 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(mark, p);
     }
-#line 64 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 64 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         fragment(buffer, PTR_TO(mark), LEN(mark, p));
     }
 	goto st4;
 tr46:
-#line 64 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 64 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         fragment(buffer, PTR_TO(mark), LEN(mark, p));
     }
 	goto st4;
 tr53:
-#line 68 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 68 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(query_start, p);
     }
-#line 72 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 72 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         query_string(buffer, PTR_TO(query_start), LEN(query_start, p));
     }
-#line 60 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 60 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{ 
         request_uri(buffer, PTR_TO(mark), LEN(mark, p));
     }
 	goto st4;
 tr57:
-#line 72 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 72 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         query_string(buffer, PTR_TO(query_start), LEN(query_start, p));
     }
-#line 60 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 60 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{ 
         request_uri(buffer, PTR_TO(mark), LEN(mark, p));
     }
@@ -218,12 +218,12 @@ st4:
 	if ( ++p == pe )
 		goto _test_eof4;
 case 4:
-#line 222 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 222 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	if ( (*p) == 72 )
 		goto tr13;
 	goto st0;
 tr13:
-#line 36 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(mark, p);
     }
@@ -232,7 +232,7 @@ st5:
 	if ( ++p == pe )
 		goto _test_eof5;
 case 5:
-#line 236 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 236 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	if ( (*p) == 84 )
 		goto st6;
 	goto st0;
@@ -288,23 +288,23 @@ case 12:
 	}
 	goto st0;
 tr21:
-#line 76 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 76 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         http_version(buffer, PTR_TO(mark), LEN(mark, p));
     }
 	goto st13;
 tr30:
-#line 48 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 48 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
     	MARK(mark, p);
     }
-#line 52 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 52 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         http_field(buffer, PTR_TO(field_start), field_len, PTR_TO(mark), LEN(mark, p));
     }
 	goto st13;
 tr33:
-#line 52 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 52 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         http_field(buffer, PTR_TO(field_start), field_len, PTR_TO(mark), LEN(mark, p));
     }
@@ -313,7 +313,7 @@ st13:
 	if ( ++p == pe )
 		goto _test_eof13;
 case 13:
-#line 317 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 317 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
 		case 10: goto tr24;
 		case 13: goto tr25;
@@ -346,7 +346,7 @@ case 13:
 		goto tr23;
 	goto st0;
 tr23:
-#line 40 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 40 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(field_start, p);
     }
@@ -355,7 +355,7 @@ st14:
 	if ( ++p == pe )
 		goto _test_eof14;
 case 14:
-#line 359 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 359 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
 		case 33: goto st14;
 		case 58: goto tr27;
@@ -387,13 +387,13 @@ case 14:
 		goto st14;
 	goto st0;
 tr27:
-#line 44 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 44 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         field_len = LEN(field_start, p);
     }
 	goto st15;
 tr29:
-#line 48 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 48 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
     	MARK(mark, p);
     }
@@ -402,7 +402,7 @@ st15:
 	if ( ++p == pe )
 		goto _test_eof15;
 case 15:
-#line 406 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 406 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
 		case 0: goto st0;
 		case 9: goto tr29;
@@ -413,7 +413,7 @@ case 15:
 	}
 	goto tr28;
 tr28:
-#line 48 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 48 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
     	MARK(mark, p);
     }
@@ -422,7 +422,7 @@ st16:
 	if ( ++p == pe )
 		goto _test_eof16;
 case 16:
-#line 426 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 426 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
 		case 0: goto st0;
 		case 10: goto tr33;
@@ -431,23 +431,23 @@ case 16:
 	}
 	goto st16;
 tr22:
-#line 76 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 76 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         http_version(buffer, PTR_TO(mark), LEN(mark, p));
     }
 	goto st17;
 tr31:
-#line 48 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 48 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
     	MARK(mark, p);
     }
-#line 52 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 52 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         http_field(buffer, PTR_TO(field_start), field_len, PTR_TO(mark), LEN(mark, p));
     }
 	goto st17;
 tr34:
-#line 52 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 52 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         http_field(buffer, PTR_TO(field_start), field_len, PTR_TO(mark), LEN(mark, p));
     }
@@ -456,16 +456,16 @@ st17:
 	if ( ++p == pe )
 		goto _test_eof17;
 case 17:
-#line 460 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 460 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	if ( (*p) == 10 )
 		goto st13;
 	goto st0;
 tr24:
-#line 40 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 40 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(field_start, p);
     }
-#line 84 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 84 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         if(xml_sent || json_sent) {
             body_start = PTR_TO(mark) - buffer;
@@ -481,7 +481,7 @@ tr24:
     }
 	goto st348;
 tr36:
-#line 84 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 84 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         if(xml_sent || json_sent) {
             body_start = PTR_TO(mark) - buffer;
@@ -500,7 +500,7 @@ st348:
 	if ( ++p == pe )
 		goto _test_eof348;
 case 348:
-#line 504 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 504 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
 		case 33: goto st14;
 		case 58: goto tr27;
@@ -532,7 +532,7 @@ case 348:
 		goto st14;
 	goto st0;
 tr25:
-#line 40 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 40 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(field_start, p);
     }
@@ -541,7 +541,7 @@ st18:
 	if ( ++p == pe )
 		goto _test_eof18;
 case 18:
-#line 545 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 545 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
 		case 10: goto tr36;
 		case 33: goto st14;
@@ -574,7 +574,7 @@ case 18:
 		goto st14;
 	goto st0;
 tr7:
-#line 36 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(mark, p);
     }
@@ -583,7 +583,7 @@ st19:
 	if ( ++p == pe )
 		goto _test_eof19;
 case 19:
-#line 587 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 587 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
 		case 32: goto tr37;
 		case 33: goto st19;
@@ -606,49 +606,49 @@ case 19:
 		goto st19;
 	goto st0;
 tr8:
-#line 36 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(mark, p);
     }
-#line 80 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 80 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         request_path(buffer, PTR_TO(mark), LEN(mark,p));
     }
-#line 60 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 60 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{ 
         request_uri(buffer, PTR_TO(mark), LEN(mark, p));
     }
 	goto st20;
 tr39:
-#line 80 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 80 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         request_path(buffer, PTR_TO(mark), LEN(mark,p));
     }
-#line 60 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 60 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{ 
         request_uri(buffer, PTR_TO(mark), LEN(mark, p));
     }
 	goto st20;
 tr55:
-#line 68 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 68 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(query_start, p);
     }
-#line 72 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 72 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         query_string(buffer, PTR_TO(query_start), LEN(query_start, p));
     }
-#line 60 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 60 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{ 
         request_uri(buffer, PTR_TO(mark), LEN(mark, p));
     }
 	goto st20;
 tr59:
-#line 72 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 72 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         query_string(buffer, PTR_TO(query_start), LEN(query_start, p));
     }
-#line 60 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 60 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{ 
         request_uri(buffer, PTR_TO(mark), LEN(mark, p));
     }
@@ -657,7 +657,7 @@ st20:
 	if ( ++p == pe )
 		goto _test_eof20;
 case 20:
-#line 661 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 661 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
 		case 32: goto tr43;
 		case 33: goto tr44;
@@ -676,7 +676,7 @@ case 20:
 		goto tr44;
 	goto st0;
 tr44:
-#line 36 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(mark, p);
     }
@@ -685,7 +685,7 @@ st21:
 	if ( ++p == pe )
 		goto _test_eof21;
 case 21:
-#line 689 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 689 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
 		case 32: goto tr46;
 		case 33: goto st21;
@@ -704,7 +704,7 @@ case 21:
 		goto st21;
 	goto st0;
 tr45:
-#line 36 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(mark, p);
     }
@@ -713,7 +713,7 @@ st22:
 	if ( ++p == pe )
 		goto _test_eof22;
 case 22:
-#line 717 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 717 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
 			goto st23;
@@ -737,7 +737,7 @@ case 23:
 		goto st21;
 	goto st0;
 tr9:
-#line 36 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(mark, p);
     }
@@ -746,7 +746,7 @@ st24:
 	if ( ++p == pe )
 		goto _test_eof24;
 case 24:
-#line 750 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 750 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
 			goto st25;
@@ -770,7 +770,7 @@ case 25:
 		goto st19;
 	goto st0;
 tr203:
-#line 36 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(mark, p);
     }
@@ -779,7 +779,7 @@ st26:
 	if ( ++p == pe )
 		goto _test_eof26;
 case 26:
-#line 783 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 783 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
 		case 32: goto tr37;
 		case 33: goto st26;
@@ -800,7 +800,7 @@ case 26:
 		goto st26;
 	goto st0;
 tr204:
-#line 36 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(mark, p);
     }
@@ -809,7 +809,7 @@ st27:
 	if ( ++p == pe )
 		goto _test_eof27;
 case 27:
-#line 813 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 813 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
 			goto st28;
@@ -833,17 +833,17 @@ case 28:
 		goto st26;
 	goto st0;
 tr11:
-#line 36 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(mark, p);
     }
-#line 80 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 80 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         request_path(buffer, PTR_TO(mark), LEN(mark,p));
     }
 	goto st29;
 tr42:
-#line 80 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 80 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         request_path(buffer, PTR_TO(mark), LEN(mark,p));
     }
@@ -852,7 +852,7 @@ st29:
 	if ( ++p == pe )
 		goto _test_eof29;
 case 29:
-#line 856 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 856 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
 		case 32: goto tr53;
 		case 33: goto tr54;
@@ -872,7 +872,7 @@ case 29:
 		goto tr54;
 	goto st0;
 tr54:
-#line 68 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 68 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(query_start, p);
     }
@@ -881,7 +881,7 @@ st30:
 	if ( ++p == pe )
 		goto _test_eof30;
 case 30:
-#line 885 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 885 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
 		case 32: goto tr57;
 		case 33: goto st30;
@@ -901,7 +901,7 @@ case 30:
 		goto st30;
 	goto st0;
 tr56:
-#line 68 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 68 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(query_start, p);
     }
@@ -910,7 +910,7 @@ st31:
 	if ( ++p == pe )
 		goto _test_eof31;
 case 31:
-#line 914 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 914 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
 			goto st32;
@@ -934,7 +934,7 @@ case 32:
 		goto st30;
 	goto st0;
 tr10:
-#line 36 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(mark, p);
     }
@@ -943,7 +943,7 @@ st33:
 	if ( ++p == pe )
 		goto _test_eof33;
 case 33:
-#line 947 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 947 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
 		case 32: goto tr37;
 		case 33: goto st26;
@@ -2968,7 +2968,7 @@ case 172:
 		goto st172;
 	goto st0;
 tr12:
-#line 36 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(mark, p);
     }
@@ -2977,7 +2977,7 @@ st173:
 	if ( ++p == pe )
 		goto _test_eof173;
 case 173:
-#line 2981 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 2981 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
 		case 32: goto tr37;
 		case 33: goto st19;
@@ -3253,7 +3253,7 @@ case 193:
 		goto tr4;
 	goto st0;
 tr2:
-#line 36 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(mark, p);
     }
@@ -3262,7 +3262,7 @@ st194:
 	if ( ++p == pe )
 		goto _test_eof194;
 case 194:
-#line 3266 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 3266 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	if ( (*p) < 48 ) {
 		if ( 45 <= (*p) && (*p) <= 46 )
 			goto st195;
@@ -3297,7 +3297,7 @@ case 195:
 		goto st195;
 	goto st0;
 tr224:
-#line 80 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 80 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         request_path(buffer, PTR_TO(mark), LEN(mark,p));
     }
@@ -3306,7 +3306,7 @@ st196:
 	if ( ++p == pe )
 		goto _test_eof196;
 case 196:
-#line 3310 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 3310 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	if ( (*p) == 62 )
 		goto st197;
 	goto st196;
@@ -3320,11 +3320,11 @@ case 197:
 	}
 	goto st196;
 tr227:
-#line 98 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 98 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         xml_sent = 1;
     }
-#line 84 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 84 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         if(xml_sent || json_sent) {
             body_start = PTR_TO(mark) - buffer;
@@ -3340,11 +3340,11 @@ tr227:
     }
 	goto st349;
 tr235:
-#line 102 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 102 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         json_sent = 1;
     }
-#line 84 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 84 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         if(xml_sent || json_sent) {
             body_start = PTR_TO(mark) - buffer;
@@ -3363,10 +3363,10 @@ st349:
 	if ( ++p == pe )
 		goto _test_eof349;
 case 349:
-#line 3367 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 3367 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	goto st0;
 tr3:
-#line 36 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(mark, p);
     }
@@ -3375,7 +3375,7 @@ st198:
 	if ( ++p == pe )
 		goto _test_eof198;
 case 198:
-#line 3379 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 3379 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
 		case 32: goto tr228;
 		case 33: goto st202;
@@ -3396,7 +3396,7 @@ case 198:
 		goto st202;
 	goto st0;
 tr228:
-#line 80 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 80 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         request_path(buffer, PTR_TO(mark), LEN(mark,p));
     }
@@ -3405,12 +3405,12 @@ st199:
 	if ( ++p == pe )
 		goto _test_eof199;
 case 199:
-#line 3409 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 3409 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	if ( (*p) == 123 )
 		goto tr232;
 	goto st0;
 tr232:
-#line 36 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 	{
         MARK(mark, p);
     }
@@ -3419,7 +3419,7 @@ st200:
 	if ( ++p == pe )
 		goto _test_eof200;
 case 200:
-#line 3423 "/home/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 3423 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
 	if ( (*p) == 125 )
 		goto st201;
 	goto st200;
@@ -5893,7 +5893,7 @@ case 347:
 	_out: {}
 	}
 
-#line 268 "/home/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 268 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
 
     // ASSERT(p <= pe);
 

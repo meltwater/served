@@ -18,16 +18,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-FIND_PACKAGE (ZeroMQ)
+#
+# Locate project sources
+#
+FILE (GLOB_RECURSE list_endpoints_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp)
 
-IF (ZEROMQ_FOUND)
-	INCLUDE_DIRECTORIES (${ZeroMQ_INCLUDE_DIR})
-	ADD_SUBDIRECTORY (http2zmq)
-ENDIF (ZEROMQ_FOUND)
+#
+# Configure common project settings
+#
+SET (list_endpoints_LIBS ${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
-ADD_SUBDIRECTORY (hello_world)
-ADD_SUBDIRECTORY (request_logger_plugin)
-ADD_SUBDIRECTORY (rest_resource)
-ADD_SUBDIRECTORY (binary_data)
-ADD_SUBDIRECTORY (list_endpoints)
-ADD_SUBDIRECTORY (handlers)
+#
+# Executable build rules
+#
+ADD_EXECUTABLE (list_endpoints ${list_endpoints_SRCS})
+TARGET_LINK_LIBRARIES (list_endpoints ${list_endpoints_LIBS})
+INSTALL (TARGETS list_endpoints DESTINATION bin)

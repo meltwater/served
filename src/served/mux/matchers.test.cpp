@@ -87,6 +87,10 @@ TEST_CASE("segment matchers compile and parsing", "[matchers]")
 		auto matcher = served::mux::compile_to_matcher(segment);
 
 		CHECK(dynamic_cast<served::mux::regex_matcher *>(matcher.get()));
-		// TODO
+
+		CHECK( matcher->check_match("1337"));
+		CHECK( matcher->check_match("1969"));
+		CHECK(!matcher->check_match("11!!oneone"));
+		CHECK(!matcher->check_match(" 11 "));
 	}
 }

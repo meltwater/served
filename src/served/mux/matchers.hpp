@@ -42,18 +42,18 @@ compile_to_matcher(const std::string & path_segment)
 	}
 	if ( path_segment[0] == '{' && path_segment[path_segment.length() - 1] == '}' )
 	{
-		size_t colon_index = path_segment.find(':');
+		std::string trimmed_segment(path_segment.substr(1, path_segment.length() - 2));
+		size_t colon_index = trimmed_segment.find(':');
 		if ( colon_index == std::string::npos )
 		{
 			return segment_matcher_ptr(
-				new variable_matcher(
-					path_segment.substr(1, path_segment.length() - 2)
-				));
+				new variable_matcher(trimmed_segment)
+			);
 		}
 		return segment_matcher_ptr(
 			new regex_matcher(
-				path_segment.substr(1, colon_index - 1),
-				path_segment.substr(colon_index, path_segment.length() - 2)
+				trimmed_segment.substr(0, colon_index),
+				trimmed_segment.substr(colon_index + 1, std::string::npos)
 			));
 	}
 	return segment_matcher_ptr(new static_matcher(path_segment));
