@@ -115,10 +115,10 @@ multiplexer::get_segments(const std::string & path)
 //  -----  http request handlers  -----
 
 served::methods_handler &
-multiplexer::handle(const std::string & path)
+multiplexer::handle(const std::string & path, const std::string info /* = "" */)
 {
 	_handler_candidates.push_back(
-		path_handler_candidate(get_segments(path), served::methods_handler(_base_path + path)));
+		path_handler_candidate(get_segments(path), served::methods_handler(_base_path + path, info)));
 
 	return std::get<1>(_handler_candidates.back());
 }

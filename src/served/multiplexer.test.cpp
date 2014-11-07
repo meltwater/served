@@ -367,6 +367,18 @@ TEST_CASE("multiplexer test plugins", "[mux]")
 	}
 }
 
+bool search(std::vector<std::string> & vec, std::string s)
+{
+	for ( auto & v : vec )
+	{
+		if ( v == s )
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 TEST_CASE("multiplexer test endpoint list", "[mux]")
 {
 	SECTION("without base path")
@@ -374,30 +386,21 @@ TEST_CASE("multiplexer test endpoint list", "[mux]")
 		auto dummy = [](served::response & res, const served::request & req){};
 
 		served::multiplexer mux;
-		mux.handle("/first/test").get(dummy).post(dummy).del(dummy);
-		mux.handle("/second/test").get(dummy).del(dummy);
-		mux.handle("/third/test").put(dummy);
+		mux.handle("/first/test", "This is first").get(dummy).post(dummy).del(dummy);
+		mux.handle("/second/test", "This is second").get(dummy).del(dummy);
+		mux.handle("/third/test", "This is third").put(dummy);
 
 		auto list = mux.get_endpoint_list();
-
-		auto search = [](std::vector<std::string> & vec, std::string s) {
-			for ( auto & v : vec )
-			{
-				if ( v == s )
-				{
-					return true;
-				}
-			}
-			return false;
-		};
 
 		{
 			auto target = list.find("/first/test");
 			REQUIRE(target != list.end());
 
-			auto methods = target->second;
+			auto methods = std::get<1>(target->second);
+			auto info = std::get<0>(target->second);
 
 			CHECK(methods.size() == 3);
+			CHECK(info == "This is first");
 
 			CHECK(search(methods, "GET"));
 			CHECK(search(methods, "POST"));
@@ -407,9 +410,11 @@ TEST_CASE("multiplexer test endpoint list", "[mux]")
 			auto target = list.find("/second/test");
 			REQUIRE(target != list.end());
 
-			auto methods = target->second;
+			auto methods = std::get<1>(target->second);
+			auto info = std::get<0>(target->second);
 
 			CHECK(methods.size() == 2);
+			CHECK(info == "This is second");
 
 			CHECK(search(methods, "GET"));
 			CHECK(search(methods, "DELETE"));
@@ -418,9 +423,11 @@ TEST_CASE("multiplexer test endpoint list", "[mux]")
 			auto target = list.find("/third/test");
 			REQUIRE(target != list.end());
 
-			auto methods = target->second;
+			auto methods = std::get<1>(target->second);
+			auto info = std::get<0>(target->second);
 
 			CHECK(methods.size() == 1);
+			CHECK(info == "This is third");
 
 			CHECK(search(methods, "PUT"));
 		}
@@ -431,30 +438,21 @@ TEST_CASE("multiplexer test endpoint list", "[mux]")
 		auto dummy = [](served::response & res, const served::request & req){};
 
 		served::multiplexer mux("/base/path");
-		mux.handle("/first/test").get(dummy).post(dummy).del(dummy);
-		mux.handle("/second/test").get(dummy).del(dummy);
-		mux.handle("/third/test").put(dummy);
+		mux.handle("/first/test", "This is first").get(dummy).post(dummy).del(dummy);
+		mux.handle("/second/test", "This is second").get(dummy).del(dummy);
+		mux.handle("/third/test", "This is third").put(dummy);
 
 		auto list = mux.get_endpoint_list();
-
-		auto search = [](std::vector<std::string> & vec, std::string s) {
-			for ( auto & v : vec )
-			{
-				if ( v == s )
-				{
-					return true;
-				}
-			}
-			return false;
-		};
 
 		{
 			auto target = list.find("/base/path/first/test");
 			REQUIRE(target != list.end());
 
-			auto methods = target->second;
+			auto methods = std::get<1>(target->second);
+			auto info = std::get<0>(target->second);
 
 			CHECK(methods.size() == 3);
+			CHECK(info == "This is first");
 
 			CHECK(search(methods, "GET"));
 			CHECK(search(methods, "POST"));
@@ -464,9 +462,11 @@ TEST_CASE("multiplexer test endpoint list", "[mux]")
 			auto target = list.find("/base/path/second/test");
 			REQUIRE(target != list.end());
 
-			auto methods = target->second;
+			auto methods = std::get<1>(target->second);
+			auto info = std::get<0>(target->second);
 
 			CHECK(methods.size() == 2);
+			CHECK(info == "This is second");
 
 			CHECK(search(methods, "GET"));
 			CHECK(search(methods, "DELETE"));
@@ -475,9 +475,11 @@ TEST_CASE("multiplexer test endpoint list", "[mux]")
 			auto target = list.find("/base/path/third/test");
 			REQUIRE(target != list.end());
 
-			auto methods = target->second;
+			auto methods = std::get<1>(target->second);
+			auto info = std::get<0>(target->second);
 
 			CHECK(methods.size() == 1);
+			CHECK(info == "This is third");
 
 			CHECK(search(methods, "PUT"));
 		}

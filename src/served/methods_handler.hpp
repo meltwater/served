@@ -32,25 +32,26 @@
 
 namespace served {
 
-typedef std::function<void(response &, const request &)> served_req_handler;
-typedef std::map<std::string, std::vector<std::string>>  served_endpoint_list;
+typedef std::function<void(response &, const request &)>  served_req_handler;
+typedef std::tuple<std::string, std::vector<std::string>> served_method_list;
+typedef std::map<std::string, served_method_list>         served_endpoint_list;
 
 class methods_handler
 {
 public:
 	//  -----  constructors  -----
 
-	methods_handler(const std::string path);
+	methods_handler(const std::string path, const std::string info = "");
 
 	//  -----  method registering  -----
 
-	methods_handler & get (served_req_handler);
-	methods_handler & post(served_req_handler);
-	methods_handler & head(served_req_handler);
-	methods_handler & put (served_req_handler);
-	methods_handler & del (served_req_handler);
+	methods_handler & get (served_req_handler handler);
+	methods_handler & post(served_req_handler handler);
+	methods_handler & head(served_req_handler handler);
+	methods_handler & put (served_req_handler handler);
+	methods_handler & del (served_req_handler handler);
 
-	methods_handler & method(const served::method, served_req_handler);
+	methods_handler & method(const served::method method, served_req_handler handler);
 
 	bool method_supported(const served::method method) const
 	{
@@ -68,6 +69,7 @@ public:
 
 private:
 	const std::string _path;
+	const std::string _info;
 
 	std::map<served::method, served_req_handler> _handlers;
 };

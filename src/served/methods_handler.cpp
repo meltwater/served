@@ -26,8 +26,9 @@ namespace served {
 
 //  -----  constructors  -----
 
-methods_handler::methods_handler(const std::string path)
+methods_handler::methods_handler(const std::string path, const std::string info /* = "" */)
 	: _path(path)
+	, _info(info)
 {
 }
 
@@ -85,7 +86,7 @@ methods_handler::propagate_endpoint(served_endpoint_list & endpoints) const
 	{
 		methods.push_back(served::method_to_string(m_handler.first));
 	}
-	endpoints[_path] = methods;
+	endpoints[_path] = served_method_list(_info, methods);
 }
 
 } // served

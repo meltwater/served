@@ -25,6 +25,18 @@
 
 #include <served/methods_handler.hpp>
 
+bool search(std::vector<std::string> & vec, std::string s)
+{
+	for ( auto & v : vec )
+	{
+		if ( v == s )
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 TEST_CASE("test methods handling", "[methods_handler]")
 {
 	SECTION("create handlers")
@@ -44,7 +56,7 @@ TEST_CASE("test methods handling", "[methods_handler]")
 		CHECK(h.method_supported(served::method::BREW) == false);
 	}
 
-	SECTION("check endpoint propagation")
+	SECTION("check endpoint propagation no description")
 	{
 		auto dummy = [](served::response & res, const served::request & req) {};
 
@@ -57,24 +69,37 @@ TEST_CASE("test methods handling", "[methods_handler]")
 		auto target = list.find("/this/path/is/great");
 		REQUIRE(target != list.end());
 
-		auto search = [](std::vector<std::string> & vec, std::string s) {
-			for ( auto & v : vec )
-			{
-				if ( v == s )
-				{
-					return true;
-				}
-			}
-			return false;
-		};
+		auto methods = target->second;
+
+		CHECK(std::get<1>(methods).size() == 4);
+		CHECK(std::get<0>(methods).empty());
+
+		CHECK(search(std::get<1>(methods), "POST"));
+		CHECK(search(std::get<1>(methods), "GET"));
+		CHECK(search(std::get<1>(methods), "CONNECT"));
+		CHECK(search(std::get<1>(methods), "PUT"));
+	}
+
+	SECTION("check endpoint propagation with description")
+	{
+		auto dummy = [](served::response & res, const served::request & req) {};
+
+		served::methods_handler h("/this/path/is/great", "This is an endpoint for great stuff");
+		h.get(dummy).put(dummy).del(dummy);
+
+		served::served_endpoint_list list;
+		h.propagate_endpoint(list);
+
+		auto target = list.find("/this/path/is/great");
+		REQUIRE(target != list.end());
 
 		auto methods = target->second;
 
-		CHECK(methods.size() == 4);
+		CHECK(3 == std::get<1>(methods).size());
+		CHECK("This is an endpoint for great stuff" == std::get<0>(methods));
 
-		CHECK(search(methods, "POST"));
-		CHECK(search(methods, "GET"));
-		CHECK(search(methods, "CONNECT"));
-		CHECK(search(methods, "PUT"));
+		CHECK(search(std::get<1>(methods), "GET"));
+		CHECK(search(std::get<1>(methods), "PUT"));
+		CHECK(search(std::get<1>(methods), "DELETE"));
 	}
 }

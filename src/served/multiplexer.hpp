@@ -57,7 +57,7 @@ public:
 
 	//  -----  http request handlers  -----
 
-	served::methods_handler & handle(const std::string & path);
+	served::methods_handler & handle(const std::string & path, const std::string info = "");
 
 	//  ----- request forwarding  -----
 
