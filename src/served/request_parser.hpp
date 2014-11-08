@@ -28,14 +28,27 @@
 namespace served {
 
 /*
- * Single line class summary.
+ * HTTP 1.1 compatible request parser.
  *
- * Describe the abstraction this class represents in detail. What are its primary
- * responsibilities?
+ * This class implements a SAX style HTTP request parser.
  *
- * Describe typical usage scenario(s).
+ * To use the parser you must create a subclass and inherit the callback methods
+ * , then create an instance and call the execute() method with the request
+ * string.
  *
- * Describe any design assumptions.
+ * class request_parser_impl : public request_parser {
+ *     // ...
+ * }
+ *
+ * bool parse(const char* req_str) {
+ *     request_parser_impl parser;
+ *     parser.execute(req_str);
+ *     return (parser.parser_error());
+ * }
+ *
+ * This parser is implemented in a SAX style because it provides a sufficient
+ * trade-off between performance and usability for the intended use-case. Note
+ * that the methods of the parser are not thread-safe.
  */
 class request_parser {
 	int    cs;
@@ -46,166 +59,140 @@ public:
 
 private:
 	/*
-	 * Describe the method in a single line.
+	 * Check whether the parser encountered an error during parsing.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * This method will check for an error. If a badly formed input string was
+	 * given to the execute() method then this function will return true. This
+	 * function should only be invoked after the execute() method.
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @return true if an error was encountered, otherwise false.
 	 */
 	bool parser_error();
 
 	/*
-	 * Describe the method in a single line.
+	 * Check whether the parser is finished.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * This method will check whether the parser has finished parsing, or if it
+	 * is waiting for more input. If the input given to execute() is correct but
+	 * partially formed, then this method will return true.
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @return true if the parser has finished, otherwise false.
 	 */
 	bool parser_finished();
 
 protected:
 	/*
-	 * Describe the method in a single line.
+	 * HTTP field callback.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param data   pointer to the beginning of the input string
+	 * @param field  pointer to the beginning of the matched field
+	 * @param flen   length of the matched field string
+	 * @param value  pointer to the beginning of the matched value
+	 * @param vlen   length of the matched value string
 	 */
 	virtual void http_field(const char *data, const char *field, size_t flen,
 			const char *value, size_t vlen) = 0;
 
 	/*
-	 * Describe the method in a single line.
+	 * HTTP request method callback.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param data   pointer to the beginning of the input string
+	 * @param at     pointer to the beginning of the matched string
+	 * @param length length of the matched string data
 	 */
 	virtual void request_method(const char *data, const char *at,
 			size_t length) = 0;
 
 	/*
-	 * Describe the method in a single line.
+	 * URI callback.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param data   pointer to the beginning of the input string
+	 * @param at     pointer to the beginning of the matched string
+	 * @param length length of the matched string data
 	 */
 	virtual void request_uri(const char *data, const char *at,
 			size_t length) = 0;
 
 	/*
-	 * Describe the method in a single line.
+	 * Fragment callback.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param data   pointer to the beginning of the input string
+	 * @param at     pointer to the beginning of the matched string
+	 * @param length length of the matched string data
 	 */
 	virtual void fragment(const char *data, const char *at,
 			size_t length) = 0;
 
 	/*
-	 * Describe the method in a single line.
+	 * Request path callback.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param data   pointer to the beginning of the input string
+	 * @param at     pointer to the beginning of the matched string
+	 * @param length length of the matched string data
 	 */
 	virtual void request_path(const char *data, const char *at,
 			size_t length) = 0;
 
 	/*
-	 * Describe the method in a single line.
+	 * Query string callback.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param data   pointer to the beginning of the input string
+	 * @param at     pointer to the beginning of the matched string
+	 * @param length length of the matched string data
 	 */
 	virtual void query_string(const char *data, const char *at,
 			size_t length) = 0;
 
 	/*
-	 * Describe the method in a single line.
+	 * HTTP version callback.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param data   pointer to the beginning of the input string
+	 * @param at     pointer to the beginning of the matched string
+	 * @param length length of the matched string data
 	 */
 	virtual void http_version(const char *data, const char *at,
 			size_t length) = 0;
 
 	/*
-	 * Describe the method in a single line.
+	 * HTTP header done callback.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param data   pointer to the beginning of the input string
+	 * @param at     pointer to the beginning of the matched string
+	 * @param length length of the matched string data
 	 */
 	virtual void header_done(const char *data, const char *at,
 			size_t length) = 0;
 
 public:
 	/*
-	 * Describe the method in a single line.
-	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * Default constructor.
 	 */
 	request_parser();
 
 	/*
-	 * Describe the method in a single line.
-	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * Class destructor.
 	 */
 	virtual ~request_parser();
 
 	/*
-	 * Describe the method in a single line.
+	 * Execute the parser.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * Executes the parser with the given input string. Invoking this method
+	 * will in turn invoke the callback methods in the order that the sequences
+	 * are identified in the input string.
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param data input string to parse
+	 * @param len  length of the input string in bytes
 	 */
 	size_t execute(const char *data, size_t len);
 
 	/*
-	 * Describe the method in a single line.
+	 * Get the parser status.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * Returns the status of the parser. This method should only be called after
+	 * execute().
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @return current parser status
 	 */
 	status get_status();
 };
