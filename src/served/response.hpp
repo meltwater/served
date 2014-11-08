@@ -31,6 +31,16 @@
 
 namespace served {
 
+/*
+ * Single line class summary.
+ *
+ * Describe the abstraction this class represents in detail. What are its primary
+ * responsibilities?
+ *
+ * Describe typical usage scenario(s).
+ *
+ * Describe any design assumptions.
+ */
 class response
 {
 	typedef std::map<std::string, std::string> header_list;
@@ -43,27 +53,111 @@ class response
 public:
 	//  -----  constructors  -----
 
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	response();
 
 	//  -----  response mutators  -----
 
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	void set_header(std::string const& header, std::string const& value);
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	void set_status(int status_code);
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	void set_body(const std::string & body);
 
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	void operator<<(std::string const& rhs);
 
 	//  -----  accessors  -----
 
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	const int status   ();
+	
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	const int body_size();
 
 	//  -----  serializer  -----
 
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	const std::string to_buffer();
 
 	//  -----  stock reply  -----
 
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	static void stock_reply(int status_code, response & res);
 };
 

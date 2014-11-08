@@ -27,22 +27,48 @@
 
 namespace served {
 
+/*
+ * Single line class summary.
+ *
+ * Describe the abstraction this class represents in detail. What are its primary
+ * responsibilities?
+ *
+ * Describe typical usage scenario(s).
+ *
+ * Describe any design assumptions.
+ */
 class request_error : public std::runtime_error
 {
+	int _status_code;
+
 public:
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	request_error(int status_code, std::string const& message)
 		: std::runtime_error(message)
 		, _status_code(status_code)
-	{
-	}
+	{}
 
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	int get_status_code() const
 	{
 		return _status_code;
 	}
-
-private:
-	int _status_code;
 };
 
 } // served

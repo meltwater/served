@@ -28,6 +28,9 @@
 
 namespace served { namespace plugin {
 
+/*
+ * TBC
+ */
 void access_log(served::response & res, const served::request & request);
 
 } } // plugin, served

@@ -37,6 +37,16 @@ namespace served { namespace net {
 
 class connection_manager;
 
+/*
+ * Single line class summary.
+ *
+ * Describe the abstraction this class represents in detail. What are its primary
+ * responsibilities?
+ *
+ * Describe typical usage scenario(s).
+ *
+ * Describe any design assumptions.
+ */
 class connection
 	: public std::enable_shared_from_this<connection>
 {
@@ -50,17 +60,65 @@ class connection
 
 public:
 	connection(const connection&) = delete;
+	
 	connection& operator=(const connection&) = delete;
 
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	explicit connection( boost::asio::ip::tcp::socket socket
 	                   , connection_manager &         manager
 	                   , multiplexer        &         handler );
 
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	void start();
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	void stop();
 
 private:
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	void do_read();
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	void do_write();
 };
 

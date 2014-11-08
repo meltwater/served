@@ -27,48 +27,175 @@
 
 namespace served {
 
+/*
+ * Single line class summary.
+ *
+ * Describe the abstraction this class represents in detail. What are its primary
+ * responsibilities?
+ *
+ * Describe typical usage scenario(s).
+ *
+ * Describe any design assumptions.
+ */
 class response_parser {
-		int    cs;
-		size_t d_offset;
+	int    cs;
+	size_t d_offset;
 
-	public:
-		enum status { RUNNING = 0, FINISHED, ERROR };
+public:
+	enum status { RUNNING = 0, FINISHED, ERROR };
 
-	private:
-		bool parser_error();
+private:
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	bool parser_error();
 
-		bool parser_finished();
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	bool parser_finished();
 
-	protected:
-		virtual void http_field(const char *data, const char *field, size_t flen,
-				const char *value, size_t vlen) = 0;
+protected:
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	virtual void http_field(const char *data, const char *field, size_t flen,
+			const char *value, size_t vlen) = 0;
 
-		virtual void phrase_element(const char *data, const char *at,
-				size_t length) = 0;
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	virtual void phrase_element(const char *data, const char *at,
+			size_t length) = 0;
 
-		virtual void status_code_element(const char *data, const char *at,
-				size_t length) = 0;
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	virtual void status_code_element(const char *data, const char *at,
+			size_t length) = 0;
 
-		virtual void chunk_size_element(const char *data, const char *at,
-				size_t length) = 0;
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	virtual void chunk_size_element(const char *data, const char *at,
+			size_t length) = 0;
 
-		virtual void http_version_element(const char *data, const char *at,
-				size_t length) = 0;
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	virtual void http_version_element(const char *data, const char *at,
+			size_t length) = 0;
 
-		virtual void header_done_element(const char *data, const char *at,
-				size_t length) = 0;
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	virtual void header_done_element(const char *data, const char *at,
+			size_t length) = 0;
 
-		virtual void last_chunk_element(const char *data, const char *at,
-				size_t length) = 0;
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	virtual void last_chunk_element(const char *data, const char *at,
+			size_t length) = 0;
 
-	public:
-		response_parser();
+public:
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	response_parser();
 
-		virtual ~response_parser();
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	virtual ~response_parser();
 
-		size_t execute(const char *data, size_t len);
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	size_t execute(const char *data, size_t len);
 
-		status get_status();
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	status get_status();
 };
 
 } // served namespace

@@ -27,32 +27,93 @@
 
 namespace served {
 
+/*
+ * Single line class summary.
+ *
+ * Describe the abstraction this class represents in detail. What are its primary
+ * responsibilities?
+ *
+ * Describe typical usage scenario(s).
+ *
+ * Describe any design assumptions.
+ */
 class uri
 {
 public:
-	//  -----  constructors  -----
-
 	//  -----  URI component mutators  -----
 
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	void set_URI      (std::string const& uri);
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	void set_path     (std::string const& path);
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	void set_query    (std::string const& query);
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	void set_fragment (std::string const& fragment);
 
 	//  -----  URI component selectors  -----
 
-	// For uri: "/foo/bar?test=one#element"
-	//
-	// "/foo/bar?test=one"
+	/*
+	 * For uri: "/foo/bar?test=one#element"
+	 * 
+	 * "/foo/bar?test=one"
+	 */
 	const std::string URI()      const;
-	//
-	// "/foo/bar"
+	
+	/*
+	 * For uri: "/foo/bar?test=one#element"
+	 * 
+	 * "/foo/bar"
+	 */
 	const std::string path()     const;
-	//
-	// "test=one"
+
+	/*
+	 * For uri: "/foo/bar?test=one#element"
+	 * 
+	 * "test=one"
+	 */
 	const std::string query()    const;
-	//
-	// "element"
+
+	/*
+	 * For uri: "/foo/bar?test=one#element"
+	 * 
+	 * "element"
+	 */
 	const std::string fragment() const;
 
 private:
@@ -62,8 +123,14 @@ private:
 	std::string _fragment;
 };
 
+/*
+ * TBC
+ */
 std::string query_escape(const std::string& s);
 
+/*
+ * TBC
+ */
 std::string query_unescape(const std::string& s);
 
 } // served

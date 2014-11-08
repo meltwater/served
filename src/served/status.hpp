@@ -111,6 +111,9 @@ namespace status_5XX {
 
 namespace status {
 
+/*
+ * TBC
+ */
 inline const std::string
 status_to_reason(int status_code)
 {

@@ -32,39 +32,18 @@
 
 namespace served {
 
+/*
+ * Single line class summary.
+ *
+ * Describe the abstraction this class represents in detail. What are its primary
+ * responsibilities?
+ *
+ * Describe typical usage scenario(s).
+ *
+ * Describe any design assumptions.
+ */
 class request
 {
-public:
-	//  -----  constructors  -----
-
-	//  -----  mutators  -----
-
-	void set_method      (const enum method & method);
-	void set_destination (const uri         & destination);
-	void set_HTTP_version(const std::string & http_version);
-	void set_source      (const std::string & source);
-	void set_header      (const std::string & header, const std::string & value);
-	void set_body        (const std::string & body);
-
-	uri & url();
-
-	//  -----  component accessors  -----
-
-	const enum method method() const;
-	const uri         url() const;
-
-	const std::string HTTP_version() const;
-	const std::string source      () const;
-
-	const std::string header(std::string const& header) const;
-	const std::string body  () const;
-
-public:
-	//  -----  public members  -----
-
-	parameters params;
-
-private:
 	// Appropriate map type for request may differ from response
 	typedef std::unordered_map<std::string, std::string>    header_list;
 
@@ -74,6 +53,159 @@ private:
 	std::string _source;
 	header_list _headers;
 	std::string _body;
+
+public:
+	//  -----  mutators  -----
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	void set_method      (const enum method & method);
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	void set_destination (const uri         & destination);
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	void set_HTTP_version(const std::string & http_version);
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	void set_source      (const std::string & source);
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	void set_header      (const std::string & header, const std::string & value);
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	void set_body        (const std::string & body);
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	uri & url();
+
+	//  -----  component accessors  -----
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	const enum method method() const;
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	const uri         url() const;
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	const std::string HTTP_version() const;
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	const std::string source      () const;
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	const std::string header(std::string const& header) const;
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	const std::string body  () const;
+
+public:
+	//  -----  public members  -----
+
+	parameters params;
 };
 
 } // served

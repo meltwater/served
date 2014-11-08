@@ -37,55 +37,147 @@ namespace served {
 
 typedef std::function<void(response &, request &)> served_plugin_req_handler;
 
+/*
+ * Single line class summary.
+ *
+ * Describe the abstraction this class represents in detail. What are its primary
+ * responsibilities?
+ *
+ * Describe typical usage scenario(s).
+ *
+ * Describe any design assumptions.
+ */
 class multiplexer
 {
-public:
-	//  -----  constructors  -----
-
-	multiplexer();
-
-	// Provides a base path that is listened for but ignored when selecting path
-	// handlers.
-	// For example: with a base path "/base" and handler registered at "/foo/bar"
-	// the handler will be called for a request at "/base/foo/bar".
-	multiplexer(const std::string & base_path);
-
-	//  -----  plugin injection  -----
-
-	void use_before(served_plugin_req_handler plugin);
-	void use_after (served_plugin_req_handler plugin);
-
-	//  -----  http request handlers  -----
-
-	served::methods_handler & handle(const std::string & path, const std::string info = "");
-
-	//  ----- request forwarding  -----
-
-	void forward_to_handler(served::response & res, served::request & req);
-	void on_request_handled(served::response & res, served::request & req);
-
-	//  -----  accessors  -----
-
-	const served_endpoint_list get_endpoint_list();
-
-private:
-	//  -----  path parsing/compiling  -----
-
 	typedef std::vector<served_plugin_req_handler>                      plugin_handler_list;
 
 	typedef std::vector<served::mux::segment_matcher_ptr>               path_compiled_segments;
 	typedef std::tuple<path_compiled_segments, served::methods_handler> path_handler_candidate;
 	typedef std::vector<path_handler_candidate>                         path_handler_candidates;
 
-	path_compiled_segments get_segments(const std::string & path);
-
-private:
 	const std::string       _base_path;
 	path_compiled_segments  _base_path_segments;
 
 	path_handler_candidates _handler_candidates;
 	plugin_handler_list     _plugin_pre_handlers;
 	plugin_handler_list     _plugin_post_handlers;
+	
+public:
+	//  -----  constructors  -----
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	multiplexer();
+
+	// Provides a base path that is listened for but ignored when selecting path
+	// handlers.
+	// For example: with a base path "/base" and handler registered at "/foo/bar"
+	// the handler will be called for a request at "/base/foo/bar".
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	multiplexer(const std::string & base_path);
+
+	//  -----  plugin injection  -----
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	void use_before(served_plugin_req_handler plugin);
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	void use_after (served_plugin_req_handler plugin);
+
+	//  -----  http request handlers  -----
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	served::methods_handler & handle(const std::string & path, const std::string info = "");
+
+	//  ----- request forwarding  -----
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	void forward_to_handler(served::response & res, served::request & req);
+	
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	void on_request_handled(served::response & res, served::request & req);
+
+	//  -----  accessors  -----
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	const served_endpoint_list get_endpoint_list();
+
+private:
+	//  -----  path parsing/compiling  -----
+
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	path_compiled_segments get_segments(const std::string & path);
 };
 
 } // served

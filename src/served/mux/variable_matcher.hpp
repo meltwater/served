@@ -29,19 +29,53 @@
 
 namespace served { namespace mux {
 
+/*
+ * Single line class summary.
+ *
+ * Describe the abstraction this class represents in detail. What are its primary
+ * responsibilities?
+ *
+ * Describe typical usage scenario(s).
+ *
+ * Describe any design assumptions.
+ */
 class variable_matcher : public segment_matcher
 {
 	const std::string _variable_name;
 
 public:
-	//  -----  constructors  -----
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
 	variable_matcher(const std::string & variable);
 
-	//  -----  matching logic  -----
-	bool check_match(const std::string & path_segment);
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	virtual bool check_match(const std::string & path_segment) override;
 
-	//  -----  REST param collecting  -----
-	void get_param(served::parameters & params, const std::string & path_segment);
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	virtual void get_param(served::parameters & params, const std::string & path_segment) override;
 };
 
 } } // mux, served

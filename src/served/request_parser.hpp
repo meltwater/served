@@ -27,51 +27,187 @@
 
 namespace served {
 
+/*
+ * Single line class summary.
+ *
+ * Describe the abstraction this class represents in detail. What are its primary
+ * responsibilities?
+ *
+ * Describe typical usage scenario(s).
+ *
+ * Describe any design assumptions.
+ */
 class request_parser {
-		int    cs;
-		size_t d_offset;
+	int    cs;
+	size_t d_offset;
 
-	public:
-		enum status { RUNNING = 0, FINISHED, ERROR };
+public:
+	enum status { RUNNING = 0, FINISHED, ERROR };
 
-	private:
-		bool parser_error();
+private:
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	bool parser_error();
 
-		bool parser_finished();
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	bool parser_finished();
 
-	protected:
-		virtual void http_field(const char *data, const char *field, size_t flen,
-				const char *value, size_t vlen) = 0;
+protected:
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	virtual void http_field(const char *data, const char *field, size_t flen,
+			const char *value, size_t vlen) = 0;
 
-		virtual void request_method(const char *data, const char *at,
-				size_t length) = 0;
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	virtual void request_method(const char *data, const char *at,
+			size_t length) = 0;
 
-		virtual void request_uri(const char *data, const char *at,
-				size_t length) = 0;
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	virtual void request_uri(const char *data, const char *at,
+			size_t length) = 0;
 
-		virtual void fragment(const char *data, const char *at,
-				size_t length) = 0;
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	virtual void fragment(const char *data, const char *at,
+			size_t length) = 0;
 
-		virtual void request_path(const char *data, const char *at,
-				size_t length) = 0;
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	virtual void request_path(const char *data, const char *at,
+			size_t length) = 0;
 
-		virtual void query_string(const char *data, const char *at,
-				size_t length) = 0;
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	virtual void query_string(const char *data, const char *at,
+			size_t length) = 0;
 
-		virtual void http_version(const char *data, const char *at,
-				size_t length) = 0;
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	virtual void http_version(const char *data, const char *at,
+			size_t length) = 0;
 
-		virtual void header_done(const char *data, const char *at,
-				size_t length) = 0;
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	virtual void header_done(const char *data, const char *at,
+			size_t length) = 0;
 
-	public:
-		request_parser();
+public:
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	request_parser();
 
-		virtual ~request_parser();
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	virtual ~request_parser();
 
-		size_t execute(const char *data, size_t len);
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	size_t execute(const char *data, size_t len);
 
-		status get_status();
+	/*
+	 * Describe the method in a single line.
+	 *
+	 * Describe the work this method does, what does it do? Is there anything
+	 * the developer should be aware of?
+	 *
+	 * List each parameter, what is the purpose? What is considered valid / 
+	 * invalid?
+	 */
+	status get_status();
 };
 
 } // served namespace

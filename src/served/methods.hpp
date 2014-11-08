@@ -28,10 +28,16 @@
 
 namespace served {
 
+/*
+ * TBC
+ */
 enum method {
 	GET, POST, HEAD, PUT, DELETE, OPTIONS, TRACE, CONNECT, BREW
 };
 
+/*
+ * TBC
+ */
 inline std::string
 method_to_string(enum method m)
 {
@@ -59,6 +65,9 @@ method_to_string(enum method m)
 	return "";
 }
 
+/*
+ * TBC
+ */
 inline enum method
 method_from_string(const std::string & str)
 {
