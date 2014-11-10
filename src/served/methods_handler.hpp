@@ -61,8 +61,8 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param path ...
+	 * @param info ...
 	 */
 	methods_handler(const std::string path, const std::string info = "");
 
@@ -74,8 +74,9 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param handler ...
+	 *
+	 * @return chainable methods_handler reference to *this
 	 */
 	methods_handler & get (served_req_handler handler);
 
@@ -85,8 +86,9 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param handler ...
+	 *
+	 * @return chainable methods_handler reference to *this
 	 */
 	methods_handler & post(served_req_handler handler);
 
@@ -96,8 +98,9 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param handler ...
+	 *
+	 * @return chainable methods_handler reference to *this
 	 */
 	methods_handler & head(served_req_handler handler);
 
@@ -107,8 +110,9 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param handler ...
+	 *
+	 * @return chainable methods_handler reference to *this
 	 */
 	methods_handler & put (served_req_handler handler);
 
@@ -118,8 +122,9 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param handler ...
+	 *
+	 * @return chainable methods_handler reference to *this
 	 */
 	methods_handler & del (served_req_handler handler);
 
@@ -129,8 +134,10 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param method ...
+	 * @param handler ...
+	 *
+	 * @return chainable methods_handler reference to *this
 	 */
 	methods_handler & method(const served::method method, served_req_handler handler);
 
@@ -140,8 +147,9 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param method ...
+	 *
+	 * @return true if the method is support, otherwise false
 	 */
 	bool method_supported(const served::method method) const
 	{
@@ -154,8 +162,9 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param method ...
+	 *
+	 * @return request handler associated with the given method
 	 */
 	served_req_handler operator[](const served::method method)
 	{
@@ -170,8 +179,7 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param endpoints ...
 	 */
 	void propagate_endpoint(served_endpoint_list & endpoints) const;
 };

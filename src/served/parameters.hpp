@@ -53,8 +53,9 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param key ...
+	 *
+	 * @return ...
 	 */
 	std::string & operator[](std::string const& key);
 
@@ -64,8 +65,8 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param key ...
+	 * @param value ...
 	 */
 	void set(std::string const& key, std::string const& value);
 
@@ -77,8 +78,9 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param key ...
+	 *
+	 * @return ...
 	 */
 	const std::string operator[](std::string const& key) const;
 
@@ -88,8 +90,9 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param key ...
+	 *
+	 * @return ...
 	 */
 	const std::string get(std::string const& key) const;
 };

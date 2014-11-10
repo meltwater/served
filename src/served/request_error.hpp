@@ -48,8 +48,8 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param status_code ...
+	 * @param message ...
 	 */
 	request_error(int status_code, std::string const& message)
 		: std::runtime_error(message)
@@ -62,8 +62,7 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @return ...
 	 */
 	int get_status_code() const
 	{

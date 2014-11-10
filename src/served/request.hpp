@@ -45,7 +45,7 @@ namespace served {
 class request
 {
 	// Appropriate map type for request may differ from response
-	typedef std::unordered_map<std::string, std::string>    header_list;
+	typedef std::unordered_map<std::string, std::string> header_list;
 
 	enum method _method;
 	uri         _destination;
@@ -63,10 +63,11 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param method ...
+	 *
+	 * @return ...
 	 */
-	void set_method      (const enum method & method);
+	void set_method(const enum method & method);
 
 	/*
 	 * Describe the method in a single line.
@@ -74,10 +75,11 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param destination ...
+	 *
+	 * @return ...
 	 */
-	void set_destination (const uri         & destination);
+	void set_destination(const uri & destination);
 
 	/*
 	 * Describe the method in a single line.
@@ -85,8 +87,9 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param http_version ...
+	 *
+	 * @return ...
 	 */
 	void set_HTTP_version(const std::string & http_version);
 
@@ -96,10 +99,11 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param source ...
+	 *
+	 * @return ...
 	 */
-	void set_source      (const std::string & source);
+	void set_source(const std::string & source);
 
 	/*
 	 * Describe the method in a single line.
@@ -107,10 +111,12 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param header ...
+	 * @param value ...
+	 *
+	 * @return ...
 	 */
-	void set_header      (const std::string & header, const std::string & value);
+	void set_header(const std::string & header, const std::string & value);
 
 	/*
 	 * Describe the method in a single line.
@@ -118,10 +124,11 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param body ...
+	 *
+	 * @return ...
 	 */
-	void set_body        (const std::string & body);
+	void set_body(const std::string & body);
 
 	/*
 	 * Describe the method in a single line.
@@ -129,8 +136,7 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @return ...
 	 */
 	uri & url();
 
@@ -142,8 +148,7 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @return ...
 	 */
 	const enum method method() const;
 
@@ -153,10 +158,9 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @return ...
 	 */
-	const uri         url() const;
+	const uri url() const;
 
 	/*
 	 * Describe the method in a single line.
@@ -164,8 +168,7 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @return ...
 	 */
 	const std::string HTTP_version() const;
 
@@ -175,10 +178,9 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @return ...
 	 */
-	const std::string source      () const;
+	const std::string source() const;
 
 	/*
 	 * Describe the method in a single line.
@@ -186,8 +188,9 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param header ...
+	 *
+	 * @return ...
 	 */
 	const std::string header(std::string const& header) const;
 
@@ -197,10 +200,9 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @return ...
 	 */
-	const std::string body  () const;
+	const std::string body() const;
 
 public:
 	//  -----  public members  -----

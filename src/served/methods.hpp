@@ -29,14 +29,18 @@
 namespace served {
 
 /*
- * TBC
+ * HTTP method enum
  */
 enum method {
 	GET, POST, HEAD, PUT, DELETE, OPTIONS, TRACE, CONNECT, BREW
 };
 
 /*
- * TBC
+ * Convert an HTTP method enum to a string
+ *
+ * @param m the method to convert to a string
+ *
+ * @return the method enum as a string
  */
 inline std::string
 method_to_string(enum method m)
@@ -66,45 +70,40 @@ method_to_string(enum method m)
 }
 
 /*
- * TBC
+ * Convert a string to an HTTP method enum
+ *
+ * @param str the string to convert to an enum
+ *
+ * @return the string converted to an enum
  */
 inline enum method
 method_from_string(const std::string & str)
 {
-	if ( "GET" == str )
-	{
+	if ( "GET" == str ) {
 		return method::GET;
 	}
-	if ( "POST" == str )
-	{
+	if ( "POST" == str ) {
 		return method::POST;
 	}
-	if ( "HEAD" == str )
-	{
+	if ( "HEAD" == str ) {
 		return method::HEAD;
 	}
-	if ( "PUT" == str )
-	{
+	if ( "PUT" == str ) {
 		return method::PUT;
 	}
-	if ( "DELETE" == str )
-	{
+	if ( "DELETE" == str ) {
 		return method::DELETE;
 	}
-	if ( "OPTIONS" == str )
-	{
+	if ( "OPTIONS" == str ) {
 		return method::OPTIONS;
 	}
-	if ( "TRACE" == str )
-	{
+	if ( "TRACE" == str ) {
 		return method::TRACE;
 	}
-	if ( "CONNECT" == str )
-	{
+	if ( "CONNECT" == str ) {
 		return method::CONNECT;
 	}
-	if ( "BREW" == str )
-	{
+	if ( "BREW" == str ) {
 		return method::BREW;
 	}
 	throw std::runtime_error("method string not recognised");

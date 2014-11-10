@@ -86,8 +86,7 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param base_path ...
 	 */
 	multiplexer(const std::string & base_path);
 
@@ -99,8 +98,7 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param plugin ...
 	 */
 	void use_before(served_plugin_req_handler plugin);
 
@@ -110,8 +108,7 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param plugin ...
 	 */
 	void use_after (served_plugin_req_handler plugin);
 
@@ -123,8 +120,10 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param path ...
+	 * @param info ...
+	 *
+	 * @return ...
 	 */
 	served::methods_handler & handle(const std::string & path, const std::string info = "");
 
@@ -136,8 +135,8 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param res ...
+	 * @param req ...
 	 */
 	void forward_to_handler(served::response & res, served::request & req);
 	
@@ -147,8 +146,8 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param res ...
+	 * @param req ...
 	 */
 	void on_request_handled(served::response & res, served::request & req);
 
@@ -160,8 +159,7 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @return ...
 	 */
 	const served_endpoint_list get_endpoint_list();
 
@@ -174,8 +172,9 @@ private:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param path ...
+	 *
+	 * @return ...
 	 */
 	path_compiled_segments get_segments(const std::string & path);
 };

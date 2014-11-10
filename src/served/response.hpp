@@ -72,8 +72,8 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param header ...
+	 * @param value ...
 	 */
 	void set_header(std::string const& header, std::string const& value);
 
@@ -83,8 +83,7 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param status_code ...
 	 */
 	void set_status(int status_code);
 
@@ -94,8 +93,7 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param body ...
 	 */
 	void set_body(const std::string & body);
 
@@ -105,8 +103,7 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param rhs ...
 	 */
 	void operator<<(std::string const& rhs);
 
@@ -118,10 +115,9 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @return ...
 	 */
-	const int status   ();
+	const int status();
 	
 	/*
 	 * Describe the method in a single line.
@@ -129,8 +125,7 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @return ...
 	 */
 	const int body_size();
 
@@ -142,8 +137,7 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @return ...
 	 */
 	const std::string to_buffer();
 
@@ -155,8 +149,8 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param method ...
+	 * @param handler ...
 	 */
 	static void stock_reply(int status_code, response & res);
 };

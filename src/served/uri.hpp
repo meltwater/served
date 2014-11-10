@@ -28,14 +28,17 @@
 namespace served {
 
 /*
- * Single line class summary.
+ * Represents a URI (Uniform Resource Identifier).
  *
- * Describe the abstraction this class represents in detail. What are its primary
- * responsibilities?
+ * A URI consists of several parts, including the path, the query and the 
+ * fragment. This class represents a URI as a struct containing these parts,
+ * with appropriate interface to get access to each of the parts.
  *
- * Describe typical usage scenario(s).
+ * The URI may be used to represent a part of a HTTP request. Typically served
+ * will create a URI when it parses a request out of convenience for the user.
  *
- * Describe any design assumptions.
+ * The URI class does not itself provide URL escaping, however separate methods
+ * are provided which will enable the user to escape / unescape as required.
  */
 class uri
 {
@@ -43,48 +46,32 @@ public:
 	//  -----  URI component mutators  -----
 
 	/*
-	 * Describe the method in a single line.
+	 * Set the full URI string
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param uri the full uri as a string
 	 */
-	void set_URI      (std::string const& uri);
+	void set_URI(std::string const& uri);
 
 	/*
-	 * Describe the method in a single line.
+	 * Set the URI path string
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param the uri path string
 	 */
-	void set_path     (std::string const& path);
+	void set_path(std::string const& path);
 
 	/*
-	 * Describe the method in a single line.
+	 * Set the URI query string
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param query the uri query string
 	 */
-	void set_query    (std::string const& query);
+	void set_query(std::string const& query);
 
 	/*
-	 * Describe the method in a single line.
+	 * Set the URI fragment string
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param fragment the uri fragment string
 	 */
-	void set_fragment (std::string const& fragment);
+	void set_fragment(std::string const& fragment);
 
 	//  -----  URI component selectors  -----
 
@@ -92,27 +79,35 @@ public:
 	 * For uri: "/foo/bar?test=one#element"
 	 * 
 	 * "/foo/bar?test=one"
+	 *
+	 * @return the full uri
 	 */
-	const std::string URI()      const;
+	const std::string URI() const;
 	
 	/*
 	 * For uri: "/foo/bar?test=one#element"
 	 * 
 	 * "/foo/bar"
+	 *
+	 * @return the uri path
 	 */
-	const std::string path()     const;
+	const std::string path() const;
 
 	/*
 	 * For uri: "/foo/bar?test=one#element"
 	 * 
 	 * "test=one"
+	 *
+	 * @return the uri query
 	 */
-	const std::string query()    const;
+	const std::string query() const;
 
 	/*
 	 * For uri: "/foo/bar?test=one#element"
 	 * 
 	 * "element"
+	 *
+	 * @return the uri fragment
 	 */
 	const std::string fragment() const;
 
@@ -124,12 +119,26 @@ private:
 };
 
 /*
- * TBC
+ * URL-encode a string.
+ *
+ * This method will escape special characters with % symbols to conform to the
+ * HTTP URL encoding scheme.
+ *
+ * @param s the input string to encode
+ *
+ * @return the encoded input string
  */
 std::string query_escape(const std::string& s);
 
 /*
- * TBC
+ * URL-decode a string.
+ *
+ * This method will unescape special characters with % symbols that conform to
+ * the HTTP URL encoding scheme.
+ *
+ * @param s the input string to decode
+ *
+ * @return the decoded input string
  */
 std::string query_unescape(const std::string& s);
 
