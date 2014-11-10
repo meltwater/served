@@ -23,21 +23,9 @@
 #define CATCH_CONFIG_MAIN
 #include "../test/catch.hpp"
 
-#include "response.hpp"
+#include "status.hpp"
 
-TEST_CASE("can chain response streaming operator", "[response]") {
-	served::response res;
-	res << "Hello" << " " << "World!";
-}
-
-TEST_CASE("generates compliant HTTP response", "[response]") {
-	const char* response =
-		"HTTP/1.1 200 OK\r\n"
-		"Content-Type: text/plain\r\n"
-		"Content-Length: 10\r\n"
-		"\r\n"
-		"Successful\r\n";
-	served::response res;
-	served::response::stock_reply(200, res);
-	REQUIRE(res.to_buffer() == response);
+TEST_CASE("convert status to reason", "[status]")
+{
+	REQUIRE(served::status::status_to_reason(served::status_2XX::OK) == "OK");
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) MediaSift Ltd.
+ * Copyright (C) 2014 MediaSift Ltd.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,24 +20,4 @@
  * SOFTWARE.
  */
 
-#define CATCH_CONFIG_MAIN
-#include "../test/catch.hpp"
-
-#include "response.hpp"
-
-TEST_CASE("can chain response streaming operator", "[response]") {
-	served::response res;
-	res << "Hello" << " " << "World!";
-}
-
-TEST_CASE("generates compliant HTTP response", "[response]") {
-	const char* response =
-		"HTTP/1.1 200 OK\r\n"
-		"Content-Type: text/plain\r\n"
-		"Content-Length: 10\r\n"
-		"\r\n"
-		"Successful\r\n";
-	served::response res;
-	served::response::stock_reply(200, res);
-	REQUIRE(res.to_buffer() == response);
-}
+#include <served/status.hpp>
