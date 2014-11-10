@@ -56,7 +56,7 @@ public:
 	 * List each parameter, what is the purpose? What is considered valid / 
 	 * invalid?
 	 */
-	regex_matcher(const std::string & variable_name, const std::string & regex);
+	explicit regex_matcher(const std::string & variable_name, const std::string & regex);
 
 	/*
 	 * Describe the method in a single line.

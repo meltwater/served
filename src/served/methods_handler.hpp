@@ -64,7 +64,7 @@ public:
 	 * @param path ...
 	 * @param info ...
 	 */
-	methods_handler(const std::string path, const std::string info = "");
+	explicit methods_handler(const std::string path, const std::string info = "");
 
 	//  -----  method registering  -----
 

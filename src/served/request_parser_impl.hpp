@@ -51,7 +51,7 @@ public:
 	 * List each parameter, what is the purpose? What is considered valid / 
 	 * invalid?
 	 */
-	request_parser_impl(request & req)
+	explicit request_parser_impl(request & req)
 		: served::request_parser()
 		, d_request(req)
 	{}

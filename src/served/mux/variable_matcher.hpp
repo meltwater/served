@@ -53,7 +53,7 @@ public:
 	 * List each parameter, what is the purpose? What is considered valid / 
 	 * invalid?
 	 */
-	variable_matcher(const std::string & variable);
+	explicit variable_matcher(const std::string & variable);
 
 	/*
 	 * Describe the method in a single line.

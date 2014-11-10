@@ -53,7 +53,7 @@ public:
 	 * List each parameter, what is the purpose? What is considered valid / 
 	 * invalid?
 	 */
-	static_matcher(const std::string & pattern);
+	explicit static_matcher(const std::string & pattern);
 	
 	/*
 	 * Describe the method in a single line.

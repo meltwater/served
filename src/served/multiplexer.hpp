@@ -88,7 +88,7 @@ public:
 	 *
 	 * @param base_path ...
 	 */
-	multiplexer(const std::string & base_path);
+	explicit multiplexer(const std::string & base_path);
 
 	//  -----  plugin injection  -----
 
