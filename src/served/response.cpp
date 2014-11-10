@@ -62,10 +62,11 @@ response::set_body(const std::string & body)
 	d_body.str(body);
 }
 
-void
+response&
 response::operator<<(std::string const& rhs)
 {
 	d_body << rhs;
+	return (*this);
 }
 
 //  -----  accessors  -----

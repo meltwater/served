@@ -105,7 +105,7 @@ public:
 	 *
 	 * @param rhs ...
 	 */
-	void operator<<(std::string const& rhs);
+	response& operator<<(std::string const& rhs);
 
 	//  -----  accessors  -----
 
