@@ -61,6 +61,62 @@ To test the above example, you could run the following command from a terminal:
 $ curl http://localhost:8080/hello -ivh
 ```
 
+You can also use named path variables:
+```cpp
+mux.handle("/users/{id}")
+	.get([](served::response & res, const served::request & req) {
+		res << "User: " << req.params["id"];
+	});
+```
+
+To test the above example, you could run the following command from a terminal:
+```bash
+$ curl http://localhost:8080/users/dave -ivh
+```
+
+If you need to be more specific, you can specify a pattern to use to validate
+the parameter:
+```cpp
+mux.handle("/users/{id:\\d+}")
+	.get([](served::response & res, const served::request & req) {
+		res << "id: " << req.params["id"];
+	});
+```
+
+To test the above example, you could run the following command from a terminal:
+```bash
+$ curl http://localhost:8080/users/1 -ivh
+```
+
+Method handlers can have arbitrary complexity:
+```cpp
+mux.handle("/users/{id:\\d+}/{property}/{value:[a-zA-Z]+")
+	.get([](served::response & res, const served::request & req) {
+		// handler logic
+	});
+```
+
+If you want to automatically log requests, you could use a plugin (or make your
+own):
+```cpp
+#include <served/plugins.hpp>
+// ...
+mux.use_after(served::plugin::access_log);
+```
+
+You can also access the other elements of the request, including headers and
+components of the URI:
+```cpp
+mux.handle("/posts/{id:\\d+}")
+	.post([](served::response & res, const served::request & req) {
+		if (req.header("Content-Type") != "application/json") {
+			served::response::stock_reply(400, res);
+			return;
+		}
+		res << req.url().fragment();
+	});
+```
+
 ### Compile Options
 
 Option                 | Purpose

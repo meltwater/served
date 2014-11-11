@@ -33,14 +33,15 @@
 namespace served {
 
 /*
- * Single line class summary.
+ * Represents a HTTP request.
  *
- * Describe the abstraction this class represents in detail. What are its primary
- * responsibilities?
+ * This class represents a parsed HTTP request, composed of the method (eg. GET,
+ * PUT, POST, etc..), the version (eg. 1.1), the uri (eg. /endpoint/get?start=0&len=5#item1),
+ * the headers (eg. 'Content-Type: application/json'), the body, and the source.
  *
- * Describe typical usage scenario(s).
- *
- * Describe any design assumptions.
+ * This class is typically created by the request parser when a request is
+ * received. The new object is then passed to method handlers that were registered
+ * by the user to the multiplexer.
  */
 class request
 {

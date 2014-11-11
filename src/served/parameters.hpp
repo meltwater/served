@@ -29,14 +29,16 @@
 namespace served {
 
 /*
- * Single line class summary.
+ * Represents a collection of named parameters passed via the request URI.
  *
- * Describe the abstraction this class represents in detail. What are its primary
- * responsibilities?
+ * This class represents named parameters defined by the user when registering
+ * method handlers in a multiplexer.
  *
- * Describe typical usage scenario(s).
+ * When the multiplexer matches a method handler, the parsed parameters are
+ * stored in an instance of this object which is then passed to the handler via
+ * the request object.
  *
- * Describe any design assumptions.
+ * Parameters are stored in a hash map.
  */
 class parameters
 {

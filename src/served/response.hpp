@@ -32,14 +32,15 @@
 namespace served {
 
 /*
- * Single line class summary.
+ * Represents a HTTP response.
  *
- * Describe the abstraction this class represents in detail. What are its primary
- * responsibilities?
+ * This class represents a HTTP response, and provides an appropriate interface
+ * for setting properties, and then generating a response string. The class is
+ * composed of a status code, headers, and the body of the response.
  *
- * Describe typical usage scenario(s).
- *
- * Describe any design assumptions.
+ * The response to a given HTTP request is built by method handlers in response
+ * to a request. This class is used to simplify the method of composing an
+ * appropriate response to a request.
  */
 class response
 {
