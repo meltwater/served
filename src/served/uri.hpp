@@ -30,7 +30,7 @@ namespace served {
 /*
  * Represents a URI (Uniform Resource Identifier).
  *
- * A URI consists of several parts, including the path, the query and the 
+ * A URI consists of several parts, including the path, the query and the
  * fragment. This class represents a URI as a struct containing these parts,
  * with appropriate interface to get access to each of the parts.
  *
@@ -77,16 +77,16 @@ public:
 
 	/*
 	 * For uri: "/foo/bar?test=one#element"
-	 * 
+	 *
 	 * "/foo/bar?test=one"
 	 *
 	 * @return the full uri
 	 */
 	const std::string URI() const;
-	
+
 	/*
 	 * For uri: "/foo/bar?test=one#element"
-	 * 
+	 *
 	 * "/foo/bar"
 	 *
 	 * @return the uri path
@@ -95,7 +95,7 @@ public:
 
 	/*
 	 * For uri: "/foo/bar?test=one#element"
-	 * 
+	 *
 	 * "test=one"
 	 *
 	 * @return the uri query
@@ -104,7 +104,7 @@ public:
 
 	/*
 	 * For uri: "/foo/bar?test=one#element"
-	 * 
+	 *
 	 * "element"
 	 *
 	 * @return the uri fragment

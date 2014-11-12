@@ -30,6 +30,7 @@
 #include <served/multiplexer.hpp>
 #include <served/methods.hpp>
 #include <served/parameters.hpp>
+#include <served/version.hpp>
 
 struct request_router_story
 {
@@ -483,5 +484,65 @@ TEST_CASE("multiplexer test endpoint list", "[mux]")
 
 			CHECK(search(methods, "PUT"));
 		}
+	}
+}
+
+TEST_CASE("multiplexer endpoint list YAML", "[mux]")
+{
+	SECTION("request router stories")
+	{
+		auto dummy = [](served::response & res, const served::request & req){};
+
+		served::multiplexer mux;
+		mux.handle("/first/test", "This is first").get(dummy).post(dummy).del(dummy);
+		mux.handle("/second/test", "This is second").get(dummy).del(dummy);
+		mux.handle("/third/test", "This is third").put(dummy);
+		mux.handle("/endpoints", "List all endpoints").get(mux.get_endpoint_list_handler_YAML());
+
+		served::uri url;
+		url.set_path("/endpoints");
+
+		served::request req;
+		req.set_destination(url);
+		req.set_method(served::method::GET);
+
+		served::response res;
+
+		CHECK_NOTHROW(mux.forward_to_handler(res, req));
+
+		const std::string expected =
+			"HTTP/1.1 200 OK\r\n"
+			"Server: served-v" + std::string(APPLICATION_VERSION_STRING) + "\r\n"
+			"Content-Type: text/yaml\r\n"
+			"Content-Length: 318\r\n"
+			"\r\n"
+			"%YAML 1.2\n"
+			"---\n"
+			"-\n"
+			"	endpoint: /endpoints\n"
+			"	summary: List all endpoints\n"
+			"	methods:\n"
+			"		- GET\n"
+			"-\n"
+			"	endpoint: /first/test\n"
+			"	summary: This is first\n"
+			"	methods:\n"
+			"		- GET\n"
+			"		- POST\n"
+			"		- DELETE\n"
+			"-\n"
+			"	endpoint: /second/test\n"
+			"	summary: This is second\n"
+			"	methods:\n"
+			"		- GET\n"
+			"		- DELETE\n"
+			"-\n"
+			"	endpoint: /third/test\n"
+			"	summary: This is third\n"
+			"	methods:\n"
+			"		- PUT"
+			"\r\n";
+
+		REQUIRE(expected == res.to_buffer());
 	}
 }

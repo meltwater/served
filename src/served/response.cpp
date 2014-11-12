@@ -46,7 +46,7 @@ response::set_header(std::string const& header, std::string const& value)
 
 	std::transform(header.begin(), header.end(), mut_header.begin(), ::tolower);
 
-	d_headers[mut_header] = value;
+	d_headers[mut_header] = header_pair(header, value);
 }
 
 void
@@ -93,21 +93,24 @@ response::to_buffer()
 
 	ss << "HTTP/1.1 " << d_status << " " << status::status_to_reason(d_status) << "\r\n";
 
+	// If server header not specified we add served version stamp
 	if ( d_headers.find("server") == d_headers.end() )
 	{
-		ss << "server: served-v" << APPLICATION_VERSION_STRING << "\r\n";
-	}
-	if ( d_headers.find("content-length") == d_headers.end() )
-	{
-		ss << "content-length: " << body_size() << "\r\n";
+		ss << "Server: served-v" << APPLICATION_VERSION_STRING << "\r\n";
 	}
 	for ( const auto & header : d_headers )
 	{
-		ss << header.first << ": " << header.second << "\r\n";
+		ss << std::get<0>(header.second) << ": " << std::get<1>(header.second) << "\r\n";
+	}
+	// If content length not specified we check body size
+	if ( d_headers.find("content-length") == d_headers.end() )
+	{
+		ss << "Content-Length: " << body_size() << "\r\n";
 	}
 
 	ss << "\r\n";
 	ss << d_body.str();
+	ss << "\r\n";
 
 	d_buffer = ss.str();
 	return d_buffer;
@@ -119,7 +122,7 @@ void
 response::stock_reply(int status_code, response & res)
 {
 	res.set_status(status_code);
-	res.set_header("content-type", "text/plain");
+	res.set_header("Content-Type", "text/plain");
 
 	switch (status_code)
 	{

@@ -117,7 +117,12 @@ namespace status {
 inline const std::string
 status_to_reason(int status_code)
 {
+	switch ( status_code )
+	{
+	case status_2XX::OK:
+		return "OK";
 	// TODO
+	}
 	return "-";
 }
 

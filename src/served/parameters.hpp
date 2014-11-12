@@ -45,7 +45,7 @@ class parameters
 	typedef std::unordered_map<std::string, std::string> parameter_list;
 
 	parameter_list _list;
-	
+
 public:
 	//  -----  parameter setting  -----
 

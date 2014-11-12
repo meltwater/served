@@ -38,14 +38,16 @@ namespace served {
 typedef std::function<void(response &, request &)> served_plugin_req_handler;
 
 /*
- * Single line class summary.
+ * Used to register endpoint handlers.
  *
- * Describe the abstraction this class represents in detail. What are its primary
- * responsibilities?
+ * The multiplexer is used by a served HTTP server to determine which handler should be used to
+ * resolve an HTTP request based on the target endpoint and the HTTP method of the request.
  *
- * Describe typical usage scenario(s).
+ * A multiplexer is required by the served HTTP server and should be fully configured before
+ * the server is run with all endpoints registered.
  *
- * Describe any design assumptions.
+ * The multiplexer must not be modified after running the HTTP server, as its internal components
+ * will be accessible to all HTTP threads.
  */
 class multiplexer
 {
@@ -61,32 +63,27 @@ class multiplexer
 	path_handler_candidates _handler_candidates;
 	plugin_handler_list     _plugin_pre_handlers;
 	plugin_handler_list     _plugin_post_handlers;
-	
+
 public:
 	//  -----  constructors  -----
 
 	/*
-	 * Describe the method in a single line.
+	 * Default constructor for the mutliplexer.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * Creates a clean multiplexer, ready for endpoint registering.
 	 */
 	multiplexer();
 
-	// Provides a base path that is listened for but ignored when selecting path
-	// handlers.
-	// For example: with a base path "/base" and handler registered at "/foo/bar"
-	// the handler will be called for a request at "/base/foo/bar".
 	/*
-	 * Describe the method in a single line.
+	 * Constructor for the multiplexer with base path.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * Adds a base path to the multiplexer, which is listened for but ignored when selecting
+	 * handlers.
 	 *
-	 * @param base_path ...
+	 * For example: with a base path "/base" and handler registered at "/foo/bar"
+	 * the handler will be called for a request at "/base/foo/bar".
+	 *
+	 * @param base_path the base path that all registered endpoints are appended to.
 	 */
 	explicit multiplexer(const std::string & base_path);
 
@@ -139,7 +136,7 @@ public:
 	 * @param req ...
 	 */
 	void forward_to_handler(served::response & res, served::request & req);
-	
+
 	/*
 	 * Describe the method in a single line.
 	 *
@@ -162,6 +159,16 @@ public:
 	 * @return ...
 	 */
 	const served_endpoint_list get_endpoint_list();
+
+	/*
+	 * Creates a request handler that lists registered handlers in YAML format.
+	 *
+	 * A handler is created that is bound to the multiplexer, and when called will generate a YAML
+	 * list of all registered endpoints.
+	 *
+	 * @return the handler for listing endpoints in YAML
+	 */
+	 served_req_handler get_endpoint_list_handler_YAML();
 
 private:
 	//  -----  path parsing/compiling  -----

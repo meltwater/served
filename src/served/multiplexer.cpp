@@ -245,4 +245,34 @@ multiplexer::get_endpoint_list()
 	return list;
 }
 
+served_req_handler
+multiplexer::get_endpoint_list_handler_YAML()
+{
+	return [this](served::response & res, const served::request & req) {
+	    res.set_header("Content-Type", "text/yaml");
+
+		res << "%YAML 1.2\n---";
+
+		auto endpoint_list = this->get_endpoint_list();
+
+		for ( const auto & endpoint : endpoint_list )
+		{
+			res << "\n-";
+			res << "\n\tendpoint: " << endpoint.first;
+
+			const std::string summary = std::get<0>(endpoint.second);
+			if ( summary.length() > 0 )
+			{
+				res << "\n\tsummary: " << summary;
+			}
+
+			res << "\n\tmethods:";
+			for ( const auto & method : std::get<1>(endpoint.second) )
+			{
+				res << "\n\t\t- " << method;
+			}
+		}
+	};
+}
+
 } // served

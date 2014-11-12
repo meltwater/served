@@ -44,7 +44,8 @@ namespace served {
  */
 class response
 {
-	typedef std::map<std::string, std::string> header_list;
+	typedef std::tuple<std::string, std::string> header_pair;
+	typedef std::map<std::string, header_pair>   header_list;
 
 	int               d_status;
 	header_list       d_headers;
@@ -60,7 +61,7 @@ public:
 	 * Describe the work this method does, what does it do? Is there anything
 	 * the developer should be aware of?
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
+	 * List each parameter, what is the purpose? What is considered valid /
 	 * invalid?
 	 */
 	response();
@@ -119,7 +120,7 @@ public:
 	 * @return ...
 	 */
 	const int status();
-	
+
 	/*
 	 * Describe the method in a single line.
 	 *
