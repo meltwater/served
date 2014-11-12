@@ -77,7 +77,7 @@ public:
 	/*
 	 * Constructor for the multiplexer with base path.
 	 *
-	 * Adds a base path to the multiplexer, which is listened for but ignored when selecting
+	 * Creates a multiplexer with a base path, which is listened for but ignored when selecting
 	 * handlers.
 	 *
 	 * For example: with a base path "/base" and handler registered at "/foo/bar"
@@ -90,83 +90,82 @@ public:
 	//  -----  plugin injection  -----
 
 	/*
-	 * Describe the method in a single line.
+	 * Register a plugin that should be called before each request.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * A plugin is a handler called regardless of the request route, this registers a handler
+	 * to be called for every request before the actual request handler is called.
 	 *
-	 * @param plugin ...
+	 * @param plugin the plugin request handler
 	 */
 	void use_before(served_plugin_req_handler plugin);
 
 	/*
-	 * Describe the method in a single line.
+	 * Register a plugin that should be called after each request.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * A plugin is a handler called regardless of the request route, this registers a handler
+	 * to be called for every request after the actual request handler is called.
 	 *
-	 * @param plugin ...
+	 * @param plugin the plugin request handler
 	 */
 	void use_after (served_plugin_req_handler plugin);
 
 	//  -----  http request handlers  -----
 
 	/*
-	 * Describe the method in a single line.
+	 * Registers a handler for a specific HTTP endpoint.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * Returns an object used to specify request handlers per HTTP method for the endpoint.
 	 *
-	 * @param path ...
-	 * @param info ...
+	 * @param path the endpoint path to register handlers for
+	 * @param info an optional summary of the resource of this endpoint
 	 *
-	 * @return ...
+	 * @return returns a methods_handler used to specify handlers per HTTP method
 	 */
 	served::methods_handler & handle(const std::string & path, const std::string info = "");
 
 	//  ----- request forwarding  -----
 
 	/*
-	 * Describe the method in a single line.
+	 * Forwards a response and request object to a registered handler.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * Based on the URI target of the request object, forwards the request and response objects to
+	 * an appropriate handler for producing a response.
 	 *
-	 * @param res ...
-	 * @param req ...
+	 * @param res object used to generate an HTTP response
+	 * @param req object containing information about the HTTP request
 	 */
 	void forward_to_handler(served::response & res, served::request & req);
 
 	/*
-	 * Describe the method in a single line.
+	 * Triggers any post request handling work to be done.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * All post request handling work, such as post request plugin handler calls, is done via this
+	 * call, and should be made by the server after forwarding a request object.
 	 *
-	 * @param res ...
-	 * @param req ...
+	 * @param res object used to generate an HTTP response
+	 * @param req object containing information about the HTTP request
 	 */
 	void on_request_handled(served::response & res, served::request & req);
 
 	//  -----  accessors  -----
 
 	/*
-	 * Describe the method in a single line.
+	 * Constructs a full list of all endpoints registered.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * Registered endpoints contain a list of HTTP methods supported and an optional summary of the
+	 * resource each endpoint represents.
 	 *
-	 * @return ...
+	 * @return a list of all endpoints registered
 	 */
 	const served_endpoint_list get_endpoint_list();
 
 	/*
-	 * Creates a request handler that lists registered handlers in YAML format.
+	 * Creates a request handler that lists all registered handlers in YAML format.
 	 *
 	 * A handler is created that is bound to the multiplexer, and when called will generate a YAML
-	 * list of all registered endpoints.
+	 * list of all registered endpoints of the multiplexer.
 	 *
-	 * @return the handler for listing endpoints in YAML
+	 * @return the handler for listing endpoints in YAML, can be registered at an endpoint
 	 */
 	 served_req_handler get_endpoint_list_handler_YAML();
 
@@ -174,14 +173,15 @@ private:
 	//  -----  path parsing/compiling  -----
 
 	/*
-	 * Describe the method in a single line.
+	 * Splits and compiles a path into segments.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * A request path is compiled into segments in order to accomodate for various path matching
+	 * strategies, such as static, variable and regex. The compiled path is returned as a list of
+	 * segments.
 	 *
-	 * @param path ...
+	 * @param path the endpoint path to be compiled
 	 *
-	 * @return ...
+	 * @return the compiled list of path segments for matching
 	 */
 	path_compiled_segments get_segments(const std::string & path);
 };

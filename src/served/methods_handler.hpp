@@ -37,14 +37,13 @@ typedef std::tuple<std::string, std::vector<std::string>> served_method_list;
 typedef std::map<std::string, served_method_list>         served_endpoint_list;
 
 /*
- * Single line class summary.
+ * Represents a single endpoint with various HTTP method handlers.
  *
- * Describe the abstraction this class represents in detail. What are its primary
- * responsibilities?
+ * The methods handler contains a list of request handlers, separated by HTTP method, for a single
+ * endpoint, and provides a convenient interface for specifying new request handlers.
  *
- * Describe typical usage scenario(s).
- *
- * Describe any design assumptions.
+ * A method handler is returned when handle has been called on a multiplexer, and should then be
+ * used for daisy chaining calls until all method handlers are specified.
  */
 class methods_handler
 {
@@ -56,100 +55,80 @@ public:
 	//  -----  constructors  -----
 
 	/*
-	 * Describe the method in a single line.
+	 * Create a methods_handler from an endpoint path and summary.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * The endpoint path should be the raw path used when registering a handler. The info param is
+	 * optional, but should be a short summary of the resource this endpoint points to and is
+	 * exposed when obtaining a list of registered endpoints from the multiplexer.
 	 *
-	 * @param path ...
-	 * @param info ...
+	 * @param path the endpoint path of this handler
+	 * @param info a short summary of the resource
 	 */
 	explicit methods_handler(const std::string path, const std::string info = "");
 
 	//  -----  method registering  -----
 
 	/*
-	 * Describe the method in a single line.
+	 * Used to specify a handler for a GET HTTP method at this endpoint.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @param handler ...
+	 * @param handler the handler to be called for this HTTP method
 	 *
 	 * @return chainable methods_handler reference to *this
 	 */
 	methods_handler & get (served_req_handler handler);
 
 	/*
-	 * Describe the method in a single line.
+	 * Used to specify a handler for a POST HTTP method at this endpoint.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @param handler ...
+	 * @param handler the handler to be called for this HTTP method
 	 *
 	 * @return chainable methods_handler reference to *this
 	 */
 	methods_handler & post(served_req_handler handler);
 
 	/*
-	 * Describe the method in a single line.
+	 * Used to specify a handler for a HEAD HTTP method at this endpoint.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @param handler ...
+	 * @param handler the handler to be called for this HTTP method
 	 *
 	 * @return chainable methods_handler reference to *this
 	 */
 	methods_handler & head(served_req_handler handler);
 
 	/*
-	 * Describe the method in a single line.
+	 * Used to specify a handler for a PUT HTTP method at this endpoint.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @param handler ...
+	 * @param handler the handler to be called for this HTTP method
 	 *
 	 * @return chainable methods_handler reference to *this
 	 */
 	methods_handler & put (served_req_handler handler);
 
 	/*
-	 * Describe the method in a single line.
+	 * Used to specify a handler for a DELETE HTTP method at this endpoint.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @param handler ...
+	 * @param handler the handler to be called for this HTTP method
 	 *
 	 * @return chainable methods_handler reference to *this
 	 */
 	methods_handler & del (served_req_handler handler);
 
 	/*
-	 * Describe the method in a single line.
+	 * Used to specify a handler for a specific HTTP method at this endpoint.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @param method ...
-	 * @param handler ...
+	 * @param method the HTTP method that a handler should be called for
+	 * @param handler the handler to be called for this HTTP method
 	 *
 	 * @return chainable methods_handler reference to *this
 	 */
 	methods_handler & method(const served::method method, served_req_handler handler);
 
 	/*
-	 * Describe the method in a single line.
+	 * Indicates whether a specific HTTP method has a handler registered for this endpoint.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * @param method the method to check
 	 *
-	 * @param method ...
-	 *
-	 * @return true if the method is support, otherwise false
+	 * @return true if the method is supported, otherwise false.
 	 */
 	bool method_supported(const served::method method) const
 	{
@@ -157,12 +136,9 @@ public:
 	}
 
 	/*
-	 * Describe the method in a single line.
+	 * An operator for acquiring a reference to a handler for a method.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @param method ...
+	 * @param method the HTTP method we want the handler for
 	 *
 	 * @return request handler associated with the given method
 	 */
@@ -174,12 +150,12 @@ public:
 	//  -----  endpoint propagation  -----
 
 	/*
-	 * Describe the method in a single line.
+	 * Populates an endpoint list with registered handlers.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * Adds the registered endpoint, a list of methods supported and, if provided, a summary of this
+	 * endpoint to the provided list.
 	 *
-	 * @param endpoints ...
+	 * @param endpoints the list of endpoints that should be populated with information
 	 */
 	void propagate_endpoint(served_endpoint_list & endpoints) const;
 };
