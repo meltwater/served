@@ -110,7 +110,6 @@ response::to_buffer()
 
 	ss << "\r\n";
 	ss << d_body.str();
-	ss << "\r\n";
 
 	d_buffer = ss.str();
 	return d_buffer;

@@ -540,8 +540,7 @@ TEST_CASE("multiplexer endpoint list YAML", "[mux]")
 			"	endpoint: /third/test\n"
 			"	summary: This is third\n"
 			"	methods:\n"
-			"		- PUT"
-			"\r\n";
+			"		- PUT";
 
 		REQUIRE(expected == res.to_buffer());
 	}

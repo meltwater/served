@@ -38,7 +38,7 @@ TEST_CASE("generates compliant HTTP response", "[response]") {
 		"Content-Type: text/plain\r\n"
 		"Content-Length: 10\r\n"
 		"\r\n"
-		"Successful\r\n";
+		"Successful";
 
 	served::response res;
 	served::response::stock_reply(200, res);
