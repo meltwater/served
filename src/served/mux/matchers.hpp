@@ -34,7 +34,9 @@
 namespace served { namespace mux {
 
 /*
- * TBC
+ * Compiles a segment of path into a matchable segment object.
+ *
+ * @param path_segment the segment of path to compile
  */
 inline segment_matcher_ptr
 compile_to_matcher(const std::string & path_segment)

@@ -32,14 +32,9 @@
 namespace served { namespace mux {
 
 /*
- * Single line class summary.
+ * Matches a particular regular expression.
  *
- * Describe the abstraction this class represents in detail. What are its primary
- * responsibilities?
- *
- * Describe typical usage scenario(s).
- *
- * Describe any design assumptions.
+ * This segment matcher will match a path segment that satisfies a regular expression.
  */
 class regex_matcher : public segment_matcher
 {
@@ -48,35 +43,30 @@ class regex_matcher : public segment_matcher
 
 public:
 	/*
-	 * Describe the method in a single line.
+	 * Constructs a regex matcher.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * The regex matcher contains a variable name for labelling REST parameters and a regular
+	 * expression for matching segments.
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param variable_name the name of the REST param this segment matches.
+	 * @param regex the regular expression used to match this segment.
 	 */
 	explicit regex_matcher(const std::string & variable_name, const std::string & regex);
 
 	/*
-	 * Describe the method in a single line.
+	 * Checks whether a segment of path matches a regex.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param path_segment the segment of path to check.
 	 */
 	virtual bool check_match(const std::string & path_segment) override;
 
 	/*
-	 * Describe the method in a single line.
+	 * Appends any parameters extracted from the path segment to a list of params.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * This is used to propagate any REST parameters.
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param params the list of parameters to append to
+	 * @param path_segment the segment of path the variable should be extracted from
 	 */
 	virtual void get_param(served::parameters & params, const std::string & path_segment) override;
 };

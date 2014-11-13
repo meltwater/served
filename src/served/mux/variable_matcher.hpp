@@ -30,14 +30,10 @@
 namespace served { namespace mux {
 
 /*
- * Single line class summary.
+ * Matches any non empty path segment.
  *
- * Describe the abstraction this class represents in detail. What are its primary
- * responsibilities?
- *
- * Describe typical usage scenario(s).
- *
- * Describe any design assumptions.
+ * This segment matcher will match any non empty path segment, and captures the path segment as a
+ * REST parameter.
  */
 class variable_matcher : public segment_matcher
 {
@@ -45,35 +41,28 @@ class variable_matcher : public segment_matcher
 
 public:
 	/*
-	 * Describe the method in a single line.
+	 * Constructs a variable matcher.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * The variable matcher contains a variable name for labelling REST parameters.
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param variable_name the name of the REST param this segment matches.
 	 */
 	explicit variable_matcher(const std::string & variable);
 
 	/*
-	 * Describe the method in a single line.
+	 * Checks that the path segment is not empty.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param path_segment the segment of path to check.
 	 */
 	virtual bool check_match(const std::string & path_segment) override;
 
 	/*
-	 * Describe the method in a single line.
+	 * Appends any parameters extracted from the path segment to a list of params.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * This is used to propagate any REST parameters.
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param params the list of parameters to append to
+	 * @param path_segment the segment of path the variable should be extracted from
 	 */
 	virtual void get_param(served::parameters & params, const std::string & path_segment) override;
 };
