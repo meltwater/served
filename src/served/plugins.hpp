@@ -29,7 +29,13 @@
 namespace served { namespace plugin {
 
 /*
- * TBC
+ * A plug in for logging HTTP requests to stdout.
+ *
+ * In order to log each request and the responses given you should register this plugin with
+ * use_after.
+ *
+ * @param res the response object for the HTTP connection
+ * @param request the request object for the HTTP connection
  */
 void access_log(served::response & res, const served::request & request);
 

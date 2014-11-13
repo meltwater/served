@@ -38,14 +38,9 @@ namespace served { namespace net {
 class connection_manager;
 
 /*
- * Single line class summary.
+ * Manages the lifecycle of a single HTTP connection.
  *
- * Describe the abstraction this class represents in detail. What are its primary
- * responsibilities?
- *
- * Describe typical usage scenario(s).
- *
- * Describe any design assumptions.
+ * A connection is created by the server each time a new client connects.
  */
 class connection
 	: public std::enable_shared_from_this<connection>
@@ -60,64 +55,38 @@ class connection
 
 public:
 	connection(const connection&) = delete;
-	
+
 	connection& operator=(const connection&) = delete;
 
 	/*
-	 * Describe the method in a single line.
+	 * Constructs a new connection.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param socket the boost::asio socket for the connection
+	 * @param manager the connection manager that oversees this connection
+	 * @param handler the multiplexer responsible for routing requests
 	 */
 	explicit connection( boost::asio::ip::tcp::socket socket
 	                   , connection_manager &         manager
 	                   , multiplexer        &         handler );
 
 	/*
-	 * Describe the method in a single line.
-	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * Prompts the connection to start reading from its TCP socket.
 	 */
 	void start();
 
 	/*
-	 * Describe the method in a single line.
-	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * Prompts the connection to close the TCP connection early.
 	 */
 	void stop();
 
 private:
 	/*
-	 * Describe the method in a single line.
-	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * An asynchronous call that triggers a TCP read from the socket.
 	 */
 	void do_read();
 
 	/*
-	 * Describe the method in a single line.
-	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * An asynchronous call that triggers a TCP write to the socket.
 	 */
 	void do_write();
 };

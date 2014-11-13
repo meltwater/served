@@ -31,14 +31,12 @@
 namespace served { namespace net {
 
 /*
- * Single line class summary.
+ * Listens for new TCP connections, and distributes them across a pool of threads.
  *
- * Describe the abstraction this class represents in detail. What are its primary
- * responsibilities?
+ * The server is given an address and a port to bind to, and a multiplexer to use for forwarding
+ * HTTP requests to handlers.
  *
- * Describe typical usage scenario(s).
- *
- * Describe any design assumptions.
+ * When run is called the server will begin to accept and respond to incoming HTTP requests.
  */
 class server
 {
@@ -51,64 +49,45 @@ class server
 
 public:
 	server(const server&) = delete;
-	
+
 	server& operator=(const server&) = delete;
 
 	/*
-	 * Describe the method in a single line.
+	 * Constructs a new server.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param address the address to bind to for incoming connections
+	 * @param port the port to bind to for incoming connections
+	 * @param mux the multiplexer to be used for forwarding requests to handlers
 	 */
 	explicit server( const std::string & address
 	               , const std::string & port
 	               , multiplexer       & mux     );
 
 	/*
-	 * Describe the method in a single line.
+	 * A call that prompts the server into listening for HTTP requests.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * This call blocks until the server is closed, it accepts a value for how large the thread
+	 * pool should be for distributing requests.
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param n_threads the number of threads to pool for request handling
 	 */
 	void run(int n_threads = 1);
 
 	/*
-	 * Describe the method in a single line.
+	 * Stops the server from accepting requests.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * This call blocks until all open connections are closed.
 	 */
 	void stop();
 
 private:
 	/*
-	 * Describe the method in a single line.
-	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * An asynchronous call that triggers listening for a TCP connection or signal.
 	 */
 	void do_accept();
 
 	/*
-	 * Describe the method in a single line.
-	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * Stops the server from listening for new connections and closes all open connections.
 	 */
 	void do_await_stop();
 };

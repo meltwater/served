@@ -54,6 +54,8 @@ public:
 	 * Checks whether a segment of path matches a string.
 	 *
 	 * @param path_segment the segment of path to check.
+	 *
+	 * @return true if the path segment matches the string, false otherwise
 	 */
 	virtual bool check_match(const std::string & path_segment) override;
 

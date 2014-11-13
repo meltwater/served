@@ -53,6 +53,8 @@ public:
 	 * Checks that the path segment is not empty.
 	 *
 	 * @param path_segment the segment of path to check.
+	 *
+	 * @return true if the path segment is not empty, false otherwise
 	 */
 	virtual bool check_match(const std::string & path_segment) override;
 

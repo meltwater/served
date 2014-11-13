@@ -37,6 +37,8 @@ namespace served { namespace mux {
  * Compiles a segment of path into a matchable segment object.
  *
  * @param path_segment the segment of path to compile
+ *
+ * @return a segment matcher compiled from the path segment
  */
 inline segment_matcher_ptr
 compile_to_matcher(const std::string & path_segment)

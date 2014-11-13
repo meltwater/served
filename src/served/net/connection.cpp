@@ -62,8 +62,7 @@ connection::do_read()
 			if (!ec)
 			{
 				request_parser::status result;
-				std::tie(result, std::ignore) = d_request_parser.parse(
-					d_buffer.data(), bytes_transferred);
+				std::tie(result, std::ignore) = d_request_parser.parse(d_buffer.data(), bytes_transferred);
 
 				if ( result == request_parser::status::FINISHED )
 				{

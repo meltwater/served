@@ -31,14 +31,10 @@
 namespace served { namespace net {
 
 /*
- * Single line class summary.
+ * Oversees a stack of open HTTP connections.
  *
- * Describe the abstraction this class represents in detail. What are its primary
- * responsibilities?
- *
- * Describe typical usage scenario(s).
- *
- * Describe any design assumptions.
+ * The connection manager is used for easily tracking any remaining open HTTP connections, and
+ * shutting down those connections in order to gracefully close.
  */
 class connection_manager
 {
@@ -47,50 +43,27 @@ class connection_manager
 
 public:
 	connection_manager(const connection_manager&) = delete;
-	
+
 	connection_manager& operator=(const connection_manager&) = delete;
 
-	/*
-	 * Describe the method in a single line.
-	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
-	 */
 	connection_manager();
 
 	/*
-	 * Describe the method in a single line.
+	 * Adds a new connection to the stack and prompts it to begin.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param c a pointer to a new connection
 	 */
 	void start(connection_ptr c);
 
 	/*
-	 * Describe the method in a single line.
+	 * Stops a connection and removes it from the stack.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @param c a pointer to an open connection
 	 */
 	void stop(connection_ptr c);
 
 	/*
-	 * Describe the method in a single line.
-	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * Stops all remaining open connections.
 	 */
 	void stop_all();
 };

@@ -50,51 +50,42 @@ public:
 	//  -----  parameter setting  -----
 
 	/*
-	 * Describe the method in a single line.
+	 * Accesses a parameter based on a key.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * The reference to the parameter is returned and can be modified through this operator. If the
+	 * key does not yet exist then it is created.
 	 *
-	 * @param key ...
+	 * @param key the key of the parameter
 	 *
-	 * @return ...
+	 * @return the parameter stored under the key
 	 */
 	std::string & operator[](std::string const& key);
 
 	/*
-	 * Describe the method in a single line.
+	 * Set a parameter.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @param key ...
-	 * @param value ...
+	 * @param key the key to store the parameter under
+	 * @param value the value of the parameter
 	 */
 	void set(std::string const& key, std::string const& value);
 
 	//  -----  parameter accessors  -----
 
 	/*
-	 * Describe the method in a single line.
+	 * Obtain the value of a parameter.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * @param key the key of the parameter
 	 *
-	 * @param key ...
-	 *
-	 * @return ...
+	 * @return the value of the parameter, or an empty string if the key is not matched.
 	 */
 	const std::string operator[](std::string const& key) const;
 
 	/*
-	 * Describe the method in a single line.
+	 * Obtain the value of a parameter.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * @param key the key of the parameter
 	 *
-	 * @param key ...
-	 *
-	 * @return ...
+	 * @return the value of the parameter, or an empty string if the key is not matched.
 	 */
 	const std::string get(std::string const& key) const;
 };
