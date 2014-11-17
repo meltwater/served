@@ -59,149 +59,105 @@ public:
 	//  -----  mutators  -----
 
 	/*
-	 * Describe the method in a single line.
+	 * Set the HTTP method of this request.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @param method ...
-	 *
-	 * @return ...
+	 * @param method the HTTP method
 	 */
 	void set_method(const enum method & method);
 
 	/*
-	 * Describe the method in a single line.
+	 * Set the destination of this request.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * The destination is the URL path of the request, used to determine which resource is being
+	 * requested.
 	 *
-	 * @param destination ...
-	 *
-	 * @return ...
+	 * @param destination the URI of the request
 	 */
 	void set_destination(const uri & destination);
 
 	/*
-	 * Describe the method in a single line.
+	 * Set the HTTP version of this request.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * Sets the HTTP protocol version of this request.
 	 *
-	 * @param http_version ...
-	 *
-	 * @return ...
+	 * @param http_version the HTTP protocol version
 	 */
 	void set_HTTP_version(const std::string & http_version);
 
 	/*
-	 * Describe the method in a single line.
+	 * Set the source of this request.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * Sets the address to be associated with the client of this request.
 	 *
-	 * @param source ...
-	 *
-	 * @return ...
+	 * @param source the source address
 	 */
 	void set_source(const std::string & source);
 
 	/*
-	 * Describe the method in a single line.
+	 * Set a header value of this request.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @param header ...
-	 * @param value ...
-	 *
-	 * @return ...
+	 * @param header the key of the header to be set
+	 * @param value the value of the header
 	 */
 	void set_header(const std::string & header, const std::string & value);
 
 	/*
-	 * Describe the method in a single line.
+	 * Set the body of the request.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @param body ...
-	 *
-	 * @return ...
+	 * @param body the body of the request
 	 */
 	void set_body(const std::string & body);
 
 	/*
-	 * Describe the method in a single line.
+	 * Obtain a reference to the URL of this request.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @return ...
+	 * @return a reference to the URL
 	 */
 	uri & url();
 
 	//  -----  component accessors  -----
 
 	/*
-	 * Describe the method in a single line.
+	 * Get the HTTP method of the request.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @return ...
+	 * @return HTTP method of the request
 	 */
 	const enum method method() const;
 
 	/*
-	 * Describe the method in a single line.
+	 * Get the URL of this request.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @return ...
+	 * @return URL of the request
 	 */
 	const uri url() const;
 
 	/*
-	 * Describe the method in a single line.
+	 * Get the HTTP version of the request.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @return ...
+	 * @return HTTP version of the request
 	 */
 	const std::string HTTP_version() const;
 
 	/*
-	 * Describe the method in a single line.
+	 * Get the source of this request.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @return ...
+	 * @return the address of the source
 	 */
 	const std::string source() const;
 
 	/*
-	 * Describe the method in a single line.
+	 * Get a header value from this request.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * @param header the key of the header to obtain
 	 *
-	 * @param header ...
-	 *
-	 * @return ...
+	 * @return either the header value, or an empty string if the header does not exist
 	 */
 	const std::string header(std::string const& header) const;
 
 	/*
-	 * Describe the method in a single line.
+	 * Get the body of the request.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @return ...
+	 * @return the body of the request
 	 */
 	const std::string body() const;
 

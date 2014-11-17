@@ -23,6 +23,8 @@
 #include <served/request_parser_impl.hpp>
 #include <served/methods.hpp>
 
+#include <algorithm>
+
 namespace served {
 
 void
@@ -32,7 +34,24 @@ request_parser_impl::http_field( const char * data
                                , const char * value
                                , size_t       vlen  )
 {
-	d_request.set_header(std::string(field, flen), std::string(value, vlen));
+	std::string header(field, flen), val(value, vlen);
+
+	std::string mut_header;
+	mut_header.resize(flen);
+
+	std::transform(header.begin(), header.end(), mut_header.begin(), ::tolower);
+
+	if ( mut_header == "expect" )
+	{
+		if ( val == "100-continue" )
+		{
+			d_expected = expect_type::CONTINUE;
+		}
+	}
+	else
+	{
+		d_request.set_header(header, val);
+	}
 }
 
 std::tuple<request_parser::status, size_t>
@@ -40,6 +59,19 @@ request_parser_impl::parse(const char *data, size_t len)
 {
 	size_t d_len = execute(data, len);
 	return std::tuple<request_parser::status, size_t>(get_status(), d_len);
+}
+
+
+request_parser_impl::expect_type
+request_parser_impl::get_expected()
+{
+	return d_expected;
+}
+
+void
+request_parser_impl::set_expected(expect_type expected)
+{
+	d_expected = expected;
 }
 
 void

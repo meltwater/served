@@ -33,7 +33,8 @@ using namespace served::net;
 connection::connection( boost::asio::ip::tcp::socket socket
                       , connection_manager &         manager
                       , multiplexer        &         handler )
-	: d_socket(std::move(socket))
+	: d_status(status_type::READING)
+	, d_socket(std::move(socket))
 	, d_connection_manager(manager)
 	, d_request_handler(handler)
 	, d_request()
@@ -64,40 +65,53 @@ connection::do_read()
 				request_parser::status result;
 				std::tie(result, std::ignore) = d_request_parser.parse(d_buffer.data(), bytes_transferred);
 
+				// Expect type informs us of any "Expect" headers received from the client
+				auto expect_type = d_request_parser.get_expected();
+
 				if ( result == request_parser::status::FINISHED )
 				{
-					try
+					if ( request_parser_impl::expect_type::NONE == expect_type )
 					{
-						d_request_handler.forward_to_handler(d_response, d_request);
-					}
-					catch (const served::request_error & e)
-					{
-						d_response.set_status(e.get_status_code());
-						d_response.set_body(e.what());
-					}
-					catch (...)
-					{
-						response::stock_reply(status_5XX::INTERNAL_SERVER_ERROR, d_response);
-					}
+						d_status = status_type::DONE;
 
-					do_write();
+						try
+						{
+							d_request_handler.forward_to_handler(d_response, d_request);
+						}
+						catch (const served::request_error & e)
+						{
+							d_response.set_status(e.get_status_code());
+							d_response.set_body(e.what());
+						}
+						catch (...)
+						{
+							response::stock_reply(status_5XX::INTERNAL_SERVER_ERROR, d_response);
+						}
 
-					try
-					{
-						d_request_handler.on_request_handled(d_response, d_request);
+						do_write();
+
+						try
+						{
+							d_request_handler.on_request_handled(d_response, d_request);
+						}
+						catch (...)
+						{
+						}
 					}
-					catch (...)
+					else if ( request_parser_impl::expect_type::CONTINUE == expect_type )
 					{
+						/* If the client is expecting a 100-continue then serve it, and ensure we read
+						 * back from the client afterwards by leaving our d_status to READING.
+						 */
+						response::stock_reply(served::status_1XX::CONTINUE, d_response);
+						d_request_parser.set_expected(request_parser_impl::expect_type::NONE);
+						do_write();
 					}
 				}
 				else if ( result == request_parser::ERROR )
 				{
 					response::stock_reply(served::status_4XX::BAD_REQUEST, d_response);
 					do_write();
-				}
-				else
-				{
-					do_read();
 				}
 			}
 			else if (ec != boost::asio::error::operation_aborted)
@@ -115,14 +129,23 @@ connection::do_write()
 
 	boost::asio::async_write(d_socket, boost::asio::buffer(d_response.to_buffer()),
 		[this, self](boost::system::error_code ec, std::size_t) {
-			if (!ec)
+			if ( !ec )
 			{
-				// Initiate graceful connection closure.
-				boost::system::error_code ignored_ec;
-				d_socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both,
-					ignored_ec);
+				if ( status_type::READING == d_status )
+				{
+					// If we're still reading from the client then continue
+					do_read();
+				}
+				else
+				{
+					// Otherwise we initiate graceful connection closure.
+					boost::system::error_code ignored_ec;
+					d_socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both,
+						ignored_ec);
+					d_connection_manager.stop(shared_from_this());
+				}
 			}
-			if (ec != boost::asio::error::operation_aborted)
+			else if ( ec != boost::asio::error::operation_aborted )
 			{
 				d_connection_manager.stop(shared_from_this());
 			}

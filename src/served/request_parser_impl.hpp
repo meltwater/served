@@ -29,17 +29,18 @@
 namespace served {
 
 /*
- * Single line class summary.
+ * An implementation of a request parser.
  *
- * Describe the abstraction this class represents in detail. What are its primary
- * responsibilities?
+ * Responsible for moving sections of an incoming HTTP request to a served request object.
  *
- * Describe typical usage scenario(s).
- *
- * Describe any design assumptions.
  */
 class request_parser_impl : public served::request_parser {
-	request & d_request;
+public:
+	enum expect_type { NONE = 0, CONTINUE };
+
+private:
+	request &   d_request;
+	expect_type d_expected;
 
 public:
 	/*
@@ -54,6 +55,7 @@ public:
 	explicit request_parser_impl(request & req)
 		: served::request_parser()
 		, d_request(req)
+		, d_expected(expect_type::NONE)
 	{}
 
 	/*
@@ -66,6 +68,27 @@ public:
 	 * invalid?
 	 */
 	std::tuple<request_parser::status, size_t> parse(const char *data, size_t len);
+
+	/*
+	 * Check whether an Expect header has been encountered.
+	 *
+	 * The HTTP 1.1 protocol allows for a client to send an Expect header stating an expected
+	 * response from the server before continuing. This returns either the expect type or NONE if
+	 * one hasn't been encountered.
+	 *
+	 * @return the blocking expect_type, or expect_type::NONE
+	 */
+	expect_type get_expected();
+
+	/*
+	 * Set the expect type of the request parser.
+	 *
+	 * This is used to determine whether or not the request is blocked whilst waiting for a response
+	 * to an 'Expect' header.
+	 *
+	 * @param expected the new expected type
+	 */
+	void set_expected(expect_type expected);
 
 protected:
 	/*

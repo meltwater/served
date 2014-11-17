@@ -26,16 +26,11 @@
 #include <stdexcept>
 
 namespace served {
-
 /*
- * Single line class summary.
+ * An exception that contains an HTTP status code.
  *
- * Describe the abstraction this class represents in detail. What are its primary
- * responsibilities?
- *
- * Describe typical usage scenario(s).
- *
- * Describe any design assumptions.
+ * The request error should be used during a request handle if an unrecoverable error occurs, and
+ * allows a status code as well as a message to be specified for returning to the client.
  */
 class request_error : public std::runtime_error
 {
@@ -43,13 +38,10 @@ class request_error : public std::runtime_error
 
 public:
 	/*
-	 * Describe the method in a single line.
+	 * Construct a request error from a status code and a message.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @param status_code ...
-	 * @param message ...
+	 * @param status_code the status code to return to the client
+	 * @param message a message body to return to the client
 	 */
 	request_error(int status_code, std::string const& message)
 		: std::runtime_error(message)
@@ -57,12 +49,9 @@ public:
 	{}
 
 	/*
-	 * Describe the method in a single line.
+	 * Returns the status code of the request error.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @return ...
+	 * @return the status code
 	 */
 	int get_status_code() const
 	{

@@ -119,6 +119,8 @@ status_to_reason(int status_code)
 {
 	switch ( status_code )
 	{
+	case status_1XX::CONTINUE:
+		return "CONTINUE";
 	case status_2XX::OK:
 		return "OK";
 	// TODO

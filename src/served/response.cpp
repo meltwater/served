@@ -77,7 +77,7 @@ response::status()
 	return d_status;
 }
 
-const int
+const size_t
 response::body_size()
 {
 	d_body.seekp(0, std::ios::end);

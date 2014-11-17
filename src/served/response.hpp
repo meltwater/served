@@ -56,103 +56,86 @@ public:
 	//  -----  constructors  -----
 
 	/*
-	 * Describe the method in a single line.
-	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid /
-	 * invalid?
+	 * Construct an empty response.
 	 */
 	response();
 
 	//  -----  response mutators  -----
 
 	/*
-	 * Describe the method in a single line.
+	 * Sets a header field.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * Setting the same header twice will overwrite the previous, and header keys are case
+	 * insensitive. When sent to the client the header key will be as written here.
 	 *
-	 * @param header ...
-	 * @param value ...
+	 * @param header the header key
+	 * @param value the header value
 	 */
 	void set_header(std::string const& header, std::string const& value);
 
 	/*
-	 * Describe the method in a single line.
+	 * Set the HTTP status of the response.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @param status_code ...
+	 * @param status_code the status code
 	 */
 	void set_status(int status_code);
 
 	/*
-	 * Describe the method in a single line.
+	 * Set the entire body of the response.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * Sets the body of the response, overwriting any previous data stored in the body.
 	 *
-	 * @param body ...
+	 * @param body the response body
 	 */
 	void set_body(const std::string & body);
 
 	/*
-	 * Describe the method in a single line.
+	 * Pipe data to the body of the response.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * Appends data onto the body of the reponse.
 	 *
-	 * @param rhs ...
+	 * @param rhs data to be appended
 	 */
 	response& operator<<(std::string const& rhs);
 
 	//  -----  accessors  -----
 
 	/*
-	 * Describe the method in a single line.
+	 * Get the status of the response.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @return ...
+	 * @return the status of the response
 	 */
 	const int status();
 
 	/*
-	 * Describe the method in a single line.
+	 * Get the byte count of the response body.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * @return ...
+	 * @return the size of the response body
 	 */
-	const int body_size();
+	const size_t body_size();
 
 	//  -----  serializer  -----
 
 	/*
-	 * Describe the method in a single line.
+	 * Generate an HTTP response from this object.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * Uses the configured parameters to generate a full HTTP response and returns it as a
+	 * std::string.
 	 *
-	 * @return ...
+	 * @return the HTTP response
 	 */
 	const std::string to_buffer();
 
 	//  -----  stock reply  -----
 
 	/*
-	 * Describe the method in a single line.
+	 * Generate a general response to a specific HTTP status code.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * Constructs a response with a generic body to match a status code for when a detailed response
+	 * isn't required.
 	 *
-	 * @param method ...
-	 * @param handler ...
+	 * @param status_code the HTTP status code to generate for
+	 * @param res the response object to modify
 	 */
 	static void stock_reply(int status_code, response & res);
 };

@@ -45,13 +45,23 @@ int main(int argc, char const* argv[])
 			res << req.params["id"];
 		});
 
-	// GET /handlers/{id}/{number:[0-9]+}
+	// GET or POST /handlers/{id}/{number:[0-9]+}
 	mux.handle("/handlers/{id}/{number:[0-9]+}")
 		.get([](served::response & res, const served::request & req) {
 			res << "id: ";
 			res << req.params["id"];
 			res << ", number: ";
 			res << req.params["number"];
+		})
+		.post([](served::response & res, const served::request & req) {
+			res.set_status(served::status_2XX::OK);
+
+			res << "id: ";
+			res << req.params["id"];
+			res << ", number: ";
+			res << req.params["number"];
+
+			std::cout << req.body() << std::endl;
 		});
 
 	served::net::server server("127.0.0.1", "8000", mux);
