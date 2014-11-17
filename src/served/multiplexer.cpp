@@ -130,8 +130,9 @@ multiplexer::forward_to_handler(served::response & res, served::request & req)
 {
 	bool pattern_matched = false;
 
-	// Default to OK
-	response::stock_reply(status_2XX::OK, res);
+	// Default to OK empty response
+	res.set_status(status_2XX::OK);
+	res.set_body("");
 
 	// Iterate plugin pre request handlers
 	for ( const auto & handler : _plugin_pre_handlers )

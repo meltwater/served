@@ -68,7 +68,14 @@ connection::do_read()
 				// Expect type informs us of any "Expect" headers received from the client
 				auto expect_type = d_request_parser.get_expected();
 
-				if ( result == request_parser::status::FINISHED )
+				if ( result == request_parser::ERROR )
+				{
+					d_status = status_type::DONE;
+
+					response::stock_reply(served::status_4XX::BAD_REQUEST, d_response);
+					do_write();
+				}
+				else if ( result == request_parser::status::FINISHED )
 				{
 					if ( request_parser_impl::expect_type::NONE == expect_type )
 					{
@@ -108,10 +115,10 @@ connection::do_read()
 						do_write();
 					}
 				}
-				else if ( result == request_parser::ERROR )
+				else
 				{
-					response::stock_reply(served::status_4XX::BAD_REQUEST, d_response);
-					do_write();
+					// Not finished yet, continue reading.
+					do_read();
 				}
 			}
 			else if (ec != boost::asio::error::operation_aborted)
