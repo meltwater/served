@@ -31,271 +31,262 @@ using namespace served;
 /** Machine **/
 
 %%{
-    machine request_parser;
+	machine request_parser;
 
-    action mark {
-        MARK(mark, fpc);
-    }
+	action mark
+	{
+		MARK(mark, fpc);
+	}
 
-    action start_field {
-        MARK(field_start, fpc);
-    }
+	action start_field
+	{
+		MARK(field_start, fpc);
+	}
 
-    action write_field {
-        field_len = LEN(field_start, fpc);
-    }
+	action write_field
+	{
+		field_len = LEN(field_start, fpc);
+	}
 
-    action start_value {
-    	MARK(mark, fpc);
-    }
+	action start_value
+	{
+		MARK(mark, fpc);
+	}
 
-    action write_value {
-        http_field(buffer, PTR_TO(field_start), field_len, PTR_TO(mark), LEN(mark, fpc));
-    }
+	action write_value
+	{
+		http_field(buffer, PTR_TO(field_start), field_len, PTR_TO(mark), LEN(mark, fpc));
+	}
 
-    action request_method {
-        request_method(buffer, PTR_TO(mark), LEN(mark, fpc));
-    }
+	action request_method
+	{
+		request_method(buffer, PTR_TO(mark), LEN(mark, fpc));
+	}
 
-    action request_uri { 
-        request_uri(buffer, PTR_TO(mark), LEN(mark, fpc));
-    }
+	action request_uri
+	{
+		request_uri(buffer, PTR_TO(mark), LEN(mark, fpc));
+	}
 
-    action fragment {
-        fragment(buffer, PTR_TO(mark), LEN(mark, fpc));
-    }
+	action fragment
+	{
+		fragment(buffer, PTR_TO(mark), LEN(mark, fpc));
+	}
 
-    action start_query {
-        MARK(query_start, fpc);
-    }
+	action start_query
+	{
+		MARK(query_start, fpc);
+	}
 
-    action query_string {
-        query_string(buffer, PTR_TO(query_start), LEN(query_start, fpc));
-    }
+	action query_string
+	{
+		query_string(buffer, PTR_TO(query_start), LEN(query_start, fpc));
+	}
 
-    action http_version {
-        http_version(buffer, PTR_TO(mark), LEN(mark, fpc));
-    }
+	action http_version
+	{
+		http_version(buffer, PTR_TO(mark), LEN(mark, fpc));
+	}
 
-    action request_path {
-        request_path(buffer, PTR_TO(mark), LEN(mark,fpc));
-    }
+	action request_path
+	{
+		request_path(buffer, PTR_TO(mark), LEN(mark,fpc));
+	}
 
-    action done {
-        if(xml_sent || json_sent) {
-            body_start = PTR_TO(mark) - buffer;
-            // +1 includes the \0
-            //content_len = fpc - buffer - body_start + 1;
-        }
-        else {
-            body_start = fpc - buffer + 1;
+	action done
+	{
+		header_done(buffer, fpc + 1, pe - fpc - 1);
+		fbreak;
+	}
 
-            header_done(buffer, fpc + 1, pe - fpc - 1);
-        }
-        fbreak;
-    }
+	#### HTTP PROTOCOL GRAMMAR
 
-    action xml {
-        xml_sent = 1;
-    }
+	CRLF = ( "\r\n" | "\n" ) ;
 
-    action json {
-        json_sent = 1;
-    }
+	# URI description as per RFC 3986.
 
-    #### HTTP PROTOCOL GRAMMAR
+	sub_delims    = ( "!" | "$" | "&" | "'" | "(" | ")" | "*"
+	                | "+" | "," | ";" | "=" ) ;
+	gen_delims    = ( ":" | "/" | "?" | "#" | "[" | "]" | "@" ) ;
+	reserved      = ( gen_delims | sub_delims ) ;
+	unreserved    = ( alpha | digit | "-" | "." | "_" | "~" ) ;
 
-    CRLF = ( "\r\n" | "\n" ) ;
+	pct_encoded   = ( "%" xdigit xdigit ) ;
 
-    # URI description as per RFC 3986.
+	pchar         = ( unreserved | pct_encoded | sub_delims | ":" | "@" ) ;
 
-    sub_delims    = ( "!" | "$" | "&" | "'" | "(" | ")" | "*"
-                  | "+" | "," | ";" | "=" ) ;
-    gen_delims    = ( ":" | "/" | "?" | "#" | "[" | "]" | "@" ) ;
-    reserved      = ( gen_delims | sub_delims ) ;
-    unreserved    = ( alpha | digit | "-" | "." | "_" | "~" ) ;
+	fragment      = ( ( pchar | "/" | "?" )* ) >mark %fragment ;
 
-    pct_encoded   = ( "%" xdigit xdigit ) ;
+	query         = ( ( pchar | "/" | "?" )* ) %query_string ;
 
-    pchar         = ( unreserved | pct_encoded | sub_delims | ":" | "@" ) ;
+	# non_zero_length segment without any colon ":" ) ;
+	segment_nz_nc = ( ( unreserved | pct_encoded | sub_delims | "@" )+ ) ;
+	segment_nz    = ( pchar+ ) ;
+	segment       = ( pchar* ) ;
 
-    fragment      = ( ( pchar | "/" | "?" )* ) >mark %fragment ;
+	path_empty    = ( pchar{0} ) ;
+	path_rootless = ( segment_nz ( "/" segment )* ) ;
+	path_noscheme = ( segment_nz_nc ( "/" segment )* ) ;
+	path_absolute = ( "/" ( segment_nz ( "/" segment )* )? ) ;
+	path_abempty  = ( ( "/" segment )* ) ;
 
-    query         = ( ( pchar | "/" | "?" )* ) %query_string ;
+	path          = ( path_abempty    # begins with "/" or is empty
+	                | path_absolute   # begins with "/" but not "//"
+	                | path_noscheme   # begins with a non-colon segment
+	                | path_rootless   # begins with a segment
+	                | path_empty      # zero characters
+	                ) ;
 
-    # non_zero_length segment without any colon ":" ) ;
-    segment_nz_nc = ( ( unreserved | pct_encoded | sub_delims | "@" )+ ) ;
-    segment_nz    = ( pchar+ ) ;
-    segment       = ( pchar* ) ;
+	reg_name      = ( unreserved | pct_encoded | sub_delims )* ;
 
-    path_empty    = ( pchar{0} ) ;
-    path_rootless = ( segment_nz ( "/" segment )* ) ;
-    path_noscheme = ( segment_nz_nc ( "/" segment )* ) ;
-    path_absolute = ( "/" ( segment_nz ( "/" segment )* )? ) ;
-    path_abempty  = ( ( "/" segment )* ) ;
+	dec_octet     = ( digit                 # 0-9
+	                | ("1"-"9") digit         # 10-99
+	                | "1" digit{2}          # 100-199
+	                | "2" ("0"-"4") digit # 200-249
+	                | "25" ("0"-"5")      # 250-255
+	                ) ;
 
-    path          = ( path_abempty    # begins with "/" or is empty
-                  | path_absolute   # begins with "/" but not "//"
-                  | path_noscheme   # begins with a non-colon segment
-                  | path_rootless   # begins with a segment
-                  | path_empty      # zero characters
-                  ) ;
+	IPv4address   = ( dec_octet "." dec_octet "." dec_octet "." dec_octet ) ;
+	h16           = ( xdigit{1,4} ) ;
+	ls32          = ( ( h16 ":" h16 ) | IPv4address ) ;
 
-    reg_name      = ( unreserved | pct_encoded | sub_delims )* ;
+	IPv6address   = (                               6( h16 ":" ) ls32
+	                |                          "::" 5( h16 ":" ) ls32
+	                | (                 h16 )? "::" 4( h16 ":" ) ls32
+	                | ( ( h16 ":" ){1,} h16 )? "::" 3( h16 ":" ) ls32
+	                | ( ( h16 ":" ){2,} h16 )? "::" 2( h16 ":" ) ls32
+	                | ( ( h16 ":" ){3,} h16 )? "::"    h16 ":"   ls32
+	                | ( ( h16 ":" ){4,} h16 )? "::"              ls32
+	                | ( ( h16 ":" ){5,} h16 )? "::"              h16
+	                | ( ( h16 ":" ){6,} h16 )? "::"
+	                ) ;
 
-    dec_octet     = ( digit                 # 0-9
-                  | ("1"-"9") digit         # 10-99
-                  | "1" digit{2}          # 100-199
-                  | "2" ("0"-"4") digit # 200-249
-                  | "25" ("0"-"5")      # 250-255
-                  ) ;
+	IPvFuture     = ( "v" xdigit+ "." ( unreserved | sub_delims | ":" )+ ) ;
 
-    IPv4address   = ( dec_octet "." dec_octet "." dec_octet "." dec_octet ) ;
-    h16           = ( xdigit{1,4} ) ;
-    ls32          = ( ( h16 ":" h16 ) | IPv4address ) ;
+	IP_literal    = ( "[" ( IPv6address | IPvFuture  ) "]" ) ;
 
-    IPv6address   = (                               6( h16 ":" ) ls32
-                  |                          "::" 5( h16 ":" ) ls32
-                  | (                 h16 )? "::" 4( h16 ":" ) ls32
-                  | ( ( h16 ":" ){1,} h16 )? "::" 3( h16 ":" ) ls32
-                  | ( ( h16 ":" ){2,} h16 )? "::" 2( h16 ":" ) ls32
-                  | ( ( h16 ":" ){3,} h16 )? "::"    h16 ":"   ls32
-                  | ( ( h16 ":" ){4,} h16 )? "::"              ls32
-                  | ( ( h16 ":" ){5,} h16 )? "::"              h16
-                  | ( ( h16 ":" ){6,} h16 )? "::"
-                  ) ;
+	port          = ( digit* ) ;
+	host          = ( IP_literal | IPv4address | reg_name ) ;
+	userinfo      = ( ( unreserved | pct_encoded | sub_delims | ":" )* ) ;
+	authority     = ( ( userinfo "@" )? host ( ":" port )? ) ;
 
-    IPvFuture     = ( "v" xdigit+ "." ( unreserved | sub_delims | ":" )+ ) ;
+	scheme        = ( alpha ( alpha | digit | "+" | "-" | "." )* ) ;
 
-    IP_literal    = ( "[" ( IPv6address | IPvFuture  ) "]" ) ;
-
-    port          = ( digit* ) ;
-    host          = ( IP_literal | IPv4address | reg_name ) ;
-    userinfo      = ( ( unreserved | pct_encoded | sub_delims | ":" )* ) ;
-    authority     = ( ( userinfo "@" )? host ( ":" port )? ) ;
-
-    scheme        = ( alpha ( alpha | digit | "+" | "-" | "." )* ) ;
-
-    relative_part = ( "//" authority path_abempty
-                  | path_absolute
-                  | path_noscheme
-                  | path_empty
-                  ) ;
+	relative_part = ( "//" authority path_abempty
+	                | path_absolute
+	                | path_noscheme
+	                | path_empty
+	                ) ;
 
 
-    hier_part     = ( "//" authority path_abempty
-                  | path_absolute
-                  | path_rootless
-                  | path_empty
-                  ) ;
+	hier_part     = ( "//" authority path_abempty
+	                | path_absolute
+	                | path_rootless
+	                | path_empty
+	                ) ;
 
-    absolute_URI  = ( scheme ":" hier_part ( "?" query )? ) ;
+	absolute_URI  = ( scheme ":" hier_part ( "?" query )? ) ;
 
-    relative_ref  = ( (relative_part %request_path ( "?" %start_query query )?) >mark %request_uri ( "#" fragment )? ) ;
-    URI           = ( scheme ":" (hier_part  %request_path ( "?" %start_query query )?) >mark %request_uri ( "#" fragment )? ) ;
+	relative_ref  = ( (relative_part %request_path ( "?" %start_query query )?) >mark %request_uri ( "#" fragment )? ) ;
+	URI           = ( scheme ":" (hier_part  %request_path ( "?" %start_query query )?) >mark %request_uri ( "#" fragment )? ) ;
 
-    URI_reference = ( URI | relative_ref ) ;
+	URI_reference = ( URI | relative_ref ) ;
 
-    # HTTP header parsing
-    Method = ( upper | digit ){1,20} >mark %request_method;
+	# HTTP header parsing
+	Method = ( upper | digit ){1,20} >mark %request_method;
 
-    http_number = ( "1." ("0" | "1") ) ;
-    HTTP_Version = ( "HTTP/" http_number ) >mark %http_version ;
-    Request_Line = ( Method " " URI_reference " " HTTP_Version CRLF ) ;
+	http_number  = ( "1." ("0" | "1") ) ;
+	HTTP_Version = ( "HTTP/" http_number ) >mark %http_version ;
+	Request_Line = ( Method " " URI_reference " " HTTP_Version CRLF ) ;
 
-    HTTP_CTL = (0 - 31) | 127 ;
-    HTTP_separator = ( "(" | ")" | "<" | ">" | "@"
-                   | "," | ";" | ":" | "\\" | "\""
-                   | "/" | "[" | "]" | "?" | "="
-                   | "{" | "}" | " " | "\t"
-                   ) ;
+	HTTP_CTL = (0 - 31) | 127 ;
+	HTTP_separator = ( "(" | ")" | "<" | ">" | "@"
+	                 | "," | ";" | ":" | "\\" | "\""
+	                 | "/" | "[" | "]" | "?" | "="
+	                 | "{" | "}" | " " | "\t"
+	                 ) ;
 
-    lws = CRLF? (" " | "\t")+ ;
-    token = ascii -- ( HTTP_CTL | HTTP_separator ) ;
-    content = ((any -- HTTP_CTL) | lws);
+	lws = CRLF? (" " | "\t")+ ;
+	token = ascii -- ( HTTP_CTL | HTTP_separator ) ;
+	content = ((any -- HTTP_CTL) | lws);
 
-    field_name = ( token )+ >start_field %write_field;
+	field_name = ( token )+ >start_field %write_field;
 
-    field_value = content* >start_value %write_value;
+	field_value = content* >start_value %write_value;
 
-    message_header = field_name ":" lws* field_value :> CRLF;
+	message_header = field_name ":" lws* field_value :> CRLF;
 
-    Request = Request_Line ( message_header )* ( CRLF );
+	Request = Request_Line ( message_header )* ( CRLF );
 
-    SocketJSONStart = ("@" relative_part);
-    SocketJSONData = "{" any* "}" :>> "\0";
+	write data;
 
-    SocketXMLData = ("<" [a-z0-9A-Z\-.]+) >mark %request_path ("/" | space | ">") any* ">" :>> "\0";
-
-    SocketJSON = SocketJSONStart >mark %request_path " " SocketJSONData >mark @json;
-    SocketXML = SocketXMLData @xml;
-
-    SocketRequest = (SocketXML | SocketJSON);
-
-    write data;
-
-    main := (Request | SocketRequest) @done;
+	main := Request @done;
 }%%
 
 request_parser::request_parser()
-    : cs(0)
-    , d_offset(0)
+	: cs(0)
+	, d_offset(0)
 {
-    %% write init;
+	%% write init;
 }
 
 request_parser::~request_parser()
 {}
 
-size_t 
-request_parser::execute(const char *buffer, size_t len) {
-    size_t body_start = 0;
-    //int    content_len;
-    size_t nread = 0;
-    size_t mark = 0;
-    size_t field_start = 0;
-    size_t field_len = 0;
-    size_t query_start = 0;
-    int    xml_sent = 0;
-    int    json_sent = 0;
+size_t
+request_parser::execute(const char *buffer, size_t len)
+{
+	//int    content_len;
+	size_t nread = 0;
+	size_t mark = 0;
+	size_t field_start = 0;
+	size_t field_len = 0;
+	size_t query_start = 0;
 
-    if(len == 0) return 0;
+	if(len == 0) return 0;
 
-    const char *p  = buffer+d_offset;
-    const char *pe = buffer+len;
+	const char *p  = buffer+d_offset;
+	const char *pe = buffer+len;
 
-    %% write exec;
+	%% write exec;
 
-    // ASSERT(p <= pe);
+	// ASSERT(p <= pe);
 
-    nread += p - (buffer + d_offset);
+	nread += p - (buffer + d_offset);
 
-    // ASSERT(nread <= len);
-    // ASSERT(body_start <= len);
-    // ASSERT(mark < len);
-    // ASSERT(field_len <= len);
-    // ASSERT(field_start < len);
+	// ASSERT(nread <= len);
+	// ASSERT(mark < len);
+	// ASSERT(field_len <= len);
+	// ASSERT(field_start < len);
 
-    return(nread);
+	return(nread);
 }
 
-request_parser::status 
-request_parser::get_status() {
-    if (parser_error() ) {
-        return ERROR;
-    } else if (parser_finished() ) {
-        return FINISHED;
-    } else {
-        return RUNNING;
-    }
+request_parser::status
+request_parser::get_status()
+{
+	if ( parser_error() )
+	{
+		return ERROR;
+	}
+	else if ( parser_finished() )
+	{
+		return FINISHED;
+	}
+	else
+	{
+		return RUNNING;
+	}
 }
 
-bool 
-request_parser::parser_error() {
-    return (cs == request_parser_error);
+bool
+request_parser::parser_error()
+{
+	return (cs == request_parser_error);
 }
 
-bool 
-request_parser::parser_finished() {
-    return (cs == request_parser_first_final);
+bool
+request_parser::parser_finished()
+{
+	return (cs == request_parser_first_final);
 }

@@ -62,63 +62,61 @@ connection::do_read()
 		[this, self](boost::system::error_code ec, std::size_t bytes_transferred) {
 			if (!ec)
 			{
-				request_parser::status result;
-				std::tie(result, std::ignore) = d_request_parser.parse(d_buffer.data(), bytes_transferred);
+				request_parser_impl::status_type result;
+				result = d_request_parser.parse(d_buffer.data(), bytes_transferred);
 
-				// Expect type informs us of any "Expect" headers received from the client
-				auto expect_type = d_request_parser.get_expected();
-
-				if ( result == request_parser::ERROR )
+				if ( request_parser_impl::FINISHED == result )
 				{
+					// Parsing is finished, stop reading and send response.
+
+					d_status = status_type::DONE;
+
+					try
+					{
+						d_request_handler.forward_to_handler(d_response, d_request);
+					}
+					catch (const served::request_error & e)
+					{
+						d_response.set_status(e.get_status_code());
+						d_response.set_body(e.what());
+					}
+					catch (...)
+					{
+						response::stock_reply(status_5XX::INTERNAL_SERVER_ERROR, d_response);
+					}
+
+					do_write();
+
+					try
+					{
+						d_request_handler.on_request_handled(d_response, d_request);
+					}
+					catch (...)
+					{
+					}
+				}
+				else if ( request_parser_impl::EXPECT_CONTINUE == result )
+				{
+					// The client is expecting a 100-continue, so we serve it and continue reading.
+
+					response::stock_reply(served::status_1XX::CONTINUE, d_response);
+					do_write();
+				}
+				else if ( request_parser_impl::READ_HEADER == result
+				       || request_parser_impl::READ_BODY   == result )
+				{
+					// Not finished reading response, continue.
+
+					do_read();
+				}
+				else if ( request_parser_impl::ERROR == result )
+				{
+					// Error occurred while parsing, respond with BAD_REQUEST
+
 					d_status = status_type::DONE;
 
 					response::stock_reply(served::status_4XX::BAD_REQUEST, d_response);
 					do_write();
-				}
-				else if ( result == request_parser::status::FINISHED )
-				{
-					if ( request_parser_impl::expect_type::NONE == expect_type )
-					{
-						d_status = status_type::DONE;
-
-						try
-						{
-							d_request_handler.forward_to_handler(d_response, d_request);
-						}
-						catch (const served::request_error & e)
-						{
-							d_response.set_status(e.get_status_code());
-							d_response.set_body(e.what());
-						}
-						catch (...)
-						{
-							response::stock_reply(status_5XX::INTERNAL_SERVER_ERROR, d_response);
-						}
-
-						do_write();
-
-						try
-						{
-							d_request_handler.on_request_handled(d_response, d_request);
-						}
-						catch (...)
-						{
-						}
-					}
-					else if ( request_parser_impl::expect_type::CONTINUE == expect_type )
-					{
-						/* If the client is expecting a 100-continue then serve it, and ensure we read
-						 * back from the client afterwards by leaving our d_status to READING.
-						 */
-						response::stock_reply(served::status_1XX::CONTINUE, d_response);
-						d_request_parser.set_expected(request_parser_impl::expect_type::NONE);
-						do_write();
-					}
-				}
-				else
-				{
-					// Not finished yet, continue reading.
-					do_read();
 				}
 			}
 			else if (ec != boost::asio::error::operation_aborted)

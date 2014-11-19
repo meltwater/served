@@ -1,5 +1,5 @@
 
-#line 1 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 1 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 /*
  * Copyright (C) 2014 MediaSift Ltd.
  *
@@ -33,62 +33,56 @@ using namespace served;
 /** Machine **/
 
 
-#line 37 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 37 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 static const int request_parser_start = 1;
-static const int request_parser_first_final = 348;
+static const int request_parser_first_final = 194;
 static const int request_parser_error = 0;
 
 static const int request_parser_en_main = 1;
 
 
-#line 238 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 224 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 
 
 request_parser::request_parser()
-    : cs(0)
-    , d_offset(0)
+	: cs(0)
+	, d_offset(0)
 {
-    
-#line 53 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+	
+#line 53 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	{
 	cs = request_parser_start;
 	}
 
-#line 245 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 231 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 }
 
 request_parser::~request_parser()
 {}
 
-size_t 
-request_parser::execute(const char *buffer, size_t len) {
-    size_t body_start = 0;
-    //int    content_len;
-    size_t nread = 0;
-    size_t mark = 0;
-    size_t field_start = 0;
-    size_t field_len = 0;
-    size_t query_start = 0;
-    int    xml_sent = 0;
-    int    json_sent = 0;
+size_t
+request_parser::execute(const char *buffer, size_t len)
+{
+	//int    content_len;
+	size_t nread = 0;
+	size_t mark = 0;
+	size_t field_start = 0;
+	size_t field_len = 0;
+	size_t query_start = 0;
 
-    if(len == 0) return 0;
+	if(len == 0) return 0;
 
-    const char *p  = buffer+d_offset;
-    const char *pe = buffer+len;
+	const char *p  = buffer+d_offset;
+	const char *pe = buffer+len;
 
-    
-#line 82 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+	
+#line 80 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	{
 	if ( p == pe )
 		goto _test_eof;
 	switch ( cs )
 	{
 case 1:
-	switch( (*p) ) {
-		case 60: goto tr2;
-		case 64: goto tr3;
-	}
 	if ( (*p) > 57 ) {
 		if ( 65 <= (*p) && (*p) <= 90 )
 			goto tr0;
@@ -99,140 +93,140 @@ st0:
 cs = 0;
 	goto _out;
 tr0:
-#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 37 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        MARK(mark, p);
-    }
+		MARK(mark, p);
+	}
 	goto st2;
 st2:
 	if ( ++p == pe )
 		goto _test_eof2;
 case 2:
-#line 112 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 106 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	if ( (*p) == 32 )
-		goto tr4;
+		goto tr2;
 	if ( (*p) > 57 ) {
 		if ( 65 <= (*p) && (*p) <= 90 )
 			goto st175;
 	} else if ( (*p) >= 48 )
 		goto st175;
 	goto st0;
-tr4:
-#line 56 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr2:
+#line 62 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        request_method(buffer, PTR_TO(mark), LEN(mark, p));
-    }
+		request_method(buffer, PTR_TO(mark), LEN(mark, p));
+	}
 	goto st3;
 st3:
 	if ( ++p == pe )
 		goto _test_eof3;
 case 3:
-#line 131 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 125 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
-		case 32: goto tr6;
-		case 33: goto tr7;
-		case 35: goto tr8;
-		case 37: goto tr9;
-		case 47: goto tr10;
-		case 59: goto tr7;
-		case 61: goto tr7;
-		case 63: goto tr11;
-		case 64: goto tr7;
-		case 95: goto tr7;
-		case 126: goto tr7;
+		case 32: goto tr4;
+		case 33: goto tr5;
+		case 35: goto tr6;
+		case 37: goto tr7;
+		case 47: goto tr8;
+		case 59: goto tr5;
+		case 61: goto tr5;
+		case 63: goto tr9;
+		case 64: goto tr5;
+		case 95: goto tr5;
+		case 126: goto tr5;
 	}
 	if ( (*p) < 65 ) {
 		if ( 36 <= (*p) && (*p) <= 57 )
-			goto tr7;
+			goto tr5;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto tr12;
+			goto tr10;
 	} else
-		goto tr12;
+		goto tr10;
 	goto st0;
-tr6:
-#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr4:
+#line 37 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        MARK(mark, p);
-    }
-#line 80 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+		MARK(mark, p);
+	}
+#line 92 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        request_path(buffer, PTR_TO(mark), LEN(mark,p));
-    }
-#line 60 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{ 
-        request_uri(buffer, PTR_TO(mark), LEN(mark, p));
-    }
+		request_path(buffer, PTR_TO(mark), LEN(mark,p));
+	}
+#line 67 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
+	{
+		request_uri(buffer, PTR_TO(mark), LEN(mark, p));
+	}
 	goto st4;
-tr37:
-#line 80 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr35:
+#line 92 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        request_path(buffer, PTR_TO(mark), LEN(mark,p));
-    }
-#line 60 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{ 
-        request_uri(buffer, PTR_TO(mark), LEN(mark, p));
-    }
+		request_path(buffer, PTR_TO(mark), LEN(mark,p));
+	}
+#line 67 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
+	{
+		request_uri(buffer, PTR_TO(mark), LEN(mark, p));
+	}
 	goto st4;
-tr43:
-#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr41:
+#line 37 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        MARK(mark, p);
-    }
-#line 64 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+		MARK(mark, p);
+	}
+#line 72 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        fragment(buffer, PTR_TO(mark), LEN(mark, p));
-    }
+		fragment(buffer, PTR_TO(mark), LEN(mark, p));
+	}
 	goto st4;
-tr46:
-#line 64 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr44:
+#line 72 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        fragment(buffer, PTR_TO(mark), LEN(mark, p));
-    }
+		fragment(buffer, PTR_TO(mark), LEN(mark, p));
+	}
 	goto st4;
-tr53:
-#line 68 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr51:
+#line 77 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        MARK(query_start, p);
-    }
-#line 72 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+		MARK(query_start, p);
+	}
+#line 82 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        query_string(buffer, PTR_TO(query_start), LEN(query_start, p));
-    }
-#line 60 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{ 
-        request_uri(buffer, PTR_TO(mark), LEN(mark, p));
-    }
+		query_string(buffer, PTR_TO(query_start), LEN(query_start, p));
+	}
+#line 67 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
+	{
+		request_uri(buffer, PTR_TO(mark), LEN(mark, p));
+	}
 	goto st4;
-tr57:
-#line 72 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr55:
+#line 82 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        query_string(buffer, PTR_TO(query_start), LEN(query_start, p));
-    }
-#line 60 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{ 
-        request_uri(buffer, PTR_TO(mark), LEN(mark, p));
-    }
+		query_string(buffer, PTR_TO(query_start), LEN(query_start, p));
+	}
+#line 67 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
+	{
+		request_uri(buffer, PTR_TO(mark), LEN(mark, p));
+	}
 	goto st4;
 st4:
 	if ( ++p == pe )
 		goto _test_eof4;
 case 4:
-#line 222 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 216 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	if ( (*p) == 72 )
-		goto tr13;
+		goto tr11;
 	goto st0;
-tr13:
-#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr11:
+#line 37 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        MARK(mark, p);
-    }
+		MARK(mark, p);
+	}
 	goto st5;
 st5:
 	if ( ++p == pe )
 		goto _test_eof5;
 case 5:
-#line 236 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 230 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	if ( (*p) == 84 )
 		goto st6;
 	goto st0;
@@ -283,227 +277,82 @@ st12:
 		goto _test_eof12;
 case 12:
 	switch( (*p) ) {
-		case 10: goto tr21;
-		case 13: goto tr22;
+		case 10: goto tr19;
+		case 13: goto tr20;
 	}
 	goto st0;
-tr21:
-#line 76 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr19:
+#line 87 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        http_version(buffer, PTR_TO(mark), LEN(mark, p));
-    }
+		http_version(buffer, PTR_TO(mark), LEN(mark, p));
+	}
 	goto st13;
-tr30:
-#line 48 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr28:
+#line 52 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-    	MARK(mark, p);
-    }
-#line 52 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+		MARK(mark, p);
+	}
+#line 57 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        http_field(buffer, PTR_TO(field_start), field_len, PTR_TO(mark), LEN(mark, p));
-    }
+		http_field(buffer, PTR_TO(field_start), field_len, PTR_TO(mark), LEN(mark, p));
+	}
 	goto st13;
-tr33:
-#line 52 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr31:
+#line 57 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        http_field(buffer, PTR_TO(field_start), field_len, PTR_TO(mark), LEN(mark, p));
-    }
+		http_field(buffer, PTR_TO(field_start), field_len, PTR_TO(mark), LEN(mark, p));
+	}
 	goto st13;
 st13:
 	if ( ++p == pe )
 		goto _test_eof13;
 case 13:
-#line 317 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 311 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
-		case 10: goto tr24;
-		case 13: goto tr25;
-		case 33: goto tr23;
-		case 124: goto tr23;
-		case 126: goto tr23;
+		case 10: goto tr22;
+		case 13: goto tr23;
+		case 33: goto tr21;
+		case 124: goto tr21;
+		case 126: goto tr21;
 	}
 	if ( (*p) < 42 ) {
 		if ( (*p) < 11 ) {
 			if ( 1 <= (*p) && (*p) <= 8 )
-				goto tr23;
+				goto tr21;
 		} else if ( (*p) > 31 ) {
 			if ( 35 <= (*p) && (*p) <= 39 )
-				goto tr23;
+				goto tr21;
 		} else
-			goto tr23;
+			goto tr21;
 	} else if ( (*p) > 43 ) {
 		if ( (*p) < 48 ) {
 			if ( 45 <= (*p) && (*p) <= 46 )
-				goto tr23;
+				goto tr21;
 		} else if ( (*p) > 57 ) {
 			if ( (*p) > 90 ) {
 				if ( 94 <= (*p) && (*p) <= 122 )
-					goto tr23;
+					goto tr21;
 			} else if ( (*p) >= 65 )
-				goto tr23;
+				goto tr21;
 		} else
-			goto tr23;
+			goto tr21;
 	} else
-		goto tr23;
+		goto tr21;
 	goto st0;
-tr23:
-#line 40 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr21:
+#line 42 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        MARK(field_start, p);
-    }
+		MARK(field_start, p);
+	}
 	goto st14;
 st14:
 	if ( ++p == pe )
 		goto _test_eof14;
 case 14:
-#line 359 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 353 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
 		case 33: goto st14;
-		case 58: goto tr27;
-		case 124: goto st14;
-		case 126: goto st14;
-	}
-	if ( (*p) < 42 ) {
-		if ( (*p) < 10 ) {
-			if ( 1 <= (*p) && (*p) <= 8 )
-				goto st14;
-		} else if ( (*p) > 31 ) {
-			if ( 35 <= (*p) && (*p) <= 39 )
-				goto st14;
-		} else
-			goto st14;
-	} else if ( (*p) > 43 ) {
-		if ( (*p) < 48 ) {
-			if ( 45 <= (*p) && (*p) <= 46 )
-				goto st14;
-		} else if ( (*p) > 57 ) {
-			if ( (*p) > 90 ) {
-				if ( 94 <= (*p) && (*p) <= 122 )
-					goto st14;
-			} else if ( (*p) >= 65 )
-				goto st14;
-		} else
-			goto st14;
-	} else
-		goto st14;
-	goto st0;
-tr27:
-#line 44 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{
-        field_len = LEN(field_start, p);
-    }
-	goto st15;
-tr29:
-#line 48 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{
-    	MARK(mark, p);
-    }
-	goto st15;
-st15:
-	if ( ++p == pe )
-		goto _test_eof15;
-case 15:
-#line 406 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
-	switch( (*p) ) {
-		case 0: goto st0;
-		case 9: goto tr29;
-		case 10: goto tr30;
-		case 13: goto tr31;
-		case 32: goto tr29;
-		case 127: goto st0;
-	}
-	goto tr28;
-tr28:
-#line 48 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{
-    	MARK(mark, p);
-    }
-	goto st16;
-st16:
-	if ( ++p == pe )
-		goto _test_eof16;
-case 16:
-#line 426 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
-	switch( (*p) ) {
-		case 0: goto st0;
-		case 10: goto tr33;
-		case 13: goto tr34;
-		case 127: goto st0;
-	}
-	goto st16;
-tr22:
-#line 76 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{
-        http_version(buffer, PTR_TO(mark), LEN(mark, p));
-    }
-	goto st17;
-tr31:
-#line 48 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{
-    	MARK(mark, p);
-    }
-#line 52 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{
-        http_field(buffer, PTR_TO(field_start), field_len, PTR_TO(mark), LEN(mark, p));
-    }
-	goto st17;
-tr34:
-#line 52 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{
-        http_field(buffer, PTR_TO(field_start), field_len, PTR_TO(mark), LEN(mark, p));
-    }
-	goto st17;
-st17:
-	if ( ++p == pe )
-		goto _test_eof17;
-case 17:
-#line 460 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
-	if ( (*p) == 10 )
-		goto st13;
-	goto st0;
-tr24:
-#line 40 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{
-        MARK(field_start, p);
-    }
-#line 84 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{
-        if(xml_sent || json_sent) {
-            body_start = PTR_TO(mark) - buffer;
-            // +1 includes the \0
-            //content_len = fpc - buffer - body_start + 1;
-        }
-        else {
-            body_start = p - buffer + 1;
-
-            header_done(buffer, p + 1, pe - p - 1);
-        }
-        {p++; cs = 348; goto _out;}
-    }
-	goto st348;
-tr36:
-#line 84 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{
-        if(xml_sent || json_sent) {
-            body_start = PTR_TO(mark) - buffer;
-            // +1 includes the \0
-            //content_len = fpc - buffer - body_start + 1;
-        }
-        else {
-            body_start = p - buffer + 1;
-
-            header_done(buffer, p + 1, pe - p - 1);
-        }
-        {p++; cs = 348; goto _out;}
-    }
-	goto st348;
-st348:
-	if ( ++p == pe )
-		goto _test_eof348;
-case 348:
-#line 504 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
-	switch( (*p) ) {
-		case 33: goto st14;
-		case 58: goto tr27;
+		case 58: goto tr25;
 		case 124: goto st14;
 		case 126: goto st14;
 	}
@@ -532,20 +381,147 @@ case 348:
 		goto st14;
 	goto st0;
 tr25:
-#line 40 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 47 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        MARK(field_start, p);
-    }
+		field_len = LEN(field_start, p);
+	}
+	goto st15;
+tr27:
+#line 52 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
+	{
+		MARK(mark, p);
+	}
+	goto st15;
+st15:
+	if ( ++p == pe )
+		goto _test_eof15;
+case 15:
+#line 400 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
+	switch( (*p) ) {
+		case 0: goto st0;
+		case 9: goto tr27;
+		case 10: goto tr28;
+		case 13: goto tr29;
+		case 32: goto tr27;
+		case 127: goto st0;
+	}
+	goto tr26;
+tr26:
+#line 52 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
+	{
+		MARK(mark, p);
+	}
+	goto st16;
+st16:
+	if ( ++p == pe )
+		goto _test_eof16;
+case 16:
+#line 420 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
+	switch( (*p) ) {
+		case 0: goto st0;
+		case 10: goto tr31;
+		case 13: goto tr32;
+		case 127: goto st0;
+	}
+	goto st16;
+tr20:
+#line 87 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
+	{
+		http_version(buffer, PTR_TO(mark), LEN(mark, p));
+	}
+	goto st17;
+tr29:
+#line 52 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
+	{
+		MARK(mark, p);
+	}
+#line 57 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
+	{
+		http_field(buffer, PTR_TO(field_start), field_len, PTR_TO(mark), LEN(mark, p));
+	}
+	goto st17;
+tr32:
+#line 57 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
+	{
+		http_field(buffer, PTR_TO(field_start), field_len, PTR_TO(mark), LEN(mark, p));
+	}
+	goto st17;
+st17:
+	if ( ++p == pe )
+		goto _test_eof17;
+case 17:
+#line 454 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
+	if ( (*p) == 10 )
+		goto st13;
+	goto st0;
+tr22:
+#line 42 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
+	{
+		MARK(field_start, p);
+	}
+#line 97 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
+	{
+		header_done(buffer, p + 1, pe - p - 1);
+		{p++; cs = 194; goto _out;}
+	}
+	goto st194;
+tr34:
+#line 97 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
+	{
+		header_done(buffer, p + 1, pe - p - 1);
+		{p++; cs = 194; goto _out;}
+	}
+	goto st194;
+st194:
+	if ( ++p == pe )
+		goto _test_eof194;
+case 194:
+#line 480 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
+	switch( (*p) ) {
+		case 33: goto st14;
+		case 58: goto tr25;
+		case 124: goto st14;
+		case 126: goto st14;
+	}
+	if ( (*p) < 42 ) {
+		if ( (*p) < 10 ) {
+			if ( 1 <= (*p) && (*p) <= 8 )
+				goto st14;
+		} else if ( (*p) > 31 ) {
+			if ( 35 <= (*p) && (*p) <= 39 )
+				goto st14;
+		} else
+			goto st14;
+	} else if ( (*p) > 43 ) {
+		if ( (*p) < 48 ) {
+			if ( 45 <= (*p) && (*p) <= 46 )
+				goto st14;
+		} else if ( (*p) > 57 ) {
+			if ( (*p) > 90 ) {
+				if ( 94 <= (*p) && (*p) <= 122 )
+					goto st14;
+			} else if ( (*p) >= 65 )
+				goto st14;
+		} else
+			goto st14;
+	} else
+		goto st14;
+	goto st0;
+tr23:
+#line 42 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
+	{
+		MARK(field_start, p);
+	}
 	goto st18;
 st18:
 	if ( ++p == pe )
 		goto _test_eof18;
 case 18:
-#line 545 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 521 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
-		case 10: goto tr36;
+		case 10: goto tr34;
 		case 33: goto st14;
-		case 58: goto tr27;
+		case 58: goto tr25;
 		case 124: goto st14;
 		case 126: goto st14;
 	}
@@ -573,26 +549,26 @@ case 18:
 	} else
 		goto st14;
 	goto st0;
-tr7:
-#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr5:
+#line 37 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        MARK(mark, p);
-    }
+		MARK(mark, p);
+	}
 	goto st19;
 st19:
 	if ( ++p == pe )
 		goto _test_eof19;
 case 19:
-#line 587 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 563 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
-		case 32: goto tr37;
+		case 32: goto tr35;
 		case 33: goto st19;
-		case 35: goto tr39;
+		case 35: goto tr37;
 		case 37: goto st24;
 		case 47: goto st26;
 		case 59: goto st19;
 		case 61: goto st19;
-		case 63: goto tr42;
+		case 63: goto tr40;
 		case 95: goto st19;
 		case 126: goto st19;
 	}
@@ -605,89 +581,89 @@ case 19:
 	} else
 		goto st19;
 	goto st0;
-tr8:
-#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr6:
+#line 37 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        MARK(mark, p);
-    }
-#line 80 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+		MARK(mark, p);
+	}
+#line 92 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        request_path(buffer, PTR_TO(mark), LEN(mark,p));
-    }
-#line 60 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{ 
-        request_uri(buffer, PTR_TO(mark), LEN(mark, p));
-    }
+		request_path(buffer, PTR_TO(mark), LEN(mark,p));
+	}
+#line 67 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
+	{
+		request_uri(buffer, PTR_TO(mark), LEN(mark, p));
+	}
 	goto st20;
-tr39:
-#line 80 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr37:
+#line 92 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        request_path(buffer, PTR_TO(mark), LEN(mark,p));
-    }
-#line 60 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{ 
-        request_uri(buffer, PTR_TO(mark), LEN(mark, p));
-    }
+		request_path(buffer, PTR_TO(mark), LEN(mark,p));
+	}
+#line 67 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
+	{
+		request_uri(buffer, PTR_TO(mark), LEN(mark, p));
+	}
 	goto st20;
-tr55:
-#line 68 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr53:
+#line 77 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        MARK(query_start, p);
-    }
-#line 72 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+		MARK(query_start, p);
+	}
+#line 82 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        query_string(buffer, PTR_TO(query_start), LEN(query_start, p));
-    }
-#line 60 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{ 
-        request_uri(buffer, PTR_TO(mark), LEN(mark, p));
-    }
+		query_string(buffer, PTR_TO(query_start), LEN(query_start, p));
+	}
+#line 67 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
+	{
+		request_uri(buffer, PTR_TO(mark), LEN(mark, p));
+	}
 	goto st20;
-tr59:
-#line 72 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr57:
+#line 82 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        query_string(buffer, PTR_TO(query_start), LEN(query_start, p));
-    }
-#line 60 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{ 
-        request_uri(buffer, PTR_TO(mark), LEN(mark, p));
-    }
+		query_string(buffer, PTR_TO(query_start), LEN(query_start, p));
+	}
+#line 67 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
+	{
+		request_uri(buffer, PTR_TO(mark), LEN(mark, p));
+	}
 	goto st20;
 st20:
 	if ( ++p == pe )
 		goto _test_eof20;
 case 20:
-#line 661 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 637 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
-		case 32: goto tr43;
-		case 33: goto tr44;
-		case 37: goto tr45;
-		case 61: goto tr44;
-		case 95: goto tr44;
-		case 126: goto tr44;
+		case 32: goto tr41;
+		case 33: goto tr42;
+		case 37: goto tr43;
+		case 61: goto tr42;
+		case 95: goto tr42;
+		case 126: goto tr42;
 	}
 	if ( (*p) < 63 ) {
 		if ( 36 <= (*p) && (*p) <= 59 )
-			goto tr44;
+			goto tr42;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto tr44;
+			goto tr42;
 	} else
-		goto tr44;
+		goto tr42;
 	goto st0;
-tr44:
-#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr42:
+#line 37 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        MARK(mark, p);
-    }
+		MARK(mark, p);
+	}
 	goto st21;
 st21:
 	if ( ++p == pe )
 		goto _test_eof21;
 case 21:
-#line 689 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 665 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
-		case 32: goto tr46;
+		case 32: goto tr44;
 		case 33: goto st21;
 		case 37: goto st22;
 		case 61: goto st21;
@@ -703,17 +679,17 @@ case 21:
 	} else
 		goto st21;
 	goto st0;
-tr45:
-#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr43:
+#line 37 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        MARK(mark, p);
-    }
+		MARK(mark, p);
+	}
 	goto st22;
 st22:
 	if ( ++p == pe )
 		goto _test_eof22;
 case 22:
-#line 717 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 693 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
 			goto st23;
@@ -736,17 +712,17 @@ case 23:
 	} else
 		goto st21;
 	goto st0;
-tr9:
-#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr7:
+#line 37 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        MARK(mark, p);
-    }
+		MARK(mark, p);
+	}
 	goto st24;
 st24:
 	if ( ++p == pe )
 		goto _test_eof24;
 case 24:
-#line 750 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 726 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
 			goto st25;
@@ -769,24 +745,24 @@ case 25:
 	} else
 		goto st19;
 	goto st0;
-tr203:
-#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr201:
+#line 37 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        MARK(mark, p);
-    }
+		MARK(mark, p);
+	}
 	goto st26;
 st26:
 	if ( ++p == pe )
 		goto _test_eof26;
 case 26:
-#line 783 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 759 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
-		case 32: goto tr37;
+		case 32: goto tr35;
 		case 33: goto st26;
-		case 35: goto tr39;
+		case 35: goto tr37;
 		case 37: goto st27;
 		case 61: goto st26;
-		case 63: goto tr42;
+		case 63: goto tr40;
 		case 95: goto st26;
 		case 126: goto st26;
 	}
@@ -799,17 +775,17 @@ case 26:
 	} else
 		goto st26;
 	goto st0;
-tr204:
-#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr202:
+#line 37 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        MARK(mark, p);
-    }
+		MARK(mark, p);
+	}
 	goto st27;
 st27:
 	if ( ++p == pe )
 		goto _test_eof27;
 case 27:
-#line 813 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 789 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
 			goto st28;
@@ -832,60 +808,60 @@ case 28:
 	} else
 		goto st26;
 	goto st0;
-tr11:
-#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr9:
+#line 37 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        MARK(mark, p);
-    }
-#line 80 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+		MARK(mark, p);
+	}
+#line 92 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        request_path(buffer, PTR_TO(mark), LEN(mark,p));
-    }
+		request_path(buffer, PTR_TO(mark), LEN(mark,p));
+	}
 	goto st29;
-tr42:
-#line 80 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr40:
+#line 92 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        request_path(buffer, PTR_TO(mark), LEN(mark,p));
-    }
+		request_path(buffer, PTR_TO(mark), LEN(mark,p));
+	}
 	goto st29;
 st29:
 	if ( ++p == pe )
 		goto _test_eof29;
 case 29:
-#line 856 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 832 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
-		case 32: goto tr53;
-		case 33: goto tr54;
-		case 35: goto tr55;
-		case 37: goto tr56;
-		case 61: goto tr54;
-		case 95: goto tr54;
-		case 126: goto tr54;
+		case 32: goto tr51;
+		case 33: goto tr52;
+		case 35: goto tr53;
+		case 37: goto tr54;
+		case 61: goto tr52;
+		case 95: goto tr52;
+		case 126: goto tr52;
 	}
 	if ( (*p) < 63 ) {
 		if ( 36 <= (*p) && (*p) <= 59 )
-			goto tr54;
+			goto tr52;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto tr54;
+			goto tr52;
 	} else
-		goto tr54;
+		goto tr52;
 	goto st0;
-tr54:
-#line 68 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr52:
+#line 77 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        MARK(query_start, p);
-    }
+		MARK(query_start, p);
+	}
 	goto st30;
 st30:
 	if ( ++p == pe )
 		goto _test_eof30;
 case 30:
-#line 885 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 861 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
-		case 32: goto tr57;
+		case 32: goto tr55;
 		case 33: goto st30;
-		case 35: goto tr59;
+		case 35: goto tr57;
 		case 37: goto st31;
 		case 61: goto st30;
 		case 95: goto st30;
@@ -900,17 +876,17 @@ case 30:
 	} else
 		goto st30;
 	goto st0;
-tr56:
-#line 68 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr54:
+#line 77 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        MARK(query_start, p);
-    }
+		MARK(query_start, p);
+	}
 	goto st31;
 st31:
 	if ( ++p == pe )
 		goto _test_eof31;
 case 31:
-#line 914 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 890 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	if ( (*p) < 65 ) {
 		if ( 48 <= (*p) && (*p) <= 57 )
 			goto st32;
@@ -933,25 +909,25 @@ case 32:
 	} else
 		goto st30;
 	goto st0;
-tr10:
-#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr8:
+#line 37 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        MARK(mark, p);
-    }
+		MARK(mark, p);
+	}
 	goto st33;
 st33:
 	if ( ++p == pe )
 		goto _test_eof33;
 case 33:
-#line 947 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 923 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
-		case 32: goto tr37;
+		case 32: goto tr35;
 		case 33: goto st26;
-		case 35: goto tr39;
+		case 35: goto tr37;
 		case 37: goto st27;
 		case 47: goto st34;
 		case 61: goto st26;
-		case 63: goto tr42;
+		case 63: goto tr40;
 		case 95: goto st26;
 		case 126: goto st26;
 	}
@@ -969,14 +945,14 @@ st34:
 		goto _test_eof34;
 case 34:
 	switch( (*p) ) {
-		case 32: goto tr37;
+		case 32: goto tr35;
 		case 33: goto st35;
-		case 35: goto tr39;
+		case 35: goto tr37;
 		case 37: goto st36;
 		case 47: goto st26;
 		case 58: goto st38;
 		case 61: goto st35;
-		case 63: goto tr42;
+		case 63: goto tr40;
 		case 64: goto st42;
 		case 91: goto st47;
 		case 95: goto st35;
@@ -996,14 +972,14 @@ st35:
 		goto _test_eof35;
 case 35:
 	switch( (*p) ) {
-		case 32: goto tr37;
+		case 32: goto tr35;
 		case 33: goto st35;
-		case 35: goto tr39;
+		case 35: goto tr37;
 		case 37: goto st36;
 		case 47: goto st26;
 		case 58: goto st38;
 		case 61: goto st35;
-		case 63: goto tr42;
+		case 63: goto tr40;
 		case 64: goto st42;
 		case 95: goto st35;
 		case 126: goto st35;
@@ -1048,13 +1024,13 @@ st38:
 		goto _test_eof38;
 case 38:
 	switch( (*p) ) {
-		case 32: goto tr37;
+		case 32: goto tr35;
 		case 33: goto st39;
-		case 35: goto tr39;
+		case 35: goto tr37;
 		case 37: goto st40;
 		case 47: goto st26;
 		case 61: goto st39;
-		case 63: goto tr42;
+		case 63: goto tr40;
 		case 64: goto st42;
 		case 95: goto st39;
 		case 126: goto st39;
@@ -1129,14 +1105,14 @@ st42:
 		goto _test_eof42;
 case 42:
 	switch( (*p) ) {
-		case 32: goto tr37;
+		case 32: goto tr35;
 		case 33: goto st43;
-		case 35: goto tr39;
+		case 35: goto tr37;
 		case 37: goto st44;
 		case 47: goto st26;
 		case 58: goto st46;
 		case 61: goto st43;
-		case 63: goto tr42;
+		case 63: goto tr40;
 		case 91: goto st47;
 		case 95: goto st43;
 		case 126: goto st43;
@@ -1155,14 +1131,14 @@ st43:
 		goto _test_eof43;
 case 43:
 	switch( (*p) ) {
-		case 32: goto tr37;
+		case 32: goto tr35;
 		case 33: goto st43;
-		case 35: goto tr39;
+		case 35: goto tr37;
 		case 37: goto st44;
 		case 47: goto st26;
 		case 58: goto st46;
 		case 61: goto st43;
-		case 63: goto tr42;
+		case 63: goto tr40;
 		case 95: goto st43;
 		case 126: goto st43;
 	}
@@ -1206,10 +1182,10 @@ st46:
 		goto _test_eof46;
 case 46:
 	switch( (*p) ) {
-		case 32: goto tr37;
-		case 35: goto tr39;
+		case 32: goto tr35;
+		case 35: goto tr37;
 		case 47: goto st26;
-		case 63: goto tr42;
+		case 63: goto tr40;
 	}
 	if ( 48 <= (*p) && (*p) <= 57 )
 		goto st46;
@@ -1390,11 +1366,11 @@ st61:
 		goto _test_eof61;
 case 61:
 	switch( (*p) ) {
-		case 32: goto tr37;
-		case 35: goto tr39;
+		case 32: goto tr35;
+		case 35: goto tr37;
 		case 47: goto st26;
 		case 58: goto st46;
-		case 63: goto tr42;
+		case 63: goto tr40;
 	}
 	goto st0;
 st62:
@@ -2967,28 +2943,28 @@ case 172:
 	} else
 		goto st172;
 	goto st0;
-tr12:
-#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+tr10:
+#line 37 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 	{
-        MARK(mark, p);
-    }
+		MARK(mark, p);
+	}
 	goto st173;
 st173:
 	if ( ++p == pe )
 		goto _test_eof173;
 case 173:
-#line 2981 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
+#line 2957 "/home/vagrant/src/dev/served/src/served/request_parser.cpp"
 	switch( (*p) ) {
-		case 32: goto tr37;
+		case 32: goto tr35;
 		case 33: goto st19;
-		case 35: goto tr39;
+		case 35: goto tr37;
 		case 37: goto st24;
 		case 43: goto st173;
 		case 47: goto st26;
 		case 58: goto st174;
 		case 59: goto st19;
 		case 61: goto st19;
-		case 63: goto tr42;
+		case 63: goto tr40;
 		case 64: goto st19;
 		case 95: goto st19;
 		case 126: goto st19;
@@ -3010,31 +2986,31 @@ st174:
 		goto _test_eof174;
 case 174:
 	switch( (*p) ) {
-		case 32: goto tr6;
-		case 33: goto tr203;
-		case 35: goto tr8;
-		case 37: goto tr204;
-		case 47: goto tr10;
-		case 61: goto tr203;
-		case 63: goto tr11;
-		case 95: goto tr203;
-		case 126: goto tr203;
+		case 32: goto tr4;
+		case 33: goto tr201;
+		case 35: goto tr6;
+		case 37: goto tr202;
+		case 47: goto tr8;
+		case 61: goto tr201;
+		case 63: goto tr9;
+		case 95: goto tr201;
+		case 126: goto tr201;
 	}
 	if ( (*p) < 64 ) {
 		if ( 36 <= (*p) && (*p) <= 59 )
-			goto tr203;
+			goto tr201;
 	} else if ( (*p) > 90 ) {
 		if ( 97 <= (*p) && (*p) <= 122 )
-			goto tr203;
+			goto tr201;
 	} else
-		goto tr203;
+		goto tr201;
 	goto st0;
 st175:
 	if ( ++p == pe )
 		goto _test_eof175;
 case 175:
 	if ( (*p) == 32 )
-		goto tr4;
+		goto tr2;
 	if ( (*p) > 57 ) {
 		if ( 65 <= (*p) && (*p) <= 90 )
 			goto st176;
@@ -3046,7 +3022,7 @@ st176:
 		goto _test_eof176;
 case 176:
 	if ( (*p) == 32 )
-		goto tr4;
+		goto tr2;
 	if ( (*p) > 57 ) {
 		if ( 65 <= (*p) && (*p) <= 90 )
 			goto st177;
@@ -3058,7 +3034,7 @@ st177:
 		goto _test_eof177;
 case 177:
 	if ( (*p) == 32 )
-		goto tr4;
+		goto tr2;
 	if ( (*p) > 57 ) {
 		if ( 65 <= (*p) && (*p) <= 90 )
 			goto st178;
@@ -3070,7 +3046,7 @@ st178:
 		goto _test_eof178;
 case 178:
 	if ( (*p) == 32 )
-		goto tr4;
+		goto tr2;
 	if ( (*p) > 57 ) {
 		if ( 65 <= (*p) && (*p) <= 90 )
 			goto st179;
@@ -3082,7 +3058,7 @@ st179:
 		goto _test_eof179;
 case 179:
 	if ( (*p) == 32 )
-		goto tr4;
+		goto tr2;
 	if ( (*p) > 57 ) {
 		if ( 65 <= (*p) && (*p) <= 90 )
 			goto st180;
@@ -3094,7 +3070,7 @@ st180:
 		goto _test_eof180;
 case 180:
 	if ( (*p) == 32 )
-		goto tr4;
+		goto tr2;
 	if ( (*p) > 57 ) {
 		if ( 65 <= (*p) && (*p) <= 90 )
 			goto st181;
@@ -3106,7 +3082,7 @@ st181:
 		goto _test_eof181;
 case 181:
 	if ( (*p) == 32 )
-		goto tr4;
+		goto tr2;
 	if ( (*p) > 57 ) {
 		if ( 65 <= (*p) && (*p) <= 90 )
 			goto st182;
@@ -3118,7 +3094,7 @@ st182:
 		goto _test_eof182;
 case 182:
 	if ( (*p) == 32 )
-		goto tr4;
+		goto tr2;
 	if ( (*p) > 57 ) {
 		if ( 65 <= (*p) && (*p) <= 90 )
 			goto st183;
@@ -3130,7 +3106,7 @@ st183:
 		goto _test_eof183;
 case 183:
 	if ( (*p) == 32 )
-		goto tr4;
+		goto tr2;
 	if ( (*p) > 57 ) {
 		if ( 65 <= (*p) && (*p) <= 90 )
 			goto st184;
@@ -3142,7 +3118,7 @@ st184:
 		goto _test_eof184;
 case 184:
 	if ( (*p) == 32 )
-		goto tr4;
+		goto tr2;
 	if ( (*p) > 57 ) {
 		if ( 65 <= (*p) && (*p) <= 90 )
 			goto st185;
@@ -3154,7 +3130,7 @@ st185:
 		goto _test_eof185;
 case 185:
 	if ( (*p) == 32 )
-		goto tr4;
+		goto tr2;
 	if ( (*p) > 57 ) {
 		if ( 65 <= (*p) && (*p) <= 90 )
 			goto st186;
@@ -3166,7 +3142,7 @@ st186:
 		goto _test_eof186;
 case 186:
 	if ( (*p) == 32 )
-		goto tr4;
+		goto tr2;
 	if ( (*p) > 57 ) {
 		if ( 65 <= (*p) && (*p) <= 90 )
 			goto st187;
@@ -3178,7 +3154,7 @@ st187:
 		goto _test_eof187;
 case 187:
 	if ( (*p) == 32 )
-		goto tr4;
+		goto tr2;
 	if ( (*p) > 57 ) {
 		if ( 65 <= (*p) && (*p) <= 90 )
 			goto st188;
@@ -3190,7 +3166,7 @@ st188:
 		goto _test_eof188;
 case 188:
 	if ( (*p) == 32 )
-		goto tr4;
+		goto tr2;
 	if ( (*p) > 57 ) {
 		if ( 65 <= (*p) && (*p) <= 90 )
 			goto st189;
@@ -3202,7 +3178,7 @@ st189:
 		goto _test_eof189;
 case 189:
 	if ( (*p) == 32 )
-		goto tr4;
+		goto tr2;
 	if ( (*p) > 57 ) {
 		if ( 65 <= (*p) && (*p) <= 90 )
 			goto st190;
@@ -3214,7 +3190,7 @@ st190:
 		goto _test_eof190;
 case 190:
 	if ( (*p) == 32 )
-		goto tr4;
+		goto tr2;
 	if ( (*p) > 57 ) {
 		if ( 65 <= (*p) && (*p) <= 90 )
 			goto st191;
@@ -3226,7 +3202,7 @@ st191:
 		goto _test_eof191;
 case 191:
 	if ( (*p) == 32 )
-		goto tr4;
+		goto tr2;
 	if ( (*p) > 57 ) {
 		if ( 65 <= (*p) && (*p) <= 90 )
 			goto st192;
@@ -3238,7 +3214,7 @@ st192:
 		goto _test_eof192;
 case 192:
 	if ( (*p) == 32 )
-		goto tr4;
+		goto tr2;
 	if ( (*p) > 57 ) {
 		if ( 65 <= (*p) && (*p) <= 90 )
 			goto st193;
@@ -3250,2294 +3226,7 @@ st193:
 		goto _test_eof193;
 case 193:
 	if ( (*p) == 32 )
-		goto tr4;
-	goto st0;
-tr2:
-#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{
-        MARK(mark, p);
-    }
-	goto st194;
-st194:
-	if ( ++p == pe )
-		goto _test_eof194;
-case 194:
-#line 3266 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
-	if ( (*p) < 48 ) {
-		if ( 45 <= (*p) && (*p) <= 46 )
-			goto st195;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st195;
-		} else if ( (*p) >= 65 )
-			goto st195;
-	} else
-		goto st195;
-	goto st0;
-st195:
-	if ( ++p == pe )
-		goto _test_eof195;
-case 195:
-	switch( (*p) ) {
-		case 32: goto tr224;
-		case 47: goto tr224;
-		case 62: goto tr224;
-	}
-	if ( (*p) < 45 ) {
-		if ( 9 <= (*p) && (*p) <= 13 )
-			goto tr224;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st195;
-		} else if ( (*p) >= 65 )
-			goto st195;
-	} else
-		goto st195;
-	goto st0;
-tr224:
-#line 80 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{
-        request_path(buffer, PTR_TO(mark), LEN(mark,p));
-    }
-	goto st196;
-st196:
-	if ( ++p == pe )
-		goto _test_eof196;
-case 196:
-#line 3310 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
-	if ( (*p) == 62 )
-		goto st197;
-	goto st196;
-st197:
-	if ( ++p == pe )
-		goto _test_eof197;
-case 197:
-	switch( (*p) ) {
-		case 0: goto tr227;
-		case 62: goto st197;
-	}
-	goto st196;
-tr227:
-#line 98 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{
-        xml_sent = 1;
-    }
-#line 84 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{
-        if(xml_sent || json_sent) {
-            body_start = PTR_TO(mark) - buffer;
-            // +1 includes the \0
-            //content_len = fpc - buffer - body_start + 1;
-        }
-        else {
-            body_start = p - buffer + 1;
-
-            header_done(buffer, p + 1, pe - p - 1);
-        }
-        {p++; cs = 349; goto _out;}
-    }
-	goto st349;
-tr235:
-#line 102 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{
-        json_sent = 1;
-    }
-#line 84 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{
-        if(xml_sent || json_sent) {
-            body_start = PTR_TO(mark) - buffer;
-            // +1 includes the \0
-            //content_len = fpc - buffer - body_start + 1;
-        }
-        else {
-            body_start = p - buffer + 1;
-
-            header_done(buffer, p + 1, pe - p - 1);
-        }
-        {p++; cs = 349; goto _out;}
-    }
-	goto st349;
-st349:
-	if ( ++p == pe )
-		goto _test_eof349;
-case 349:
-#line 3367 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
-	goto st0;
-tr3:
-#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{
-        MARK(mark, p);
-    }
-	goto st198;
-st198:
-	if ( ++p == pe )
-		goto _test_eof198;
-case 198:
-#line 3379 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
-	switch( (*p) ) {
-		case 32: goto tr228;
-		case 33: goto st202;
-		case 37: goto st203;
-		case 47: goto st208;
-		case 59: goto st202;
-		case 61: goto st202;
-		case 95: goto st202;
-		case 126: goto st202;
-	}
-	if ( (*p) < 64 ) {
-		if ( 36 <= (*p) && (*p) <= 57 )
-			goto st202;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st202;
-	} else
-		goto st202;
-	goto st0;
-tr228:
-#line 80 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{
-        request_path(buffer, PTR_TO(mark), LEN(mark,p));
-    }
-	goto st199;
-st199:
-	if ( ++p == pe )
-		goto _test_eof199;
-case 199:
-#line 3409 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
-	if ( (*p) == 123 )
-		goto tr232;
-	goto st0;
-tr232:
-#line 36 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
-	{
-        MARK(mark, p);
-    }
-	goto st200;
-st200:
-	if ( ++p == pe )
-		goto _test_eof200;
-case 200:
-#line 3423 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.cpp"
-	if ( (*p) == 125 )
-		goto st201;
-	goto st200;
-st201:
-	if ( ++p == pe )
-		goto _test_eof201;
-case 201:
-	switch( (*p) ) {
-		case 0: goto tr235;
-		case 125: goto st201;
-	}
-	goto st200;
-st202:
-	if ( ++p == pe )
-		goto _test_eof202;
-case 202:
-	switch( (*p) ) {
-		case 32: goto tr228;
-		case 33: goto st202;
-		case 37: goto st203;
-		case 47: goto st205;
-		case 59: goto st202;
-		case 61: goto st202;
-		case 95: goto st202;
-		case 126: goto st202;
-	}
-	if ( (*p) < 64 ) {
-		if ( 36 <= (*p) && (*p) <= 57 )
-			goto st202;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st202;
-	} else
-		goto st202;
-	goto st0;
-st203:
-	if ( ++p == pe )
-		goto _test_eof203;
-case 203:
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st204;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st204;
-	} else
-		goto st204;
-	goto st0;
-st204:
-	if ( ++p == pe )
-		goto _test_eof204;
-case 204:
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st202;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st202;
-	} else
-		goto st202;
-	goto st0;
-st205:
-	if ( ++p == pe )
-		goto _test_eof205;
-case 205:
-	switch( (*p) ) {
-		case 32: goto tr228;
-		case 33: goto st205;
-		case 37: goto st206;
-		case 61: goto st205;
-		case 95: goto st205;
-		case 126: goto st205;
-	}
-	if ( (*p) < 64 ) {
-		if ( 36 <= (*p) && (*p) <= 59 )
-			goto st205;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st205;
-	} else
-		goto st205;
-	goto st0;
-st206:
-	if ( ++p == pe )
-		goto _test_eof206;
-case 206:
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st207;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st207;
-	} else
-		goto st207;
-	goto st0;
-st207:
-	if ( ++p == pe )
-		goto _test_eof207;
-case 207:
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st205;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st205;
-	} else
-		goto st205;
-	goto st0;
-st208:
-	if ( ++p == pe )
-		goto _test_eof208;
-case 208:
-	switch( (*p) ) {
-		case 32: goto tr228;
-		case 33: goto st205;
-		case 37: goto st206;
-		case 47: goto st209;
-		case 61: goto st205;
-		case 95: goto st205;
-		case 126: goto st205;
-	}
-	if ( (*p) < 64 ) {
-		if ( 36 <= (*p) && (*p) <= 59 )
-			goto st205;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st205;
-	} else
-		goto st205;
-	goto st0;
-st209:
-	if ( ++p == pe )
-		goto _test_eof209;
-case 209:
-	switch( (*p) ) {
-		case 32: goto tr228;
-		case 33: goto st210;
-		case 37: goto st211;
-		case 47: goto st205;
-		case 58: goto st213;
-		case 61: goto st210;
-		case 64: goto st217;
-		case 91: goto st222;
-		case 95: goto st210;
-		case 126: goto st210;
-	}
-	if ( (*p) < 65 ) {
-		if ( 36 <= (*p) && (*p) <= 59 )
-			goto st210;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st210;
-	} else
-		goto st210;
-	goto st0;
-st210:
-	if ( ++p == pe )
-		goto _test_eof210;
-case 210:
-	switch( (*p) ) {
-		case 32: goto tr228;
-		case 33: goto st210;
-		case 37: goto st211;
-		case 47: goto st205;
-		case 58: goto st213;
-		case 61: goto st210;
-		case 64: goto st217;
-		case 95: goto st210;
-		case 126: goto st210;
-	}
-	if ( (*p) < 65 ) {
-		if ( 36 <= (*p) && (*p) <= 59 )
-			goto st210;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st210;
-	} else
-		goto st210;
-	goto st0;
-st211:
-	if ( ++p == pe )
-		goto _test_eof211;
-case 211:
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st212;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st212;
-	} else
-		goto st212;
-	goto st0;
-st212:
-	if ( ++p == pe )
-		goto _test_eof212;
-case 212:
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st210;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st210;
-	} else
-		goto st210;
-	goto st0;
-st213:
-	if ( ++p == pe )
-		goto _test_eof213;
-case 213:
-	switch( (*p) ) {
-		case 32: goto tr228;
-		case 33: goto st214;
-		case 37: goto st215;
-		case 47: goto st205;
-		case 61: goto st214;
-		case 64: goto st217;
-		case 95: goto st214;
-		case 126: goto st214;
-	}
-	if ( (*p) < 58 ) {
-		if ( (*p) > 46 ) {
-			if ( 48 <= (*p) && (*p) <= 57 )
-				goto st213;
-		} else if ( (*p) >= 36 )
-			goto st214;
-	} else if ( (*p) > 59 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st214;
-		} else if ( (*p) >= 65 )
-			goto st214;
-	} else
-		goto st214;
-	goto st0;
-st214:
-	if ( ++p == pe )
-		goto _test_eof214;
-case 214:
-	switch( (*p) ) {
-		case 33: goto st214;
-		case 37: goto st215;
-		case 61: goto st214;
-		case 64: goto st217;
-		case 95: goto st214;
-		case 126: goto st214;
-	}
-	if ( (*p) < 48 ) {
-		if ( 36 <= (*p) && (*p) <= 46 )
-			goto st214;
-	} else if ( (*p) > 59 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st214;
-		} else if ( (*p) >= 65 )
-			goto st214;
-	} else
-		goto st214;
-	goto st0;
-st215:
-	if ( ++p == pe )
-		goto _test_eof215;
-case 215:
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st216;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st216;
-	} else
-		goto st216;
-	goto st0;
-st216:
-	if ( ++p == pe )
-		goto _test_eof216;
-case 216:
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st214;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st214;
-	} else
-		goto st214;
-	goto st0;
-st217:
-	if ( ++p == pe )
-		goto _test_eof217;
-case 217:
-	switch( (*p) ) {
-		case 32: goto tr228;
-		case 33: goto st218;
-		case 37: goto st219;
-		case 47: goto st205;
-		case 58: goto st221;
-		case 61: goto st218;
-		case 91: goto st222;
-		case 95: goto st218;
-		case 126: goto st218;
-	}
-	if ( (*p) < 65 ) {
-		if ( 36 <= (*p) && (*p) <= 59 )
-			goto st218;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st218;
-	} else
-		goto st218;
-	goto st0;
-st218:
-	if ( ++p == pe )
-		goto _test_eof218;
-case 218:
-	switch( (*p) ) {
-		case 32: goto tr228;
-		case 33: goto st218;
-		case 37: goto st219;
-		case 47: goto st205;
-		case 58: goto st221;
-		case 61: goto st218;
-		case 95: goto st218;
-		case 126: goto st218;
-	}
-	if ( (*p) < 65 ) {
-		if ( 36 <= (*p) && (*p) <= 59 )
-			goto st218;
-	} else if ( (*p) > 90 ) {
-		if ( 97 <= (*p) && (*p) <= 122 )
-			goto st218;
-	} else
-		goto st218;
-	goto st0;
-st219:
-	if ( ++p == pe )
-		goto _test_eof219;
-case 219:
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st220;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st220;
-	} else
-		goto st220;
-	goto st0;
-st220:
-	if ( ++p == pe )
-		goto _test_eof220;
-case 220:
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st218;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st218;
-	} else
-		goto st218;
-	goto st0;
-st221:
-	if ( ++p == pe )
-		goto _test_eof221;
-case 221:
-	switch( (*p) ) {
-		case 32: goto tr228;
-		case 47: goto st205;
-	}
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st221;
-	goto st0;
-st222:
-	if ( ++p == pe )
-		goto _test_eof222;
-case 222:
-	switch( (*p) ) {
-		case 6: goto st223;
-		case 58: goto st342;
-		case 118: goto st344;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st266;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st266;
-	} else
-		goto st266;
-	goto st0;
-st223:
-	if ( ++p == pe )
-		goto _test_eof223;
-case 223:
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st224;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st224;
-	} else
-		goto st224;
-	goto st0;
-st224:
-	if ( ++p == pe )
-		goto _test_eof224;
-case 224:
-	if ( (*p) == 58 )
-		goto st228;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st225;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st225;
-	} else
-		goto st225;
-	goto st0;
-st225:
-	if ( ++p == pe )
-		goto _test_eof225;
-case 225:
-	if ( (*p) == 58 )
-		goto st228;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st226;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st226;
-	} else
-		goto st226;
-	goto st0;
-st226:
-	if ( ++p == pe )
-		goto _test_eof226;
-case 226:
-	if ( (*p) == 58 )
-		goto st228;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st227;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st227;
-	} else
-		goto st227;
-	goto st0;
-st227:
-	if ( ++p == pe )
-		goto _test_eof227;
-case 227:
-	if ( (*p) == 58 )
-		goto st228;
-	goto st0;
-st228:
-	if ( ++p == pe )
-		goto _test_eof228;
-case 228:
-	switch( (*p) ) {
-		case 49: goto st259;
-		case 50: goto st262;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st229;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st265;
-	} else
-		goto st265;
-	goto st0;
-st229:
-	if ( ++p == pe )
-		goto _test_eof229;
-case 229:
-	switch( (*p) ) {
-		case 46: goto st230;
-		case 58: goto st255;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st252;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st252;
-	} else
-		goto st252;
-	goto st0;
-st230:
-	if ( ++p == pe )
-		goto _test_eof230;
-case 230:
-	switch( (*p) ) {
-		case 49: goto st247;
-		case 50: goto st249;
-	}
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st231;
-	goto st0;
-st231:
-	if ( ++p == pe )
-		goto _test_eof231;
-case 231:
-	if ( (*p) == 46 )
-		goto st232;
-	goto st0;
-st232:
-	if ( ++p == pe )
-		goto _test_eof232;
-case 232:
-	switch( (*p) ) {
-		case 49: goto st242;
-		case 50: goto st244;
-	}
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st233;
-	goto st0;
-st233:
-	if ( ++p == pe )
-		goto _test_eof233;
-case 233:
-	if ( (*p) == 46 )
-		goto st234;
-	goto st0;
-st234:
-	if ( ++p == pe )
-		goto _test_eof234;
-case 234:
-	switch( (*p) ) {
-		case 49: goto st237;
-		case 50: goto st239;
-	}
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st235;
-	goto st0;
-st235:
-	if ( ++p == pe )
-		goto _test_eof235;
-case 235:
-	if ( (*p) == 93 )
-		goto st236;
-	goto st0;
-st236:
-	if ( ++p == pe )
-		goto _test_eof236;
-case 236:
-	switch( (*p) ) {
-		case 32: goto tr228;
-		case 47: goto st205;
-		case 58: goto st221;
-	}
-	goto st0;
-st237:
-	if ( ++p == pe )
-		goto _test_eof237;
-case 237:
-	if ( (*p) == 93 )
-		goto st236;
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st238;
-	goto st0;
-st238:
-	if ( ++p == pe )
-		goto _test_eof238;
-case 238:
-	if ( (*p) == 93 )
-		goto st236;
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st235;
-	goto st0;
-st239:
-	if ( ++p == pe )
-		goto _test_eof239;
-case 239:
-	switch( (*p) ) {
-		case 48: goto st240;
-		case 53: goto st241;
-		case 93: goto st236;
-	}
-	goto st0;
-st240:
-	if ( ++p == pe )
-		goto _test_eof240;
-case 240:
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st235;
-	goto st0;
-st241:
-	if ( ++p == pe )
-		goto _test_eof241;
-case 241:
-	if ( (*p) == 48 )
-		goto st235;
-	goto st0;
-st242:
-	if ( ++p == pe )
-		goto _test_eof242;
-case 242:
-	if ( (*p) == 46 )
-		goto st234;
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st243;
-	goto st0;
-st243:
-	if ( ++p == pe )
-		goto _test_eof243;
-case 243:
-	if ( (*p) == 46 )
-		goto st234;
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st233;
-	goto st0;
-st244:
-	if ( ++p == pe )
-		goto _test_eof244;
-case 244:
-	switch( (*p) ) {
-		case 46: goto st234;
-		case 48: goto st245;
-		case 53: goto st246;
-	}
-	goto st0;
-st245:
-	if ( ++p == pe )
-		goto _test_eof245;
-case 245:
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st233;
-	goto st0;
-st246:
-	if ( ++p == pe )
-		goto _test_eof246;
-case 246:
-	if ( (*p) == 48 )
-		goto st233;
-	goto st0;
-st247:
-	if ( ++p == pe )
-		goto _test_eof247;
-case 247:
-	if ( (*p) == 46 )
-		goto st232;
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st248;
-	goto st0;
-st248:
-	if ( ++p == pe )
-		goto _test_eof248;
-case 248:
-	if ( (*p) == 46 )
-		goto st232;
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st231;
-	goto st0;
-st249:
-	if ( ++p == pe )
-		goto _test_eof249;
-case 249:
-	switch( (*p) ) {
-		case 46: goto st232;
-		case 48: goto st250;
-		case 53: goto st251;
-	}
-	goto st0;
-st250:
-	if ( ++p == pe )
-		goto _test_eof250;
-case 250:
-	if ( 48 <= (*p) && (*p) <= 57 )
-		goto st231;
-	goto st0;
-st251:
-	if ( ++p == pe )
-		goto _test_eof251;
-case 251:
-	if ( (*p) == 48 )
-		goto st231;
-	goto st0;
-st252:
-	if ( ++p == pe )
-		goto _test_eof252;
-case 252:
-	if ( (*p) == 58 )
-		goto st255;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st253;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st253;
-	} else
-		goto st253;
-	goto st0;
-st253:
-	if ( ++p == pe )
-		goto _test_eof253;
-case 253:
-	if ( (*p) == 58 )
-		goto st255;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st254;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st254;
-	} else
-		goto st254;
-	goto st0;
-st254:
-	if ( ++p == pe )
-		goto _test_eof254;
-case 254:
-	if ( (*p) == 58 )
-		goto st255;
-	goto st0;
-st255:
-	if ( ++p == pe )
-		goto _test_eof255;
-case 255:
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st256;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st256;
-	} else
-		goto st256;
-	goto st0;
-st256:
-	if ( ++p == pe )
-		goto _test_eof256;
-case 256:
-	if ( (*p) == 93 )
-		goto st236;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st257;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st257;
-	} else
-		goto st257;
-	goto st0;
-st257:
-	if ( ++p == pe )
-		goto _test_eof257;
-case 257:
-	if ( (*p) == 93 )
-		goto st236;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st258;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st258;
-	} else
-		goto st258;
-	goto st0;
-st258:
-	if ( ++p == pe )
-		goto _test_eof258;
-case 258:
-	if ( (*p) == 93 )
-		goto st236;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st235;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st235;
-	} else
-		goto st235;
-	goto st0;
-st259:
-	if ( ++p == pe )
-		goto _test_eof259;
-case 259:
-	switch( (*p) ) {
-		case 46: goto st230;
-		case 58: goto st255;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st260;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st252;
-	} else
-		goto st252;
-	goto st0;
-st260:
-	if ( ++p == pe )
-		goto _test_eof260;
-case 260:
-	switch( (*p) ) {
-		case 46: goto st230;
-		case 58: goto st255;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st261;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st253;
-	} else
-		goto st253;
-	goto st0;
-st261:
-	if ( ++p == pe )
-		goto _test_eof261;
-case 261:
-	switch( (*p) ) {
-		case 46: goto st230;
-		case 58: goto st255;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st254;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st254;
-	} else
-		goto st254;
-	goto st0;
-st262:
-	if ( ++p == pe )
-		goto _test_eof262;
-case 262:
-	switch( (*p) ) {
-		case 46: goto st230;
-		case 48: goto st263;
-		case 53: goto st264;
-		case 58: goto st255;
-	}
-	if ( (*p) < 65 ) {
-		if ( 49 <= (*p) && (*p) <= 57 )
-			goto st252;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st252;
-	} else
-		goto st252;
-	goto st0;
-st263:
-	if ( ++p == pe )
-		goto _test_eof263;
-case 263:
-	if ( (*p) == 58 )
-		goto st255;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st261;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st253;
-	} else
-		goto st253;
-	goto st0;
-st264:
-	if ( ++p == pe )
-		goto _test_eof264;
-case 264:
-	switch( (*p) ) {
-		case 48: goto st261;
-		case 58: goto st255;
-	}
-	if ( (*p) < 65 ) {
-		if ( 49 <= (*p) && (*p) <= 57 )
-			goto st253;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st253;
-	} else
-		goto st253;
-	goto st0;
-st265:
-	if ( ++p == pe )
-		goto _test_eof265;
-case 265:
-	if ( (*p) == 58 )
-		goto st255;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st252;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st252;
-	} else
-		goto st252;
-	goto st0;
-st266:
-	if ( ++p == pe )
-		goto _test_eof266;
-case 266:
-	if ( (*p) == 58 )
-		goto st270;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st267;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st267;
-	} else
-		goto st267;
-	goto st0;
-st267:
-	if ( ++p == pe )
-		goto _test_eof267;
-case 267:
-	if ( (*p) == 58 )
-		goto st270;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st268;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st268;
-	} else
-		goto st268;
-	goto st0;
-st268:
-	if ( ++p == pe )
-		goto _test_eof268;
-case 268:
-	if ( (*p) == 58 )
-		goto st270;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st269;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st269;
-	} else
-		goto st269;
-	goto st0;
-st269:
-	if ( ++p == pe )
-		goto _test_eof269;
-case 269:
-	if ( (*p) == 58 )
-		goto st270;
-	goto st0;
-st270:
-	if ( ++p == pe )
-		goto _test_eof270;
-case 270:
-	if ( (*p) == 58 )
-		goto st341;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st271;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st271;
-	} else
-		goto st271;
-	goto st0;
-st271:
-	if ( ++p == pe )
-		goto _test_eof271;
-case 271:
-	if ( (*p) == 58 )
-		goto st275;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st272;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st272;
-	} else
-		goto st272;
-	goto st0;
-st272:
-	if ( ++p == pe )
-		goto _test_eof272;
-case 272:
-	if ( (*p) == 58 )
-		goto st275;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st273;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st273;
-	} else
-		goto st273;
-	goto st0;
-st273:
-	if ( ++p == pe )
-		goto _test_eof273;
-case 273:
-	if ( (*p) == 58 )
-		goto st275;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st274;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st274;
-	} else
-		goto st274;
-	goto st0;
-st274:
-	if ( ++p == pe )
-		goto _test_eof274;
-case 274:
-	if ( (*p) == 58 )
-		goto st275;
-	goto st0;
-st275:
-	if ( ++p == pe )
-		goto _test_eof275;
-case 275:
-	if ( (*p) == 58 )
-		goto st340;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st276;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st276;
-	} else
-		goto st276;
-	goto st0;
-st276:
-	if ( ++p == pe )
-		goto _test_eof276;
-case 276:
-	if ( (*p) == 58 )
-		goto st280;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st277;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st277;
-	} else
-		goto st277;
-	goto st0;
-st277:
-	if ( ++p == pe )
-		goto _test_eof277;
-case 277:
-	if ( (*p) == 58 )
-		goto st280;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st278;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st278;
-	} else
-		goto st278;
-	goto st0;
-st278:
-	if ( ++p == pe )
-		goto _test_eof278;
-case 278:
-	if ( (*p) == 58 )
-		goto st280;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st279;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st279;
-	} else
-		goto st279;
-	goto st0;
-st279:
-	if ( ++p == pe )
-		goto _test_eof279;
-case 279:
-	if ( (*p) == 58 )
-		goto st280;
-	goto st0;
-st280:
-	if ( ++p == pe )
-		goto _test_eof280;
-case 280:
-	if ( (*p) == 58 )
-		goto st339;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st281;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st281;
-	} else
-		goto st281;
-	goto st0;
-st281:
-	if ( ++p == pe )
-		goto _test_eof281;
-case 281:
-	if ( (*p) == 58 )
-		goto st285;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st282;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st282;
-	} else
-		goto st282;
-	goto st0;
-st282:
-	if ( ++p == pe )
-		goto _test_eof282;
-case 282:
-	if ( (*p) == 58 )
-		goto st285;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st283;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st283;
-	} else
-		goto st283;
-	goto st0;
-st283:
-	if ( ++p == pe )
-		goto _test_eof283;
-case 283:
-	if ( (*p) == 58 )
-		goto st285;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st284;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st284;
-	} else
-		goto st284;
-	goto st0;
-st284:
-	if ( ++p == pe )
-		goto _test_eof284;
-case 284:
-	if ( (*p) == 58 )
-		goto st285;
-	goto st0;
-st285:
-	if ( ++p == pe )
-		goto _test_eof285;
-case 285:
-	if ( (*p) == 58 )
-		goto st338;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st286;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st286;
-	} else
-		goto st286;
-	goto st0;
-st286:
-	if ( ++p == pe )
-		goto _test_eof286;
-case 286:
-	if ( (*p) == 58 )
-		goto st290;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st287;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st287;
-	} else
-		goto st287;
-	goto st0;
-st287:
-	if ( ++p == pe )
-		goto _test_eof287;
-case 287:
-	if ( (*p) == 58 )
-		goto st290;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st288;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st288;
-	} else
-		goto st288;
-	goto st0;
-st288:
-	if ( ++p == pe )
-		goto _test_eof288;
-case 288:
-	if ( (*p) == 58 )
-		goto st290;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st289;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st289;
-	} else
-		goto st289;
-	goto st0;
-st289:
-	if ( ++p == pe )
-		goto _test_eof289;
-case 289:
-	if ( (*p) == 58 )
-		goto st290;
-	goto st0;
-st290:
-	if ( ++p == pe )
-		goto _test_eof290;
-case 290:
-	if ( (*p) == 58 )
-		goto st326;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st291;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st291;
-	} else
-		goto st291;
-	goto st0;
-st291:
-	if ( ++p == pe )
-		goto _test_eof291;
-case 291:
-	if ( (*p) == 58 )
-		goto st295;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st292;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st292;
-	} else
-		goto st292;
-	goto st0;
-st292:
-	if ( ++p == pe )
-		goto _test_eof292;
-case 292:
-	if ( (*p) == 58 )
-		goto st295;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st293;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st293;
-	} else
-		goto st293;
-	goto st0;
-st293:
-	if ( ++p == pe )
-		goto _test_eof293;
-case 293:
-	if ( (*p) == 58 )
-		goto st295;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st294;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st294;
-	} else
-		goto st294;
-	goto st0;
-st294:
-	if ( ++p == pe )
-		goto _test_eof294;
-case 294:
-	if ( (*p) == 58 )
-		goto st295;
-	goto st0;
-st295:
-	if ( ++p == pe )
-		goto _test_eof295;
-case 295:
-	if ( (*p) == 58 )
-		goto st325;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st296;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st296;
-	} else
-		goto st296;
-	goto st0;
-st296:
-	if ( ++p == pe )
-		goto _test_eof296;
-case 296:
-	if ( (*p) == 58 )
-		goto st300;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st297;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st297;
-	} else
-		goto st297;
-	goto st0;
-st297:
-	if ( ++p == pe )
-		goto _test_eof297;
-case 297:
-	if ( (*p) == 58 )
-		goto st300;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st298;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st298;
-	} else
-		goto st298;
-	goto st0;
-st298:
-	if ( ++p == pe )
-		goto _test_eof298;
-case 298:
-	if ( (*p) == 58 )
-		goto st300;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st299;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st299;
-	} else
-		goto st299;
-	goto st0;
-st299:
-	if ( ++p == pe )
-		goto _test_eof299;
-case 299:
-	if ( (*p) == 58 )
-		goto st300;
-	goto st0;
-st300:
-	if ( ++p == pe )
-		goto _test_eof300;
-case 300:
-	if ( (*p) == 58 )
-		goto st301;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st296;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st296;
-	} else
-		goto st296;
-	goto st0;
-st301:
-	if ( ++p == pe )
-		goto _test_eof301;
-case 301:
-	switch( (*p) ) {
-		case 49: goto st318;
-		case 50: goto st321;
-		case 93: goto st236;
-	}
-	if ( (*p) < 48 ) {
-		if ( 2 <= (*p) && (*p) <= 3 )
-			goto st223;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 70 ) {
-			if ( 97 <= (*p) && (*p) <= 102 )
-				goto st324;
-		} else if ( (*p) >= 65 )
-			goto st324;
-	} else
-		goto st302;
-	goto st0;
-st302:
-	if ( ++p == pe )
-		goto _test_eof302;
-case 302:
-	switch( (*p) ) {
-		case 46: goto st230;
-		case 58: goto st306;
-		case 93: goto st236;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st303;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st303;
-	} else
-		goto st303;
-	goto st0;
-st303:
-	if ( ++p == pe )
-		goto _test_eof303;
-case 303:
-	switch( (*p) ) {
-		case 58: goto st306;
-		case 93: goto st236;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st304;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st304;
-	} else
-		goto st304;
-	goto st0;
-st304:
-	if ( ++p == pe )
-		goto _test_eof304;
-case 304:
-	switch( (*p) ) {
-		case 58: goto st306;
-		case 93: goto st236;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st305;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st305;
-	} else
-		goto st305;
-	goto st0;
-st305:
-	if ( ++p == pe )
-		goto _test_eof305;
-case 305:
-	switch( (*p) ) {
-		case 58: goto st306;
-		case 93: goto st236;
-	}
-	goto st0;
-st306:
-	if ( ++p == pe )
-		goto _test_eof306;
-case 306:
-	switch( (*p) ) {
-		case 49: goto st311;
-		case 50: goto st314;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st307;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st317;
-	} else
-		goto st317;
-	goto st0;
-st307:
-	if ( ++p == pe )
-		goto _test_eof307;
-case 307:
-	switch( (*p) ) {
-		case 46: goto st230;
-		case 58: goto st255;
-		case 93: goto st236;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st308;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st308;
-	} else
-		goto st308;
-	goto st0;
-st308:
-	if ( ++p == pe )
-		goto _test_eof308;
-case 308:
-	switch( (*p) ) {
-		case 58: goto st255;
-		case 93: goto st236;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st309;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st309;
-	} else
-		goto st309;
-	goto st0;
-st309:
-	if ( ++p == pe )
-		goto _test_eof309;
-case 309:
-	switch( (*p) ) {
-		case 58: goto st255;
-		case 93: goto st236;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st310;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st310;
-	} else
-		goto st310;
-	goto st0;
-st310:
-	if ( ++p == pe )
-		goto _test_eof310;
-case 310:
-	switch( (*p) ) {
-		case 58: goto st255;
-		case 93: goto st236;
-	}
-	goto st0;
-st311:
-	if ( ++p == pe )
-		goto _test_eof311;
-case 311:
-	switch( (*p) ) {
-		case 46: goto st230;
-		case 58: goto st255;
-		case 93: goto st236;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st312;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st308;
-	} else
-		goto st308;
-	goto st0;
-st312:
-	if ( ++p == pe )
-		goto _test_eof312;
-case 312:
-	switch( (*p) ) {
-		case 46: goto st230;
-		case 58: goto st255;
-		case 93: goto st236;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st313;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st309;
-	} else
-		goto st309;
-	goto st0;
-st313:
-	if ( ++p == pe )
-		goto _test_eof313;
-case 313:
-	switch( (*p) ) {
-		case 46: goto st230;
-		case 58: goto st255;
-		case 93: goto st236;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st310;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st310;
-	} else
-		goto st310;
-	goto st0;
-st314:
-	if ( ++p == pe )
-		goto _test_eof314;
-case 314:
-	switch( (*p) ) {
-		case 46: goto st230;
-		case 48: goto st315;
-		case 53: goto st316;
-		case 58: goto st255;
-		case 93: goto st236;
-	}
-	if ( (*p) < 65 ) {
-		if ( 49 <= (*p) && (*p) <= 57 )
-			goto st308;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st308;
-	} else
-		goto st308;
-	goto st0;
-st315:
-	if ( ++p == pe )
-		goto _test_eof315;
-case 315:
-	switch( (*p) ) {
-		case 58: goto st255;
-		case 93: goto st236;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st313;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st309;
-	} else
-		goto st309;
-	goto st0;
-st316:
-	if ( ++p == pe )
-		goto _test_eof316;
-case 316:
-	switch( (*p) ) {
-		case 48: goto st313;
-		case 58: goto st255;
-		case 93: goto st236;
-	}
-	if ( (*p) < 65 ) {
-		if ( 49 <= (*p) && (*p) <= 57 )
-			goto st309;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st309;
-	} else
-		goto st309;
-	goto st0;
-st317:
-	if ( ++p == pe )
-		goto _test_eof317;
-case 317:
-	switch( (*p) ) {
-		case 58: goto st255;
-		case 93: goto st236;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st308;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st308;
-	} else
-		goto st308;
-	goto st0;
-st318:
-	if ( ++p == pe )
-		goto _test_eof318;
-case 318:
-	switch( (*p) ) {
-		case 46: goto st230;
-		case 58: goto st306;
-		case 93: goto st236;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st319;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st303;
-	} else
-		goto st303;
-	goto st0;
-st319:
-	if ( ++p == pe )
-		goto _test_eof319;
-case 319:
-	switch( (*p) ) {
-		case 46: goto st230;
-		case 58: goto st306;
-		case 93: goto st236;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st320;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st304;
-	} else
-		goto st304;
-	goto st0;
-st320:
-	if ( ++p == pe )
-		goto _test_eof320;
-case 320:
-	switch( (*p) ) {
-		case 46: goto st230;
-		case 58: goto st306;
-		case 93: goto st236;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st305;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st305;
-	} else
-		goto st305;
-	goto st0;
-st321:
-	if ( ++p == pe )
-		goto _test_eof321;
-case 321:
-	switch( (*p) ) {
-		case 46: goto st230;
-		case 48: goto st322;
-		case 53: goto st323;
-		case 58: goto st306;
-		case 93: goto st236;
-	}
-	if ( (*p) < 65 ) {
-		if ( 49 <= (*p) && (*p) <= 57 )
-			goto st303;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st303;
-	} else
-		goto st303;
-	goto st0;
-st322:
-	if ( ++p == pe )
-		goto _test_eof322;
-case 322:
-	switch( (*p) ) {
-		case 58: goto st306;
-		case 93: goto st236;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st320;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st304;
-	} else
-		goto st304;
-	goto st0;
-st323:
-	if ( ++p == pe )
-		goto _test_eof323;
-case 323:
-	switch( (*p) ) {
-		case 48: goto st320;
-		case 58: goto st306;
-		case 93: goto st236;
-	}
-	if ( (*p) < 65 ) {
-		if ( 49 <= (*p) && (*p) <= 57 )
-			goto st304;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st304;
-	} else
-		goto st304;
-	goto st0;
-st324:
-	if ( ++p == pe )
-		goto _test_eof324;
-case 324:
-	switch( (*p) ) {
-		case 58: goto st306;
-		case 93: goto st236;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st303;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st303;
-	} else
-		goto st303;
-	goto st0;
-st325:
-	if ( ++p == pe )
-		goto _test_eof325;
-case 325:
-	switch( (*p) ) {
-		case 49: goto st318;
-		case 50: goto st321;
-	}
-	if ( (*p) < 48 ) {
-		if ( 2 <= (*p) && (*p) <= 3 )
-			goto st223;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 70 ) {
-			if ( 97 <= (*p) && (*p) <= 102 )
-				goto st324;
-		} else if ( (*p) >= 65 )
-			goto st324;
-	} else
-		goto st302;
-	goto st0;
-st326:
-	if ( ++p == pe )
-		goto _test_eof326;
-case 326:
-	switch( (*p) ) {
-		case 49: goto st331;
-		case 50: goto st334;
-	}
-	if ( (*p) < 48 ) {
-		if ( 2 <= (*p) && (*p) <= 3 )
-			goto st223;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 70 ) {
-			if ( 97 <= (*p) && (*p) <= 102 )
-				goto st337;
-		} else if ( (*p) >= 65 )
-			goto st337;
-	} else
-		goto st327;
-	goto st0;
-st327:
-	if ( ++p == pe )
-		goto _test_eof327;
-case 327:
-	switch( (*p) ) {
-		case 46: goto st230;
-		case 58: goto st306;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st328;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st328;
-	} else
-		goto st328;
-	goto st0;
-st328:
-	if ( ++p == pe )
-		goto _test_eof328;
-case 328:
-	if ( (*p) == 58 )
-		goto st306;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st329;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st329;
-	} else
-		goto st329;
-	goto st0;
-st329:
-	if ( ++p == pe )
-		goto _test_eof329;
-case 329:
-	if ( (*p) == 58 )
-		goto st306;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st330;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st330;
-	} else
-		goto st330;
-	goto st0;
-st330:
-	if ( ++p == pe )
-		goto _test_eof330;
-case 330:
-	if ( (*p) == 58 )
-		goto st306;
-	goto st0;
-st331:
-	if ( ++p == pe )
-		goto _test_eof331;
-case 331:
-	switch( (*p) ) {
-		case 46: goto st230;
-		case 58: goto st306;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st332;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st328;
-	} else
-		goto st328;
-	goto st0;
-st332:
-	if ( ++p == pe )
-		goto _test_eof332;
-case 332:
-	switch( (*p) ) {
-		case 46: goto st230;
-		case 58: goto st306;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st333;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st329;
-	} else
-		goto st329;
-	goto st0;
-st333:
-	if ( ++p == pe )
-		goto _test_eof333;
-case 333:
-	switch( (*p) ) {
-		case 46: goto st230;
-		case 58: goto st306;
-	}
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st330;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st330;
-	} else
-		goto st330;
-	goto st0;
-st334:
-	if ( ++p == pe )
-		goto _test_eof334;
-case 334:
-	switch( (*p) ) {
-		case 46: goto st230;
-		case 48: goto st335;
-		case 53: goto st336;
-		case 58: goto st306;
-	}
-	if ( (*p) < 65 ) {
-		if ( 49 <= (*p) && (*p) <= 57 )
-			goto st328;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st328;
-	} else
-		goto st328;
-	goto st0;
-st335:
-	if ( ++p == pe )
-		goto _test_eof335;
-case 335:
-	if ( (*p) == 58 )
-		goto st306;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st333;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st329;
-	} else
-		goto st329;
-	goto st0;
-st336:
-	if ( ++p == pe )
-		goto _test_eof336;
-case 336:
-	switch( (*p) ) {
-		case 48: goto st333;
-		case 58: goto st306;
-	}
-	if ( (*p) < 65 ) {
-		if ( 49 <= (*p) && (*p) <= 57 )
-			goto st329;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st329;
-	} else
-		goto st329;
-	goto st0;
-st337:
-	if ( ++p == pe )
-		goto _test_eof337;
-case 337:
-	if ( (*p) == 58 )
-		goto st306;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st328;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st328;
-	} else
-		goto st328;
-	goto st0;
-st338:
-	if ( ++p == pe )
-		goto _test_eof338;
-case 338:
-	if ( (*p) < 48 ) {
-		if ( 2 <= (*p) && (*p) <= 3 )
-			goto st223;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 70 ) {
-			if ( 97 <= (*p) && (*p) <= 102 )
-				goto st224;
-		} else if ( (*p) >= 65 )
-			goto st224;
-	} else
-		goto st224;
-	goto st0;
-st339:
-	if ( ++p == pe )
-		goto _test_eof339;
-case 339:
-	if ( 2 <= (*p) && (*p) <= 3 )
-		goto st223;
-	goto st0;
-st340:
-	if ( ++p == pe )
-		goto _test_eof340;
-case 340:
-	if ( (*p) == 3 )
-		goto st223;
-	goto st0;
-st341:
-	if ( ++p == pe )
-		goto _test_eof341;
-case 341:
-	if ( (*p) == 4 )
-		goto st223;
-	goto st0;
-st342:
-	if ( ++p == pe )
-		goto _test_eof342;
-case 342:
-	if ( (*p) == 58 )
-		goto st343;
-	goto st0;
-st343:
-	if ( ++p == pe )
-		goto _test_eof343;
-case 343:
-	switch( (*p) ) {
-		case 49: goto st318;
-		case 50: goto st321;
-		case 93: goto st236;
-	}
-	if ( (*p) < 48 ) {
-		if ( 2 <= (*p) && (*p) <= 5 )
-			goto st223;
-	} else if ( (*p) > 57 ) {
-		if ( (*p) > 70 ) {
-			if ( 97 <= (*p) && (*p) <= 102 )
-				goto st324;
-		} else if ( (*p) >= 65 )
-			goto st324;
-	} else
-		goto st302;
-	goto st0;
-st344:
-	if ( ++p == pe )
-		goto _test_eof344;
-case 344:
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st345;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st345;
-	} else
-		goto st345;
-	goto st0;
-st345:
-	if ( ++p == pe )
-		goto _test_eof345;
-case 345:
-	if ( (*p) == 46 )
-		goto st346;
-	if ( (*p) < 65 ) {
-		if ( 48 <= (*p) && (*p) <= 57 )
-			goto st345;
-	} else if ( (*p) > 70 ) {
-		if ( 97 <= (*p) && (*p) <= 102 )
-			goto st345;
-	} else
-		goto st345;
-	goto st0;
-st346:
-	if ( ++p == pe )
-		goto _test_eof346;
-case 346:
-	switch( (*p) ) {
-		case 33: goto st347;
-		case 36: goto st347;
-		case 61: goto st347;
-		case 95: goto st347;
-		case 126: goto st347;
-	}
-	if ( (*p) < 48 ) {
-		if ( 38 <= (*p) && (*p) <= 46 )
-			goto st347;
-	} else if ( (*p) > 59 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st347;
-		} else if ( (*p) >= 65 )
-			goto st347;
-	} else
-		goto st347;
-	goto st0;
-st347:
-	if ( ++p == pe )
-		goto _test_eof347;
-case 347:
-	switch( (*p) ) {
-		case 33: goto st347;
-		case 36: goto st347;
-		case 61: goto st347;
-		case 93: goto st236;
-		case 95: goto st347;
-		case 126: goto st347;
-	}
-	if ( (*p) < 48 ) {
-		if ( 38 <= (*p) && (*p) <= 46 )
-			goto st347;
-	} else if ( (*p) > 59 ) {
-		if ( (*p) > 90 ) {
-			if ( 97 <= (*p) && (*p) <= 122 )
-				goto st347;
-		} else if ( (*p) >= 65 )
-			goto st347;
-	} else
-		goto st347;
+		goto tr2;
 	goto st0;
 	}
 	_test_eof2: cs = 2; goto _test_eof; 
@@ -5556,7 +3245,7 @@ case 347:
 	_test_eof15: cs = 15; goto _test_eof; 
 	_test_eof16: cs = 16; goto _test_eof; 
 	_test_eof17: cs = 17; goto _test_eof; 
-	_test_eof348: cs = 348; goto _test_eof; 
+	_test_eof194: cs = 194; goto _test_eof; 
 	_test_eof18: cs = 18; goto _test_eof; 
 	_test_eof19: cs = 19; goto _test_eof; 
 	_test_eof20: cs = 20; goto _test_eof; 
@@ -5733,198 +3422,50 @@ case 347:
 	_test_eof191: cs = 191; goto _test_eof; 
 	_test_eof192: cs = 192; goto _test_eof; 
 	_test_eof193: cs = 193; goto _test_eof; 
-	_test_eof194: cs = 194; goto _test_eof; 
-	_test_eof195: cs = 195; goto _test_eof; 
-	_test_eof196: cs = 196; goto _test_eof; 
-	_test_eof197: cs = 197; goto _test_eof; 
-	_test_eof349: cs = 349; goto _test_eof; 
-	_test_eof198: cs = 198; goto _test_eof; 
-	_test_eof199: cs = 199; goto _test_eof; 
-	_test_eof200: cs = 200; goto _test_eof; 
-	_test_eof201: cs = 201; goto _test_eof; 
-	_test_eof202: cs = 202; goto _test_eof; 
-	_test_eof203: cs = 203; goto _test_eof; 
-	_test_eof204: cs = 204; goto _test_eof; 
-	_test_eof205: cs = 205; goto _test_eof; 
-	_test_eof206: cs = 206; goto _test_eof; 
-	_test_eof207: cs = 207; goto _test_eof; 
-	_test_eof208: cs = 208; goto _test_eof; 
-	_test_eof209: cs = 209; goto _test_eof; 
-	_test_eof210: cs = 210; goto _test_eof; 
-	_test_eof211: cs = 211; goto _test_eof; 
-	_test_eof212: cs = 212; goto _test_eof; 
-	_test_eof213: cs = 213; goto _test_eof; 
-	_test_eof214: cs = 214; goto _test_eof; 
-	_test_eof215: cs = 215; goto _test_eof; 
-	_test_eof216: cs = 216; goto _test_eof; 
-	_test_eof217: cs = 217; goto _test_eof; 
-	_test_eof218: cs = 218; goto _test_eof; 
-	_test_eof219: cs = 219; goto _test_eof; 
-	_test_eof220: cs = 220; goto _test_eof; 
-	_test_eof221: cs = 221; goto _test_eof; 
-	_test_eof222: cs = 222; goto _test_eof; 
-	_test_eof223: cs = 223; goto _test_eof; 
-	_test_eof224: cs = 224; goto _test_eof; 
-	_test_eof225: cs = 225; goto _test_eof; 
-	_test_eof226: cs = 226; goto _test_eof; 
-	_test_eof227: cs = 227; goto _test_eof; 
-	_test_eof228: cs = 228; goto _test_eof; 
-	_test_eof229: cs = 229; goto _test_eof; 
-	_test_eof230: cs = 230; goto _test_eof; 
-	_test_eof231: cs = 231; goto _test_eof; 
-	_test_eof232: cs = 232; goto _test_eof; 
-	_test_eof233: cs = 233; goto _test_eof; 
-	_test_eof234: cs = 234; goto _test_eof; 
-	_test_eof235: cs = 235; goto _test_eof; 
-	_test_eof236: cs = 236; goto _test_eof; 
-	_test_eof237: cs = 237; goto _test_eof; 
-	_test_eof238: cs = 238; goto _test_eof; 
-	_test_eof239: cs = 239; goto _test_eof; 
-	_test_eof240: cs = 240; goto _test_eof; 
-	_test_eof241: cs = 241; goto _test_eof; 
-	_test_eof242: cs = 242; goto _test_eof; 
-	_test_eof243: cs = 243; goto _test_eof; 
-	_test_eof244: cs = 244; goto _test_eof; 
-	_test_eof245: cs = 245; goto _test_eof; 
-	_test_eof246: cs = 246; goto _test_eof; 
-	_test_eof247: cs = 247; goto _test_eof; 
-	_test_eof248: cs = 248; goto _test_eof; 
-	_test_eof249: cs = 249; goto _test_eof; 
-	_test_eof250: cs = 250; goto _test_eof; 
-	_test_eof251: cs = 251; goto _test_eof; 
-	_test_eof252: cs = 252; goto _test_eof; 
-	_test_eof253: cs = 253; goto _test_eof; 
-	_test_eof254: cs = 254; goto _test_eof; 
-	_test_eof255: cs = 255; goto _test_eof; 
-	_test_eof256: cs = 256; goto _test_eof; 
-	_test_eof257: cs = 257; goto _test_eof; 
-	_test_eof258: cs = 258; goto _test_eof; 
-	_test_eof259: cs = 259; goto _test_eof; 
-	_test_eof260: cs = 260; goto _test_eof; 
-	_test_eof261: cs = 261; goto _test_eof; 
-	_test_eof262: cs = 262; goto _test_eof; 
-	_test_eof263: cs = 263; goto _test_eof; 
-	_test_eof264: cs = 264; goto _test_eof; 
-	_test_eof265: cs = 265; goto _test_eof; 
-	_test_eof266: cs = 266; goto _test_eof; 
-	_test_eof267: cs = 267; goto _test_eof; 
-	_test_eof268: cs = 268; goto _test_eof; 
-	_test_eof269: cs = 269; goto _test_eof; 
-	_test_eof270: cs = 270; goto _test_eof; 
-	_test_eof271: cs = 271; goto _test_eof; 
-	_test_eof272: cs = 272; goto _test_eof; 
-	_test_eof273: cs = 273; goto _test_eof; 
-	_test_eof274: cs = 274; goto _test_eof; 
-	_test_eof275: cs = 275; goto _test_eof; 
-	_test_eof276: cs = 276; goto _test_eof; 
-	_test_eof277: cs = 277; goto _test_eof; 
-	_test_eof278: cs = 278; goto _test_eof; 
-	_test_eof279: cs = 279; goto _test_eof; 
-	_test_eof280: cs = 280; goto _test_eof; 
-	_test_eof281: cs = 281; goto _test_eof; 
-	_test_eof282: cs = 282; goto _test_eof; 
-	_test_eof283: cs = 283; goto _test_eof; 
-	_test_eof284: cs = 284; goto _test_eof; 
-	_test_eof285: cs = 285; goto _test_eof; 
-	_test_eof286: cs = 286; goto _test_eof; 
-	_test_eof287: cs = 287; goto _test_eof; 
-	_test_eof288: cs = 288; goto _test_eof; 
-	_test_eof289: cs = 289; goto _test_eof; 
-	_test_eof290: cs = 290; goto _test_eof; 
-	_test_eof291: cs = 291; goto _test_eof; 
-	_test_eof292: cs = 292; goto _test_eof; 
-	_test_eof293: cs = 293; goto _test_eof; 
-	_test_eof294: cs = 294; goto _test_eof; 
-	_test_eof295: cs = 295; goto _test_eof; 
-	_test_eof296: cs = 296; goto _test_eof; 
-	_test_eof297: cs = 297; goto _test_eof; 
-	_test_eof298: cs = 298; goto _test_eof; 
-	_test_eof299: cs = 299; goto _test_eof; 
-	_test_eof300: cs = 300; goto _test_eof; 
-	_test_eof301: cs = 301; goto _test_eof; 
-	_test_eof302: cs = 302; goto _test_eof; 
-	_test_eof303: cs = 303; goto _test_eof; 
-	_test_eof304: cs = 304; goto _test_eof; 
-	_test_eof305: cs = 305; goto _test_eof; 
-	_test_eof306: cs = 306; goto _test_eof; 
-	_test_eof307: cs = 307; goto _test_eof; 
-	_test_eof308: cs = 308; goto _test_eof; 
-	_test_eof309: cs = 309; goto _test_eof; 
-	_test_eof310: cs = 310; goto _test_eof; 
-	_test_eof311: cs = 311; goto _test_eof; 
-	_test_eof312: cs = 312; goto _test_eof; 
-	_test_eof313: cs = 313; goto _test_eof; 
-	_test_eof314: cs = 314; goto _test_eof; 
-	_test_eof315: cs = 315; goto _test_eof; 
-	_test_eof316: cs = 316; goto _test_eof; 
-	_test_eof317: cs = 317; goto _test_eof; 
-	_test_eof318: cs = 318; goto _test_eof; 
-	_test_eof319: cs = 319; goto _test_eof; 
-	_test_eof320: cs = 320; goto _test_eof; 
-	_test_eof321: cs = 321; goto _test_eof; 
-	_test_eof322: cs = 322; goto _test_eof; 
-	_test_eof323: cs = 323; goto _test_eof; 
-	_test_eof324: cs = 324; goto _test_eof; 
-	_test_eof325: cs = 325; goto _test_eof; 
-	_test_eof326: cs = 326; goto _test_eof; 
-	_test_eof327: cs = 327; goto _test_eof; 
-	_test_eof328: cs = 328; goto _test_eof; 
-	_test_eof329: cs = 329; goto _test_eof; 
-	_test_eof330: cs = 330; goto _test_eof; 
-	_test_eof331: cs = 331; goto _test_eof; 
-	_test_eof332: cs = 332; goto _test_eof; 
-	_test_eof333: cs = 333; goto _test_eof; 
-	_test_eof334: cs = 334; goto _test_eof; 
-	_test_eof335: cs = 335; goto _test_eof; 
-	_test_eof336: cs = 336; goto _test_eof; 
-	_test_eof337: cs = 337; goto _test_eof; 
-	_test_eof338: cs = 338; goto _test_eof; 
-	_test_eof339: cs = 339; goto _test_eof; 
-	_test_eof340: cs = 340; goto _test_eof; 
-	_test_eof341: cs = 341; goto _test_eof; 
-	_test_eof342: cs = 342; goto _test_eof; 
-	_test_eof343: cs = 343; goto _test_eof; 
-	_test_eof344: cs = 344; goto _test_eof; 
-	_test_eof345: cs = 345; goto _test_eof; 
-	_test_eof346: cs = 346; goto _test_eof; 
-	_test_eof347: cs = 347; goto _test_eof; 
 
 	_test_eof: {}
 	_out: {}
 	}
 
-#line 268 "/Users/cgilbert/Work/datasift/served/src/served/request_parser.rl"
+#line 252 "/home/vagrant/src/dev/served/src/served/request_parser.rl"
 
-    // ASSERT(p <= pe);
+	// ASSERT(p <= pe);
 
-    nread += p - (buffer + d_offset);
+	nread += p - (buffer + d_offset);
 
-    // ASSERT(nread <= len);
-    // ASSERT(body_start <= len);
-    // ASSERT(mark < len);
-    // ASSERT(field_len <= len);
-    // ASSERT(field_start < len);
+	// ASSERT(nread <= len);
+	// ASSERT(mark < len);
+	// ASSERT(field_len <= len);
+	// ASSERT(field_start < len);
 
-    return(nread);
+	return(nread);
 }
 
-request_parser::status 
-request_parser::get_status() {
-    if (parser_error() ) {
-        return ERROR;
-    } else if (parser_finished() ) {
-        return FINISHED;
-    } else {
-        return RUNNING;
-    }
+request_parser::status
+request_parser::get_status()
+{
+	if ( parser_error() )
+	{
+		return ERROR;
+	}
+	else if ( parser_finished() )
+	{
+		return FINISHED;
+	}
+	else
+	{
+		return RUNNING;
+	}
 }
 
-bool 
-request_parser::parser_error() {
-    return (cs == request_parser_error);
+bool
+request_parser::parser_error()
+{
+	return (cs == request_parser_error);
 }
 
-bool 
-request_parser::parser_finished() {
-    return (cs == request_parser_first_final);
+bool
+request_parser::parser_finished()
+{
+	return (cs == request_parser_first_final);
 }

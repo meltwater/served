@@ -26,6 +26,8 @@
 #include <served/request_parser.hpp>
 #include <served/request.hpp>
 
+#include <sstream>
+
 namespace served {
 
 /*
@@ -36,11 +38,13 @@ namespace served {
  */
 class request_parser_impl : public served::request_parser {
 public:
-	enum expect_type { NONE = 0, CONTINUE };
+	enum status_type { ERROR = 0, READ_HEADER, EXPECT_CONTINUE, READ_BODY, FINISHED };
 
 private:
-	request &   d_request;
-	expect_type d_expected;
+	request &         d_request;
+	status_type       d_status;
+	size_t            d_body_expected;
+	std::stringstream d_body_stream;
 
 public:
 	/*
@@ -55,7 +59,9 @@ public:
 	explicit request_parser_impl(request & req)
 		: served::request_parser()
 		, d_request(req)
-		, d_expected(expect_type::NONE)
+		, d_status(status_type::READ_HEADER)
+		, d_body_expected(0)
+		, d_body_stream()
 	{}
 
 	/*
@@ -67,28 +73,14 @@ public:
 	 * List each parameter, what is the purpose? What is considered valid / 
 	 * invalid?
 	 */
-	std::tuple<request_parser::status, size_t> parse(const char *data, size_t len);
+	status_type parse(const char *data, size_t len);
 
 	/*
-	 * Check whether an Expect header has been encountered.
+	 * Prompts the parser to finalise any remaining fields of the request object.
 	 *
-	 * The HTTP 1.1 protocol allows for a client to send an Expect header stating an expected
-	 * response from the server before continuing. This returns either the expect type or NONE if
-	 * one hasn't been encountered.
-	 *
-	 * @return the blocking expect_type, or expect_type::NONE
+	 * Should be called after all remaining TCP data has been pushed.
 	 */
-	expect_type get_expected();
-
-	/*
-	 * Set the expect type of the request parser.
-	 *
-	 * This is used to determine whether or not the request is blocked whilst waiting for a response
-	 * to an 'Expect' header.
-	 *
-	 * @param expected the new expected type
-	 */
-	void set_expected(expect_type expected);
+	void finish();
 
 protected:
 	/*
@@ -186,6 +178,40 @@ protected:
 	 */
 	virtual void header_done(const char *data, const char *at,
 		size_t length) override;
+
+private:
+	/*
+	 * Checks whether the request has sent an Expect: 100-continue header.
+	 *
+	 * Scans the HTTP verb and headers of the request object to find out if a body is possible
+	 * and whether a 100-continue has been requested.
+	 *
+	 * Should be used after the HTTP header is fully parsed to determine whether to send a
+	 * 100 CONTINUE response before waiting for more data.
+	 */
+	bool requested_continue();
+
+	/*
+	 * Checks whether the request is sending a body.
+	 *
+	 * Scans the HTTP verb and headers of the request object to find out if a header should be
+	 * expected, and how long the body will be.
+	 *
+	 * Should be used after the HTTP header is fully parsed to determine whether to wait for more
+	 * data.
+	 *
+	 * @return the size of the expected body, or 0 if a body is not expected
+	 */
+	size_t expecting_body();
+
+	/*
+	 * Parse a chunk of body.
+	 *
+	 * Continues to read the body of a request and returns the status of the parser.
+	 *
+	 * @return status_type of request_parser_impl, FINISHED indicates the body is fully read
+	 */
+	status_type parse_body(const char *data, size_t len);
 };
 
 } // served namespace

@@ -52,6 +52,8 @@ int main(int argc, char const* argv[])
 			res << req.params["id"];
 			res << ", number: ";
 			res << req.params["number"];
+			res << ", agent: ";
+			res << req.header("agent");
 		})
 		.post([](served::response & res, const served::request & req) {
 			res << "id: ";
