@@ -112,7 +112,10 @@ namespace status_5XX {
 namespace status {
 
 /*
- * TBC
+ * Converts an HTTP status code into a known reason string.
+ *
+ * The reason string is a small line of text that gives a hint as to the underlying meaning of the
+ * status code for debugging purposes.
  */
 inline const std::string
 status_to_reason(int status_code)

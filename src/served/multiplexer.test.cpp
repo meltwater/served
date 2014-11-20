@@ -106,7 +106,20 @@ TEST_CASE("multiplexer path routing", "[mux]")
 			"/variable2//variable"
 		};
 
-		// TODO: Regex
+		// regex1
+		stories.push_back(request_router_story());
+		stories.back().pattern = "/regex1/{number:[0-9]+}/{text:[a-zA-Z]+}";
+		stories.back().expected_200s = {
+			"/regex1/343234534/fGSDFGfdsgdfgsdfgfsFGDSF",
+			"/regex1/1/f",
+			"/regex1/132432/HELLOWORLD",
+		};
+		stories.back().expected_404s = {
+			"/regex1/nan/hello",
+			"/regex1/343a/hello",
+			"/regex1/343/hello5",
+			"/regex1/343/55",
+		};
 
 		// begin stories
 		served::multiplexer mux;

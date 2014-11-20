@@ -33,8 +33,12 @@ namespace served {
 /*
  * An implementation of a request parser.
  *
- * Responsible for moving sections of an incoming HTTP request to a served request object.
+ * Responsible for moving sections of an incoming HTTP request to a served request object, and uses
+ * the headers and HTTP verb of the request to parse a body if one is expected.
  *
+ * Call parse for each chunk of TCP data received, the parser will return a state that declares its
+ * current position through the HTTP response. If the state is EXPECT_CONTINUE then the client
+ * should be waiting for a 100 CONTINUE response before it will send its body.
  */
 class request_parser_impl : public served::request_parser {
 public:
@@ -48,13 +52,7 @@ private:
 
 public:
 	/*
-	 * Describe the method in a single line.
-	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * Constructs a parser by giving it a reference to a request object to be modified.
 	 */
 	explicit request_parser_impl(request & req)
 		: served::request_parser()
@@ -65,116 +63,62 @@ public:
 	{}
 
 	/*
-	 * Describe the method in a single line.
+	 * Parses a chunk of data into the request object and returns the current status of the parser.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
+	 * The status determines whether the parsing is complete, an error has occurred, the body is
+	 * being read, or whether the client has requested a 100 CONTINUE response and is waiting.
 	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * @return the new state of the parser
 	 */
 	status_type parse(const char *data, size_t len);
 
-	/*
-	 * Prompts the parser to finalise any remaining fields of the request object.
-	 *
-	 * Should be called after all remaining TCP data has been pushed.
-	 */
-	void finish();
-
 protected:
 	/*
-	 * Describe the method in a single line.
-	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * Converts a block of data into an HTTP request header and stores it in the request object.
 	 */
 	virtual void http_field(const char *data, const char *field, size_t flen,
 		const char *value, size_t vlen) override;
 
 	/*
-	 * Describe the method in a single line.
-	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * Converts a block of data into an HTTP method and stores it in the request object.
 	 */
 	virtual void request_method(const char *data, const char *at,
 		size_t length) override;
 
 	/*
-	 * Describe the method in a single line.
-	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * Converts a block of data into an HTTP request URI and stores it in the request object.
 	 */
 	virtual void request_uri(const char *data, const char *at,
 		size_t length) override;
 
 	/*
-	 * Describe the method in a single line.
-	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * Converts a block of data into a URL fragment and stores it in the request object.
 	 */
 	virtual void fragment(const char *data, const char *at,
 		size_t length) override;
 
 	/*
-	 * Describe the method in a single line.
-	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * Converts a block of data into a URL request path and stores it in the request object.
 	 */
 	virtual void request_path(const char *data, const char *at,
 		size_t length) override;
 
 	/*
-	 * Describe the method in a single line.
-	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * Converts a block of data into a URL query string and stores it in the request object.
 	 */
 	virtual void query_string(const char *data, const char *at,
 		size_t length) override;
 
 	/*
-	 * Describe the method in a single line.
-	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * Converts a block of data into an HTTP protocol and stores it in the request object.
 	 */
 	virtual void http_version(const char *data, const char *at,
 		size_t length) override;
 
 	/*
-	 * Describe the method in a single line.
+	 * Called when the parser has completed reading the HEADER of the request.
 	 *
-	 * Describe the work this method does, what does it do? Is there anything
-	 * the developer should be aware of?
-	 *
-	 * List each parameter, what is the purpose? What is considered valid / 
-	 * invalid?
+	 * Currently not used.
 	 */
 	virtual void header_done(const char *data, const char *at,
 		size_t length) override;
