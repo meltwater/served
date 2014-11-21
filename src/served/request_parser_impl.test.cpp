@@ -298,4 +298,50 @@ TEST_CASE("test parser states", "[request_parser_impl]")
 			REQUIRE(std::get<1>(section) == parser.parse(s.c_str(), s.length()));
 		}
 	}
+
+	SECTION("POST with body under limit")
+	{
+		served::request dummy_req;
+		served::request_parser_impl parser(dummy_req, 0, 40);
+		auto sections = section_stories {{
+			section_story { "POST /endpoints HTTP/1.1\r\n", status_type::READ_HEADER },
+			section_story { "Content-Type: text/html\r\n",  status_type::READ_HEADER },
+			section_story { "Content-Length: 40\r\n",       status_type::READ_HEADER },
+			section_story { "\r\nA small amoun",            status_type::READ_BODY   },
+			section_story { "t of body for you",            status_type::READ_BODY   },
+			section_story { "to enjoy plz thxx",            status_type::FINISHED    },
+			section_story { "plz ignore this..",            status_type::FINISHED    },
+		}};
+
+		for ( const auto & section : sections )
+		{
+			const std::string s = std::get<0>(section);
+			INFO("section: " << s);
+			REQUIRE(std::get<1>(section) == parser.parse(s.c_str(), s.length()));
+		}
+
+		CHECK(dummy_req.body() == "A small amount of body for youto enjoy p");
+	}
+
+	SECTION("POST with body over limit")
+	{
+		served::request dummy_req;
+		served::request_parser_impl parser(dummy_req, 0, 39);
+		auto sections = section_stories {{
+			section_story { "POST /endpoints HTTP/1.1\r\n", status_type::READ_HEADER        },
+			section_story { "Content-Type: text/html\r\n",  status_type::READ_HEADER        },
+			section_story { "Content-Length: 40\r\n",       status_type::READ_HEADER        },
+			section_story { "\r\nA small amoun",            status_type::REJECTED_BODY_SIZE },
+			section_story { "t of body for you",            status_type::REJECTED_BODY_SIZE },
+			section_story { "to enjoy plz thxx",            status_type::REJECTED_BODY_SIZE },
+			section_story { "plz ignore this..",            status_type::REJECTED_BODY_SIZE },
+		}};
+
+		for ( const auto & section : sections )
+		{
+			const std::string s = std::get<0>(section);
+			INFO("section: " << s);
+			REQUIRE(std::get<1>(section) == parser.parse(s.c_str(), s.length()));
+		}
+	}
 }

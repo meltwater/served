@@ -49,6 +49,7 @@ public:
 	enum status_type { READING = 0, DONE };
 
 private:
+	boost::asio::io_service &    d_io_service;
 	status_type                  d_status;
 	boost::asio::ip::tcp::socket d_socket;
 	connection_manager &         d_connection_manager;
@@ -57,6 +58,10 @@ private:
 	request                      d_request;
 	request_parser_impl          d_request_parser;
 	response                     d_response;
+	int                          d_read_timeout;
+	int                          d_write_timeout;
+	boost::asio::deadline_timer  d_read_timer;
+	boost::asio::deadline_timer  d_write_timer;
 
 public:
 	connection(const connection&) = delete;
@@ -66,13 +71,21 @@ public:
 	/*
 	 * Constructs a new connection.
 	 *
+	 * @param io_service the boost::asio::io_service for managing async operations
 	 * @param socket the boost::asio socket for the connection
 	 * @param manager the connection manager that oversees this connection
 	 * @param handler the multiplexer responsible for routing requests
+	 * @param read_timer the timeout for reading, 0 is ignored
+	 * @param write_timer the timeout for writing, 0 is ignored
 	 */
-	explicit connection( boost::asio::ip::tcp::socket socket
+	explicit connection( boost::asio::io_service &    io_service
+	                   , boost::asio::ip::tcp::socket socket
 	                   , connection_manager &         manager
-	                   , multiplexer        &         handler );
+	                   , multiplexer        &         handler
+	                   , size_t                       max_header_size_bytes
+	                   , size_t                       max_body_size_bytes
+	                   , int                          read_timeout
+	                   , int                          write_timeout );
 
 	/*
 	 * Prompts the connection to start reading from its TCP socket.

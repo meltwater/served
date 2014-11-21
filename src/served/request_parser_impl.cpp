@@ -50,7 +50,11 @@ request_parser_impl::parse(const char *data, size_t len)
 		{
 			d_body_expected = expecting_body();
 
-			if ( requested_continue() )
+			if ( d_max_body_size_bytes > 0 && d_body_expected > d_max_body_size_bytes )
+			{
+				d_status = request_parser_impl::REJECTED_BODY_SIZE;
+			}
+			else if ( requested_continue() )
 			{
 				if ( 0 == d_body_expected )
 				{

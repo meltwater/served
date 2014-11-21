@@ -35,8 +35,6 @@ $ ccmake ../served && make -j8
 The most basic example of creating a server and handling a `HTTP GET` for the path `/hello`:
 ```cpp
 #include <served/served.hpp>
-#include <iostream>
-#include <unistd.h>
 
 int main(int argc, char const* argv[]) {
 	// Create a multiplexer for handling requests
@@ -48,7 +46,7 @@ int main(int argc, char const* argv[]) {
 			res << "Hello world!";
 		});
 
-	// Create the server and run
+	// Create the server and run with 10 handler threads.
 	served::net::server server("127.0.0.1", "8080", mux);
 	server.run(10);
 
@@ -61,7 +59,7 @@ To test the above example, you could run the following command from a terminal:
 $ curl http://localhost:8080/hello -ivh
 ```
 
-You can also use named path variables:
+You can also use named path variables for REST parameters:
 ```cpp
 mux.handle("/users/{id}")
 	.get([](served::response & res, const served::request & req) {

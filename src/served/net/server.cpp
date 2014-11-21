@@ -30,13 +30,18 @@ using namespace served::net;
 
 server::server( const std::string & address
               , const std::string & port
-              , multiplexer       & mux     )
+              , multiplexer       & mux
+              )
 	: d_io_service()
 	, d_signals(d_io_service)
 	, d_acceptor(d_io_service)
 	, d_connection_manager()
 	, d_socket(d_io_service)
 	, d_request_handler(mux)
+	, d_read_timeout(0)
+	, d_write_timeout(0)
+	, d_header_max_bytes(0)
+	, d_body_max_bytes(0)
 {
 	/*
 	 * Register to handle the signals that indicate when the server should exit.
@@ -96,6 +101,30 @@ server::run(int n_threads /* = 1 */)
 }
 
 void
+server::set_read_timeout(int time_milliseconds)
+{
+	d_read_timeout = time_milliseconds;
+}
+
+void
+server::set_write_timeout(int time_milliseconds)
+{
+	d_write_timeout = time_milliseconds;
+}
+
+/*void
+server::set_max_header_bytes(size_t num_bytes)
+{
+	d_header_max_bytes = num_bytes;
+}*/
+
+void
+server::set_max_body_bytes(size_t num_bytes)
+{
+	d_body_max_bytes = num_bytes;
+}
+
+void
 server::stop()
 {
 	if ( ! d_io_service.stopped() )
@@ -117,8 +146,16 @@ server::do_accept()
 			}
 			if (!ec)
 			{
-				d_connection_manager.start(std::make_shared<connection>(
-					std::move(d_socket), d_connection_manager, d_request_handler));
+				d_connection_manager.start(
+					std::make_shared<connection>( d_io_service
+					                            , std::move(d_socket)
+					                            , d_connection_manager
+					                            , d_request_handler
+					                            , d_read_timeout
+					                            , d_write_timeout
+					                            , d_header_max_bytes
+					                            , d_body_max_bytes
+					                            ));
 			}
 			do_accept();
 		}

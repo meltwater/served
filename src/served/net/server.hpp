@@ -46,6 +46,10 @@ class server
 	connection_manager             d_connection_manager;
 	boost::asio::ip::tcp::socket   d_socket;
 	multiplexer &                  d_request_handler;
+	int                            d_read_timeout;
+	int                            d_write_timeout;
+	size_t                         d_header_max_bytes;
+	size_t                         d_body_max_bytes;
 
 public:
 	server(const server&) = delete;
@@ -58,6 +62,8 @@ public:
 	 * @param address the address to bind to for incoming connections
 	 * @param port the port to bind to for incoming connections
 	 * @param mux the multiplexer to be used for forwarding requests to handlers
+	 * @param read_timeout optional parameter that specifies a timeout for reading
+	 * @param write_timeout optional parameter that specifies a timeout for writing
 	 */
 	explicit server( const std::string & address
 	               , const std::string & port
@@ -79,6 +85,40 @@ public:
 	 * This call blocks until all open connections are closed.
 	 */
 	void stop();
+
+	/*
+	 * Sets the maximum length of time in milliseconds to wait for a clients request to be received.
+	 * If set to 0 (default) the value is ignored and no timeout is used.
+	 *
+	 * @param time_milliseconds the time in milliseconds to wait, 0 is ignored and no timeout is set
+	 */
+	void set_read_timeout(int time_milliseconds);
+
+	/*
+	 * Sets the maximum length of time in milliseconds to wait for a client to fully receive the
+	 * response from the server. If set to 0 (default) the value is ignored and no timeout is used.
+	 *
+	 * @param time_milliseconds the time in milliseconds to wait, 0 is ignored and no timeout is set
+	 */
+	void set_write_timeout(int time_milliseconds);
+
+	/*
+	 * NOTE: CURRENTLY NOT IMPLEMENTED
+	 *
+	 * Sets the maximum size in bytes that a request header is permitted to be before a client is
+	 * rejected. If set to 0 (default) the limit is ignored.
+	 *
+	 * @param num_bytes the number of bytes permitted, 0 is ignored and no limit is used
+	 */
+	// void set_max_header_bytes(size_t num_bytes);
+
+	/*
+	 * Sets the maximum size in bytes that a request body is permitted to be before a client is
+	 * rejected. If set to 0 (default) the limit is ignored.
+	 *
+	 * @param num_bytes the number of bytes permitted, 0 is ignored and no limit is used
+	 */
+	void set_max_body_bytes(size_t num_bytes);
 
 private:
 	/*

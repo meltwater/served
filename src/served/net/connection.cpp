@@ -30,21 +30,44 @@
 
 using namespace served::net;
 
-connection::connection( boost::asio::ip::tcp::socket socket
+connection::connection( boost::asio::io_service &    io_service
+                      , boost::asio::ip::tcp::socket socket
                       , connection_manager &         manager
-                      , multiplexer        &         handler )
-	: d_status(status_type::READING)
+                      , multiplexer        &         handler
+                      , size_t                       max_header_size_bytes
+                      , size_t                       max_body_size_bytes
+                      , int                          read_timeout
+                      , int                          write_timeout
+                      )
+	: d_io_service(io_service)
+	, d_status(status_type::READING)
 	, d_socket(std::move(socket))
 	, d_connection_manager(manager)
 	, d_request_handler(handler)
 	, d_request()
-	, d_request_parser(d_request)
+	, d_request_parser(d_request, max_header_size_bytes, max_body_size_bytes)
+	, d_read_timeout(read_timeout)
+	, d_write_timeout(write_timeout)
+	, d_read_timer(d_io_service, boost::posix_time::milliseconds(read_timeout))
+	, d_write_timer(d_io_service, boost::posix_time::milliseconds(write_timeout))
 {}
 
 void
 connection::start()
 {
 	do_read();
+
+	if ( d_read_timeout > 0 )
+	{
+		auto self(shared_from_this());
+
+		d_read_timer.async_wait([this, self](const boost::system::error_code& error) {
+			if ( error.value() != boost::system::errc::operation_canceled )
+			{
+				d_connection_manager.stop(shared_from_this());
+			}
+		});
+	}
 }
 
 void
@@ -69,6 +92,7 @@ connection::do_read()
 				{
 					// Parsing is finished, stop reading and send response.
 
+					d_read_timer.cancel();
 					d_status = status_type::DONE;
 
 					try
@@ -85,6 +109,15 @@ connection::do_read()
 						response::stock_reply(status_5XX::INTERNAL_SERVER_ERROR, d_response);
 					}
 
+					if ( d_write_timeout > 0 )
+					{
+						d_write_timer.async_wait([this, self](const boost::system::error_code& error) {
+							if ( error.value() != boost::system::errc::operation_canceled )
+							{
+								d_connection_manager.stop(shared_from_this());
+							}
+						});
+					}
 					do_write();
 
 					try
@@ -108,6 +141,24 @@ connection::do_read()
 					// Not finished reading response, continue.
 
 					do_read();
+				}
+				else if ( request_parser_impl::REJECTED_HEADER_SIZE == result )
+				{
+					// The header is too large and has been rejected
+
+					d_status = status_type::DONE;
+
+					response::stock_reply(served::status_4XX::REQ_HEADER_FIELDS_TOO_LARGE, d_response);
+					do_write();
+				}
+				else if ( request_parser_impl::REJECTED_BODY_SIZE == result )
+				{
+					// The body is too large and has been rejected
+
+					d_status = status_type::DONE;
+
+					response::stock_reply(served::status_4XX::REQ_ENTITY_TOO_LARGE, d_response);
+					do_write();
 				}
 				else if ( request_parser_impl::ERROR == result )
 				{
@@ -144,6 +195,9 @@ connection::do_write()
 				else
 				{
 					// Otherwise we initiate graceful connection closure.
+
+					d_write_timer.cancel();
+
 					boost::system::error_code ignored_ec;
 					d_socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both,
 						ignored_ec);
