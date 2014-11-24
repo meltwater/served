@@ -99,11 +99,11 @@ TEST_CASE("multiplexer path routing", "[mux]")
 			"/variable2/foo/bar/",
 			"/variable2/foo/bar/",
 			"/variable2/this/variable/",
-			"/variable2/test1/test2/test3"
 		};
 		stories.back().expected_404s = {
 			"/variable2/this/variable",
-			"/variable2//variable"
+			"/variable2//variable",
+			"/variable2/test1/test2/test3",
 		};
 
 		// regex1
@@ -119,6 +119,21 @@ TEST_CASE("multiplexer path routing", "[mux]")
 			"/regex1/343a/hello",
 			"/regex1/343/hello5",
 			"/regex1/343/55",
+		};
+
+		// regex2
+		stories.push_back(request_router_story());
+		stories.back().pattern = "/regex2/{number:[0-9]+}/{:[0-9]+}";
+		stories.back().expected_200s = {
+			"/regex2/5/4353",
+			"/regex2/1/3243",
+			"/regex2/132432/0",
+		};
+		stories.back().expected_404s = {
+			"/regex2/nan/34k",
+			"/regex2/343a/wat",
+			"/regex2/wa/4534",
+			"/regex2/hey/55",
 		};
 
 		// begin stories

@@ -32,7 +32,7 @@ namespace served { namespace mux {
 /*
  * Matches all segments.
  *
- * This segment matcher will match any path segment. It is used when a path ends with "/".
+ * This segment matcher will only match an empty path segment. It is used when a path ends with "/".
  */
 class empty_matcher : public segment_matcher
 {
@@ -46,7 +46,7 @@ public:
 	 */
 	virtual bool check_match(const std::string & path_segment) override
 	{
-		return true;
+		return path_segment.empty();
 	}
 
 	/*
