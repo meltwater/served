@@ -1,6 +1,6 @@
 #Request Routing
 
-Served supports a range of useful syntaxes to assist in defining RESTful resource patterns. Once compiled by the Served multiplexer, a pattern can be considered an array of segments, where each segment is constructed from the pattern once split by the path separator **'/'** character.
+Served supports a range of useful syntaxes to assist in defining RESTful resource patterns. Once compiled by the Served multiplexer, a pattern can be considered an array of segments, where each segment is constructed from the pattern once split by the path separator "**/**" character.
 
 Here is a break down of the various segment types.
 
@@ -12,11 +12,11 @@ This is the most simple type of segment, it is compiled from a static string, an
 /first/second/third
 ```
 
-And would only ever match the request path: **"/first/second/third"**
+And would only ever match a request path starting with: "**/first/second/third**"
 
 ###Variable
 
-A variable segment is a RESTful resource parameter that can exist in any section of your pattern, it is defined between curly braces ('{' and '}') and can have an optional parameter name which will cause the variable to be parsed and captured in request.params under that name.
+A variable segment is a RESTful resource parameter that can exist in any section of your pattern, it is defined between curly braces and can have an optional parameter name which will cause the variable to be parsed and captured in request.params under that name.
 
 The syntax is as follows:
 
@@ -38,9 +38,9 @@ And would match all of the following request paths:
 /first/second/file.jpg
 ```
 
-And, respectively, **variable1** would be placed in **request.params** with values: **hello**, **50** and **file.jpg**.
+And, respectively, **variable1** would be placed in **req.params** with values: **hello**, **50** and **file.jpg**.
 
-The variable name can be left blank and causes the variable segment to essentially act as a wildcard, the following pattern would match all the same paths as before:
+The variable name can be left blank and causes the variable segment to essentially act as a wildcard, the following pattern would match all of the same paths as before:
 
 ```
 /first/second/{}
@@ -81,7 +81,7 @@ The rules of capturing variables is the same here as for variable segments.
 
 ###Empty
 
-An empty segment is compiled from a trailing path separator. This is a special case where the segment only matches an empty pattern section.
+An empty segment is compiled from a trailing path separator. This is a special case where the segment will match any value or no value.
 
 The following pattern would compile into two static segments followed by an empty segment:
 
@@ -89,17 +89,12 @@ The following pattern would compile into two static segments followed by an empt
 /first/second/
 ```
 
-And this pattern would only match following request resource:
+And this pattern would match any of the following request resources:
 
 ```
 /first/second/
-```
-
-And none of the following:
-
-```
-/first/second/example
-/first/second/page.html
-/first/second/wat
-/first/second/10
+/first/second/foo
+/first/second/foo.bar
+/first/second/foo/bar
+/first/second/foo/bar/baz
 ```

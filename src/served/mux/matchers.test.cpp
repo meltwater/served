@@ -51,9 +51,9 @@ TEST_CASE("segment matchers compile and parsing", "[matchers]")
 		CHECK(dynamic_cast<served::mux::empty_matcher *>(matcher.get()));
 
 		CHECK(matcher->check_match(""));
-		CHECK(!matcher->check_match("notempty"));
-		CHECK(!matcher->check_match(" "));
-		CHECK(!matcher->check_match("things.html"));
+		CHECK(matcher->check_match("notempty"));
+		CHECK(matcher->check_match(" "));
+		CHECK(matcher->check_match("things.html"));
 	}
 	SECTION("static_matcher")
 	{

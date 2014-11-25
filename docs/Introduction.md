@@ -1,33 +1,30 @@
 #Served - An Introduction
 
-Served is a C++ HTTP server library, designed primarily for quickly building RESTful service front ends for existing C++ projects. Little consideration has been made for use cases such as general file serving, in favour of focussing on explicit resource specification. Therefore, before using Served there are some caveats you ought to familiarise yourself with.
+Served is a C++ HTTP server library, designed primarily for quickly building RESTful service front ends for existing C++ projects. Served can be used to build any type of HTTP server, but any caveats you ought to familiarise yourself with before using Served shall be listed here:
 
-##Caveat 1 - Handler routing
+##Caveat 1 - Handlers, order matters
 
-Usage of any typical HTTP server begins with defining your resources and respective handlers. This usually involves listing endpoint patterns with method handlers, and the expected behaviour is that the handler chosen for any request is simply the "most specific" pattern that matches.
+A request is dispatched to the first matching pattern found in the order that they were defined, irrespective of all other patterns. Patterns will be considered a match if all their components are found in the request resource, therefore the pattern "**/**" will match all requests unless registered *after* any of your more specific patterns.
 
-In Served, this is not the case. Instead, a request is only dispatched to a handler with an explicit pattern that exactly matches. The request is also dispatched to the first matching pattern found in the order that they were defined, irrespective of all other patterns.
-
-With variable and regular expression pattern parameters you can still easily define patterns that exactly match a range of request paths. For example, the pattern:
+For example, given the following handler patterns registered in their respective order:
 
 ```
-/base/{var1}/{var2:[0-9]+}/{file}
+/first/handler
+/second/handler
+/second/handler/foo
+/
 ```
 
-Will exactly match the following requests:
+And a request with the resource target:
 
 ```
-/base/images/67/test.jpg
-/base/html/456/index.html
-/base/css/23478/style.css
+/second/handler/foo/bar
 ```
 
-And if you did not care about catching path segments as variables you can simplify the previous pattern to:
+The handler chosen will be the one registered with the pattern:
 
 ```
-/base/{}/{:[0-9]+}/{}
+/second/handler
 ```
 
-Where **'{}'** essentially becomes a wildcard.
-
-Working under these constraints makes the multiplexer implementation simpler. However, this approach would not be suitable for a file server unless the directory structure was simple and never changing, which is unlikely.
+Since this is the first registered pattern that is fully matched within the request resource.

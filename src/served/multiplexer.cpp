@@ -180,8 +180,8 @@ multiplexer::forward_to_handler(served::response & res, served::request & req)
 		const auto & handler_segments = std::get<0>(candidate);
 		const size_t h_size           = handler_segments.size();
 
-		// If the candidate segment count does not match then skip
-		if ( h_size != r_size )
+		// If the candidate segment count is lower than the pattern then skip
+		if ( h_size > r_size )
 		{
 			continue;
 		}

@@ -67,13 +67,13 @@ TEST_CASE("multiplexer path routing", "[mux]")
 		stories.push_back(request_router_story());
 		stories.back().pattern = "/static1/foo/bar";
 		stories.back().expected_200s = {
-			"/static1/foo/bar"
+			"/static1/foo/bar",
+			"/static1/foo/bar/",
+			"/static1/foo/bar/bob",
 		};
 		stories.back().expected_404s = {
 			"/static1/bar/foo",
 			"/static1/foo/bar2",
-			"/static1/foo/bar/",
-			"/static1/foo/bar/bob"
 		};
 
 		// variable1
@@ -84,12 +84,13 @@ TEST_CASE("multiplexer path routing", "[mux]")
 			"/variable1/bar/bob",
 			"/variable1/bob/baz",
 			"/variable1/this/variable",
-			"/variable1/variable/variable"
+			"/variable1/variable/variable",
+			"/variable1/variable/variable/more_ignored_variables",
+			"/variable1/test1/test2/test3",
 		};
 		stories.back().expected_404s = {
 			"/variable1//variable",
-			"/variable1/test1/test2/",
-			"/variable1/test1/test2/test3"
+			"/variable1/test1/",
 		};
 
 		// variable2
@@ -97,13 +98,13 @@ TEST_CASE("multiplexer path routing", "[mux]")
 		stories.back().pattern = "/variable2/{first}/{second}/";
 		stories.back().expected_200s = {
 			"/variable2/foo/bar/",
-			"/variable2/foo/bar/",
-			"/variable2/this/variable/",
+			"/variable2/foo/bar/things/test",
+			"/variable2/this/variable/wat",
+			"/variable2/test1/test2/test3",
 		};
 		stories.back().expected_404s = {
 			"/variable2/this/variable",
 			"/variable2//variable",
-			"/variable2/test1/test2/test3",
 		};
 
 		// regex1
@@ -259,6 +260,65 @@ TEST_CASE("multiplexer method routing", "[mux]")
 			INFO("Checking for correct routing (4 requests)");
 			CHECK(s1.received.size() == 4);
 		}
+	}
+}
+
+TEST_CASE("multiplexer hierarchy test", "[mux]")
+{
+	SECTION("shorter pattern first")
+	{
+		bool correct_call = false;
+
+		auto dummy_call    = [&](served::response & res, const served::request & req) {};
+		auto expected_call = [&](served::response & res, const served::request & req) {
+			correct_call = true;
+		};
+
+		served::multiplexer mux;
+		mux.handle("/"            ).get(expected_call);
+		mux.handle("/first/second").get(dummy_call);
+		mux.handle("/testing"     ).get(dummy_call);
+		mux.handle("/"            ).get(dummy_call);
+
+		served::response res;
+		served::request req;
+		served::uri url;
+
+		url.set_path("/first/second");
+		req.set_destination(url);
+		req.set_method(served::method::GET);
+
+		mux.forward_to_handler( res, req );
+
+		CHECK(correct_call);
+	}
+
+	SECTION("longer pattern first")
+	{
+		bool correct_call = false;
+
+		auto dummy_call    = [&](served::response & res, const served::request & req) {};
+		auto expected_call = [&](served::response & res, const served::request & req) {
+			correct_call = true;
+		};
+
+		served::multiplexer mux;
+		mux.handle("/first/second/third").get(dummy_call);
+		mux.handle("/first/second"      ).get(expected_call);
+		mux.handle("/testing"           ).get(dummy_call);
+		mux.handle("/"                  ).get(dummy_call);
+
+		served::response res;
+		served::request req;
+		served::uri url;
+
+		url.set_path("/first/second");
+		req.set_destination(url);
+		req.set_method(served::method::GET);
+
+		mux.forward_to_handler( res, req );
+
+		CHECK(correct_call);
 	}
 }
 

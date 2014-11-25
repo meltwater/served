@@ -129,7 +129,7 @@ public:
 	 * Forwards a response and request object to a registered handler.
 	 *
 	 * Based on the URI target of the request object, forwards the request and response objects to
-	 * an appropriate handler for producing a response.
+	 * an appropriate handler for producing a response. Always chooses the first registered match.
 	 *
 	 * @param res object used to generate an HTTP response
 	 * @param req object containing information about the HTTP request

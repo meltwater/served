@@ -122,11 +122,135 @@ status_to_reason(int status_code)
 {
 	switch ( status_code )
 	{
+	// 1XX - Informational
 	case status_1XX::CONTINUE:
 		return "CONTINUE";
+	case status_1XX::SWITCHING_PROTOCOLS:
+		return "SWITCHING PROTOCOLS";
+	case status_1XX::PROCESSING:
+		return "PROCESSING";
+	// 2XX - Success
 	case status_2XX::OK:
 		return "OK";
-	// TODO
+	case status_2XX::CREATED:
+		return "CREATED";
+	case status_2XX::ACCEPTED:
+		return "ACCEPTED";
+	case status_2XX::NON_AUTHORITIVE_INFO:
+		return "NON AUTHORITIVE INFO";
+	case status_2XX::NO_CONTENT:
+		return "NO CONTENT";
+	case status_2XX::RESET_CONTENT:
+		return "RESET CONTENT";
+	case status_2XX::PARTIAL_CONTENT:
+		return "PARTIAL CONTENT";
+	case status_2XX::MULTI_STATUS:
+		return "MULTI STATUS";
+	case status_2XX::ALREADY_REPORTED:
+		return "ALREADY REPORTED";
+	case status_2XX::IM_USED:
+		return "IM USED";
+	// 3XX - Redirectional
+	case status_3XX::MULTI_CHOICES:
+		return "MULTI CHOICES";
+	case status_3XX::MOVED_PERMANENTLY:
+		return "MOVED PERMANENTLY";
+	case status_3XX::FOUND:
+		return "FOUND";
+	case status_3XX::SEE_OTHER:
+		return "SEE OTHER";
+	case status_3XX::NOT_MODIFIED:
+		return "NOT MODIFIED";
+	case status_3XX::USE_PROXY:
+		return "USE PROXY";
+	case status_3XX::SWITCH_PROXY:
+		return "SWITCH PROXY";
+	case status_3XX::TEMP_REDIRECT:
+		return "TEMP REDIRECT";
+	case status_3XX::PERM_REDIRECT:
+		return "PERM REDIRECT";
+	// 4XX - Client error
+	case status_4XX::BAD_REQUEST:
+		return "BAD REQUEST";
+	case status_4XX::UNAUTHORIZED:
+		return "UNAUTHORIZED";
+	case status_4XX::PAYMENT_REQUIRED:
+		return "PAYMENT REQUIRED";
+	case status_4XX::FORBIDDEN:
+		return "FORBIDDEN";
+	case status_4XX::NOT_FOUND:
+		return "NOT FOUND";
+	case status_4XX::METHOD_NOT_ALLOWED:
+		return "METHOD NOT ALLOWED";
+	case status_4XX::NOT_ACCEPTABLE:
+		return "NOT ACCEPTABLE";
+	case status_4XX::PROXY_AUTH_REQUIRED:
+		return "PROXY AUTH REQUIRED";
+	case status_4XX::REQUEST_TIMEOUT:
+		return "REQUEST TIMEOUT";
+	case status_4XX::CONFLICT:
+		return "CONFLICT";
+	case status_4XX::GONE:
+		return "GONE";
+	case status_4XX::LENGTH_REQUIRED:
+		return "LENGTH REQUIRED";
+	case status_4XX::PRECONDITION_FAILED:
+		return "PRECONDITION FAILED";
+	case status_4XX::REQ_ENTITY_TOO_LARGE:
+		return "REQ ENTITY TOO LARGE";
+	case status_4XX::REQ_URI_TOO_LONG:
+		return "REQ URI TOO LONG";
+	case status_4XX::UNSUPPORTED_MEDIA_TYPE:
+		return "UNSUPPORTED MEDIA TYPE";
+	case status_4XX::REQ_RANGE_NOT_SATISFYABLE:
+		return "REQ RANGE NOT SATISFYABLE";
+	case status_4XX::EXPECTATION_FAILED:
+		return "EXPECTATION FAILED";
+	case status_4XX::IM_A_TEAPOT:
+		return "IM A TEAPOT";
+	case status_4XX::AUTH_TIMEOUT: // not in RFC 2616
+		return "AUTH TIMEOUT";
+	case status_4XX::UNPROCESSABLE_ENTITY:
+		return "UNPROCESSABLE ENTITY";
+	case status_4XX::LOCKED:
+		return "LOCKED";
+	case status_4XX::FAILED_DEPENDENCY:
+		return "FAILED DEPENDENCY";
+	case status_4XX::UPGRADE_REQUIRED:
+		return "UPGRADE REQUIRED";
+	case status_4XX::PRECONDITION_REQUIRED:
+		return "PRECONDITION REQUIRED";
+	case status_4XX::TOO_MANY_REQUESTS:
+		return "TOO MANY REQUESTS";
+	case status_4XX::REQ_HEADER_FIELDS_TOO_LARGE:
+		return "REQ HEADER FIELDS TOO LARGE";
+	// 5XX - Server error
+	case status_5XX::INTERNAL_SERVER_ERROR:
+		return "INTERNAL SERVER ERROR";
+	case status_5XX::NOT_IMPLEMENTED:
+		return "NOT IMPLEMENTED";
+	case status_5XX::BAD_GATEWAY:
+		return "BAD GATEWAY";
+	case status_5XX::SERVICE_UNAVAILABLE:
+		return "SERVICE UNAVAILABLE";
+	case status_5XX::GATEWAY_TIMEOUT:
+		return "GATEWAY TIMEOUT";
+	case status_5XX::HTTP_VERSION_NOT_SUPPORTED:
+		return "HTTP VERSION NOT SUPPORTED";
+	case status_5XX::VARIANT_ALSO_NEGOTIATES:
+		return "VARIANT ALSO NEGOTIATES";
+	case status_5XX::INSUFFICIENT_STORAGE:
+		return "INSUFFICIENT STORAGE";
+	case status_5XX::LOOP_DETECTED:
+		return "LOOP DETECTED";
+	case status_5XX::NOT_EXTENDED:
+		return "NOT EXTENDED";
+	case status_5XX::NETWORK_AUTH_REQUIRED:
+		return "NETWORK AUTH REQUIRED";
+	case status_5XX::NETWORK_READ_TIMEOUT_ERR:
+		return "NETWORK READ TIMEOUT ERR";
+	case status_5XX::NETWORK_CONNECT_TIMEOUT_ERR:
+		return "NETWORK CONNECT TIMEOUT ERR";
 	}
 	return "-";
 }
