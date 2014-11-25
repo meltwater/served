@@ -25,6 +25,7 @@
 
 #include <served/response.hpp>
 #include <served/request.hpp>
+#include <functional>
 
 namespace served { namespace plugin {
 
@@ -38,6 +39,21 @@ namespace served { namespace plugin {
  * @param request the request object for the HTTP connection
  */
 void access_log(served::response & res, const served::request & request);
+
+/*
+ * NOT IMPLEMENTED: Generates a static file handler.
+ *
+ * Provide a file directory and an optional base path to trim from request resources and a static
+ * file server for that directory is generated.
+ *
+ * @param file_directory the path to search for files within
+ * @param base_path an optional string to trim from the start of request resource paths
+ * @return the static file handler to register
+ */
+/*
+std::function<void(served::response &, const served::request &)>
+file_server(const std::string & file_directory, const std::string & base_path = "");
+*/
 
 } } // plugin, served
 
