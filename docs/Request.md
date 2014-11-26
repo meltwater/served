@@ -40,7 +40,7 @@ E.g. **"HTTP/1.1"**
 ## .header(std::string const& key)
 ###### Returns the value of the header "key", or an empty string if it doesn't exist
 
-The argument 'key' is case insensitive.
+The argument **key** is case insensitive.
 
 ## .body()
 ###### Returns the body of the request as a string.
