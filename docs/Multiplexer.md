@@ -52,7 +52,7 @@ More info about plugins can be found in Plugins.md
 
 More info about plugins can be found in Plugins.md
 
-## .get_endpoint_list()
+## .get_endpoint_list()
 ###### Returns a full list of registered endpoints as a served_endpoint_list object.
 
 ## .get_endpoint_list_handler_YAML()

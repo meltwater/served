@@ -38,5 +38,20 @@ TEST_CASE("Test request error", "[request_error]")
 	{
 		REQUIRE( std::string(e.what()) == "internal error" );
 		REQUIRE( e.get_status_code() == served::status_5XX::INTERNAL_SERVER_ERROR);
+		REQUIRE( e.get_content_type() == "text/plain" );
+	}
+
+	try
+	{
+		throw served::request_error(
+			served::status_4XX::NOT_FOUND,
+			"{\"error\":\"File not found\"}",
+			"application/json");
+	}
+	catch (served::request_error const& e)
+	{
+		REQUIRE( std::string(e.what()) == "{\"error\":\"File not found\"}" );
+		REQUIRE( e.get_status_code() == served::status_4XX::NOT_FOUND );
+		REQUIRE( e.get_content_type() == "application/json" );
 	}
 }

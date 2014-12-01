@@ -102,6 +102,7 @@ connection::do_read()
 					catch (const served::request_error & e)
 					{
 						d_response.set_status(e.get_status_code());
+						d_response.set_header("Content-Type", e.get_content_type());
 						d_response.set_body(e.what());
 					}
 					catch (...)

@@ -34,7 +34,8 @@ namespace served {
  */
 class request_error : public std::runtime_error
 {
-	int _status_code;
+	int         _status_code;
+	std::string _content_type;
 
 public:
 	/*
@@ -43,9 +44,10 @@ public:
 	 * @param status_code the status code to return to the client
 	 * @param message a message body to return to the client
 	 */
-	request_error(int status_code, std::string const& message)
+	request_error(int status_code, const std::string & message, const std::string & content_type = "text/plain")
 		: std::runtime_error(message)
 		, _status_code(status_code)
+		, _content_type(content_type)
 	{}
 
 	/*
@@ -56,6 +58,16 @@ public:
 	int get_status_code() const
 	{
 		return _status_code;
+	}
+
+	/*
+	 * Returns the content type of the request error message.
+	 *
+	 * @return the content type
+	 */
+	std::string get_content_type() const
+	{
+		return _content_type;
 	}
 };
 
