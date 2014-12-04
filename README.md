@@ -27,7 +27,7 @@ Features:
 ```bash
 $ git clone git@github.com:datasift/served.git
 $ mkdir served.build && cd served.build
-$ ccmake ../served && make -j8
+$ cmake ../served && make
 ```
 
 ### Getting Started
