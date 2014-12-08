@@ -31,7 +31,7 @@ namespace served {
 //  -----  constructors  -----
 
 response::response()
-	: d_status(status_2XX::OK)
+	: _status(status_2XX::OK)
 {
 }
 
@@ -46,26 +46,26 @@ response::set_header(std::string const& header, std::string const& value)
 
 	std::transform(header.begin(), header.end(), mut_header.begin(), ::tolower);
 
-	d_headers[mut_header] = header_pair(header, value);
+	_headers[mut_header] = header_pair(header, value);
 }
 
 void
 response::set_status(int status_code)
 {
-	d_status = status_code;
+	_status = status_code;
 }
 
 void
 response::set_body(const std::string & body)
 {
-	d_body.clear();
-	d_body.str(body);
+	_body.clear();
+	_body.str(body);
 }
 
 response&
 response::operator<<(std::string const& rhs)
 {
-	d_body << rhs;
+	_body << rhs;
 	return (*this);
 }
 
@@ -74,14 +74,14 @@ response::operator<<(std::string const& rhs)
 const int
 response::status()
 {
-	return d_status;
+	return _status;
 }
 
 const size_t
 response::body_size()
 {
-	d_body.seekp(0, std::ios::end);
-	return d_body.tellp();
+	_body.seekp(0, std::ios::end);
+	return _body.tellp();
 }
 
 //  -----  serialization  -----
@@ -91,28 +91,28 @@ response::to_buffer()
 {
 	std::stringstream ss;
 
-	ss << "HTTP/1.1 " << d_status << " " << status::status_to_reason(d_status) << "\r\n";
+	ss << "HTTP/1.1 " << _status << " " << status::status_to_reason(_status) << "\r\n";
 
 	// If server header not specified we add served version stamp
-	if ( d_headers.find("server") == d_headers.end() )
+	if ( _headers.find("server") == _headers.end() )
 	{
 		ss << "Server: served-v" << APPLICATION_VERSION_STRING << "\r\n";
 	}
-	for ( const auto & header : d_headers )
+	for ( const auto & header : _headers )
 	{
 		ss << std::get<0>(header.second) << ": " << std::get<1>(header.second) << "\r\n";
 	}
 	// If content length not specified we check body size
-	if ( d_headers.find("content-length") == d_headers.end() )
+	if ( _headers.find("content-length") == _headers.end() )
 	{
 		ss << "Content-Length: " << body_size() << "\r\n";
 	}
 
 	ss << "\r\n";
-	ss << d_body.str();
+	ss << _body.str();
 
-	d_buffer = ss.str();
-	return d_buffer;
+	_buffer = ss.str();
+	return _buffer;
 }
 
 //  -----  stock reply  -----

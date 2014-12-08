@@ -47,10 +47,10 @@ class response
 	typedef std::tuple<std::string, std::string> header_pair;
 	typedef std::map<std::string, header_pair>   header_list;
 
-	int               d_status;
-	header_list       d_headers;
-	std::stringstream d_body;
-	std::string       d_buffer;
+	int               _status;
+	header_list       _headers;
+	std::stringstream _body;
+	std::string       _buffer;
 
 public:
 	//  -----  constructors  -----

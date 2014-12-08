@@ -64,7 +64,7 @@ int main(int argc, char const* argv[])
 
 	served::net::server server("127.0.0.1", "8000", mux);
 	server.set_read_timeout(5000);
-	server.set_max_body_bytes(4096);
+	server.set_max_request_bytes(4096);
 	server.run(10);
 
 	return (EXIT_SUCCESS);

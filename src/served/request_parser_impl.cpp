@@ -35,58 +35,60 @@ request_parser_impl::http_field( const char * data
                                , size_t       vlen  )
 {
 	std::string header(field, flen), val(value, vlen);
-	d_request.set_header(header, val);
+	_request.set_header(header, val);
 }
 
 request_parser_impl::status_type
 request_parser_impl::parse(const char *data, size_t len)
 {
-	if ( d_status == status_type::READ_HEADER )
+	_bytes_parsed += len;
+
+	if ( _max_req_size_bytes > 0 && _bytes_parsed > _max_req_size_bytes )
 	{
-		size_t d_len = execute(data, len);
+		_status = request_parser_impl::REJECTED_REQUEST_SIZE;
+	}
+	else if ( _status == status_type::READ_HEADER )
+	{
+		size_t _len = execute(data, len);
 		request_parser::status status = get_status();
 
 		if ( request_parser::FINISHED == status )
 		{
-			d_body_expected = expecting_body();
+			_body_expected = expecting_body();
 
-			if ( d_max_body_size_bytes > 0 && d_body_expected > d_max_body_size_bytes )
+			if ( requested_continue() )
 			{
-				d_status = request_parser_impl::REJECTED_BODY_SIZE;
-			}
-			else if ( requested_continue() )
-			{
-				if ( 0 == d_body_expected )
+				if ( 0 == _body_expected )
 				{
-					d_status = request_parser_impl::ERROR;
+					_status = request_parser_impl::ERROR;
 				}
 				else
 				{
-					d_status = request_parser_impl::EXPECT_CONTINUE;
+					_status = request_parser_impl::EXPECT_CONTINUE;
 				}
 			}
-			else if ( 0 != d_body_expected )
+			else if ( 0 != _body_expected )
 			{
-				d_status = request_parser_impl::READ_BODY;
-				parse_body(data + d_len, len - d_len);
+				_status = request_parser_impl::READ_BODY;
+				parse_body(data + _len, len - _len);
 			}
 			else
 			{
-				d_status = request_parser_impl::FINISHED;
+				_status = request_parser_impl::FINISHED;
 			}
 		}
 		else if ( request_parser::ERROR == status )
 		{
-			d_status = request_parser_impl::ERROR;
+			_status = request_parser_impl::ERROR;
 		}
 	}
-	else if ( d_status == status_type::EXPECT_CONTINUE
-	       || d_status == status_type::READ_BODY       )
+	else if ( _status == status_type::EXPECT_CONTINUE
+	       || _status == status_type::READ_BODY       )
 	{
 		parse_body(data, len);
 	}
 
-	return d_status;
+	return _status;
 }
 
 void
@@ -94,7 +96,7 @@ request_parser_impl::request_method( const char * data
                                    , const char * at
                                    , size_t       length )
 {
-	d_request.set_method(method_from_string(std::string(at, length)));
+	_request.set_method(method_from_string(std::string(at, length)));
 }
 
 void
@@ -102,7 +104,7 @@ request_parser_impl::request_uri( const char * data
                                 , const char * at
                                 , size_t       length )
 {
-	d_request.url().set_URI(std::string(at, length));
+	_request.url().set_URI(std::string(at, length));
 }
 
 void
@@ -110,7 +112,7 @@ request_parser_impl::fragment( const char * data
                              , const char * at
                              , size_t       length )
 {
-	d_request.url().set_fragment(std::string(at, length));
+	_request.url().set_fragment(std::string(at, length));
 }
 
 void
@@ -118,7 +120,7 @@ request_parser_impl::request_path( const char * data
                                  , const char * at
                                  , size_t       length )
 {
-	d_request.url().set_path(std::string(at, length));
+	_request.url().set_path(std::string(at, length));
 }
 
 void
@@ -126,7 +128,7 @@ request_parser_impl::query_string( const char * data
                                  , const char * at
                                  , size_t       length )
 {
-	d_request.url().set_query(std::string(at, length));
+	_request.url().set_query(std::string(at, length));
 }
 
 void
@@ -134,7 +136,7 @@ request_parser_impl::http_version( const char * data
                                  , const char * at
                                  , size_t       length )
 {
-	d_request.set_HTTP_version(std::string(at, length));
+	_request.set_HTTP_version(std::string(at, length));
 }
 
 void
@@ -148,19 +150,19 @@ request_parser_impl::header_done( const char * data
 bool
 request_parser_impl::requested_continue()
 {
-	return d_request.header("expect") == "100-continue";
+	return _request.header("expect") == "100-continue";
 }
 
 size_t
 request_parser_impl::expecting_body()
 {
-	switch (d_request.method())
+	switch (_request.method())
 	{
 	case method::PUT:
 	case method::POST:
 	{
-		std::string type   = d_request.header("content-type");
-		std::string length = d_request.header("content-length");
+		std::string type   = _request.header("content-type");
+		std::string length = _request.header("content-length");
 
 		// TODO: Better validation here
 		if ( !type.empty() && !length.empty() )
@@ -185,26 +187,26 @@ request_parser_impl::expecting_body()
 request_parser_impl::status_type
 request_parser_impl::parse_body(const char *data, size_t len)
 {
-	if ( len > d_body_expected )
+	if ( len > _body_expected )
 	{
-		len = d_body_expected;
+		len = _body_expected;
 	}
 
-	d_body_stream.write(data, len);
-	d_body_expected -= len;
+	_body_stream.write(data, len);
+	_body_expected -= len;
 
-	if ( 0 == d_body_expected )
+	if ( 0 == _body_expected )
 	{
-		d_request.set_body(d_body_stream.str());
-		d_body_stream.str(std::string());
-		d_status = status_type::FINISHED;
+		_request.set_body(_body_stream.str());
+		_body_stream.str(std::string());
+		_status = status_type::FINISHED;
 	}
 	else
 	{
-		d_status = status_type::READ_BODY;
+		_status = status_type::READ_BODY;
 	}
 
-	return d_status;
+	return _status;
 }
 
 } // served

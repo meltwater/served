@@ -49,34 +49,32 @@ public:
 		EXPECT_CONTINUE,
 		READ_BODY,
 		FINISHED,
-		REJECTED_HEADER_SIZE,
-		REJECTED_BODY_SIZE
+		REJECTED_REQUEST_SIZE
 	};
 
 private:
-	request &         d_request;
-	status_type       d_status;
-	size_t            d_body_expected;
-	std::stringstream d_body_stream;
-	size_t            d_max_header_size_bytes;
-	size_t            d_max_body_size_bytes;
+	request &         _request;
+	status_type       _status;
+	size_t            _body_expected;
+	std::stringstream _body_stream;
+	size_t            _max_req_size_bytes;
+	size_t            _bytes_parsed;
 
 public:
 	/*
 	 * Constructs a parser by giving it a reference to a request object to be modified.
 	 *
 	 * @param req the request object to be modified
-	 * @param max_header_size_bytes the max size of an acceptable header, a value of 0 is ignored
-	 * @param max_body_size_bytes the max size of an acceptable body, a value of 0 is ignored
+	 * @param max_header_size_bytes the max size of an acceptable request, a value of 0 is ignored
 	 */
-	explicit request_parser_impl(request & req, size_t max_header_size_bytes = 0, size_t max_body_size_bytes = 0)
+	explicit request_parser_impl(request & req, size_t max_req_size_bytes = 0)
 		: served::request_parser()
-		, d_request(req)
-		, d_status(status_type::READ_HEADER)
-		, d_body_expected(0)
-		, d_body_stream()
-		, d_max_header_size_bytes(max_header_size_bytes)
-		, d_max_body_size_bytes(max_body_size_bytes)
+		, _request(req)
+		, _status(status_type::READ_HEADER)
+		, _body_expected(0)
+		, _body_stream()
+		, _max_req_size_bytes(max_req_size_bytes)
+		, _bytes_parsed(0)
 	{}
 
 	/*

@@ -32,38 +32,37 @@ server::server( const std::string & address
               , const std::string & port
               , multiplexer       & mux
               )
-	: d_io_service()
-	, d_signals(d_io_service)
-	, d_acceptor(d_io_service)
-	, d_connection_manager()
-	, d_socket(d_io_service)
-	, d_request_handler(mux)
-	, d_read_timeout(0)
-	, d_write_timeout(0)
-	, d_header_max_bytes(0)
-	, d_body_max_bytes(0)
+	: _io_service()
+	, _signals(_io_service)
+	, _acceptor(_io_service)
+	, _connection_manager()
+	, _socket(_io_service)
+	, _request_handler(mux)
+	, _read_timeout(0)
+	, _write_timeout(0)
+	, _req_max_bytes(0)
 {
 	/*
 	 * Register to handle the signals that indicate when the server should exit.
 	 * It is safe to register for the same signal multiple times in a program,
 	 * provided all registration for the specified signal is made through Asio.
 	 */
-	d_signals.add(SIGINT);
-	d_signals.add(SIGTERM);
+	_signals.add(SIGINT);
+	_signals.add(SIGTERM);
 #if defined(SIGQUIT)
-	d_signals.add(SIGQUIT);
+	_signals.add(SIGQUIT);
 #endif // defined(SIGQUIT)
 
 	do_await_stop();
 
 	// Open the acceptor with the option to reuse the address (i.e. SO_REUSEADDR).
-	boost::asio::ip::tcp::resolver resolver(d_io_service);
+	boost::asio::ip::tcp::resolver resolver(_io_service);
 	boost::asio::ip::tcp::endpoint endpoint = *resolver.resolve({address, port});
 
-	d_acceptor.open(endpoint.protocol());
-	d_acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
-	d_acceptor.bind(endpoint);
-	d_acceptor.listen();
+	_acceptor.open(endpoint.protocol());
+	_acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
+	_acceptor.bind(endpoint);
+	_acceptor.listen();
 
 	do_accept();
 }
@@ -83,7 +82,7 @@ server::run(int n_threads /* = 1 */)
 		for ( int i = 0; i < n_threads; i++ )
 		{
 			v_threads.push_back(std::thread([this](){
-				d_io_service.run();
+				_io_service.run();
 			}));
 		}
 		for ( auto & thread : v_threads )
@@ -96,65 +95,58 @@ server::run(int n_threads /* = 1 */)
 	}
 	else
 	{
-		d_io_service.run();
+		_io_service.run();
 	}
 }
 
 void
 server::set_read_timeout(int time_milliseconds)
 {
-	d_read_timeout = time_milliseconds;
+	_read_timeout = time_milliseconds;
 }
 
 void
 server::set_write_timeout(int time_milliseconds)
 {
-	d_write_timeout = time_milliseconds;
+	_write_timeout = time_milliseconds;
 }
 
-/*void
-server::set_max_header_bytes(size_t num_bytes)
-{
-	d_header_max_bytes = num_bytes;
-}*/
-
 void
-server::set_max_body_bytes(size_t num_bytes)
+server::set_max_request_bytes(size_t num_bytes)
 {
-	d_body_max_bytes = num_bytes;
+	_req_max_bytes = num_bytes;
 }
 
 void
 server::stop()
 {
-	if ( ! d_io_service.stopped() )
+	if ( ! _io_service.stopped() )
 	{
-		d_io_service.stop();
+		_io_service.stop();
 	}
 }
 
 void
 server::do_accept()
 {
-	d_acceptor.async_accept(d_socket,
+	_acceptor.async_accept(_socket,
 		[this](boost::system::error_code ec) {
 			// Check whether the server was stopped by a signal before this
 			// completion handler had a chance to run.
-			if (!d_acceptor.is_open())
+			if (!_acceptor.is_open())
 			{
 				return;
 			}
 			if (!ec)
 			{
-				d_connection_manager.start(
-					std::make_shared<connection>( d_io_service
-					                            , std::move(d_socket)
-					                            , d_connection_manager
-					                            , d_request_handler
-					                            , d_read_timeout
-					                            , d_write_timeout
-					                            , d_header_max_bytes
-					                            , d_body_max_bytes
+				_connection_manager.start(
+					std::make_shared<connection>( _io_service
+					                            , std::move(_socket)
+					                            , _connection_manager
+					                            , _request_handler
+					                            , _read_timeout
+					                            , _write_timeout
+					                            , _req_max_bytes
 					                            ));
 			}
 			do_accept();
@@ -165,12 +157,13 @@ server::do_accept()
 void
 server::do_await_stop()
 {
-	d_signals.async_wait(
+	_signals.async_wait(
 		[this](boost::system::error_code /*ec*/, int /*signo*/) {
-			// The server is stopped by cancelling all outstanding asynchronous
-			// operations. Once all operations have finished the io_service::run()
-			// call will exit.
-			d_acceptor.close();
-			d_connection_manager.stop_all();
+			/* The server is stopped by cancelling all outstanding asynchronous
+			 * operations. Once all operations have finished the io_service::run()
+			 * call will exit.
+			 */
+			_acceptor.close();
+			_connection_manager.stop_all();
 		});
 }

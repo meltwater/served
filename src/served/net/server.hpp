@@ -40,16 +40,15 @@ namespace served { namespace net {
  */
 class server
 {
-	boost::asio::io_service        d_io_service;
-	boost::asio::signal_set        d_signals;
-	boost::asio::ip::tcp::acceptor d_acceptor;
-	connection_manager             d_connection_manager;
-	boost::asio::ip::tcp::socket   d_socket;
-	multiplexer &                  d_request_handler;
-	int                            d_read_timeout;
-	int                            d_write_timeout;
-	size_t                         d_header_max_bytes;
-	size_t                         d_body_max_bytes;
+	boost::asio::io_service        _io_service;
+	boost::asio::signal_set        _signals;
+	boost::asio::ip::tcp::acceptor _acceptor;
+	connection_manager             _connection_manager;
+	boost::asio::ip::tcp::socket   _socket;
+	multiplexer &                  _request_handler;
+	int                            _read_timeout;
+	int                            _write_timeout;
+	size_t                         _req_max_bytes;
 
 public:
 	server(const server&) = delete;
@@ -103,22 +102,12 @@ public:
 	void set_write_timeout(int time_milliseconds);
 
 	/*
-	 * NOTE: CURRENTLY NOT IMPLEMENTED
-	 *
-	 * Sets the maximum size in bytes that a request header is permitted to be before a client is
-	 * rejected. If set to 0 (default) the limit is ignored.
+	 * Sets the maximum size in bytes that a request is permitted to be before a client is rejected.
+	 * If set to 0 (default) the limit is ignored.
 	 *
 	 * @param num_bytes the number of bytes permitted, 0 is ignored and no limit is used
 	 */
-	// void set_max_header_bytes(size_t num_bytes);
-
-	/*
-	 * Sets the maximum size in bytes that a request body is permitted to be before a client is
-	 * rejected. If set to 0 (default) the limit is ignored.
-	 *
-	 * @param num_bytes the number of bytes permitted, 0 is ignored and no limit is used
-	 */
-	void set_max_body_bytes(size_t num_bytes);
+	void set_max_request_bytes(size_t num_bytes);
 
 private:
 	/*

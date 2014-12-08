@@ -49,19 +49,19 @@ public:
 	enum status_type { READING = 0, DONE };
 
 private:
-	boost::asio::io_service &    d_io_service;
-	status_type                  d_status;
-	boost::asio::ip::tcp::socket d_socket;
-	connection_manager &         d_connection_manager;
-	multiplexer        &         d_request_handler;
-	std::array<char, 8192>       d_buffer;
-	request                      d_request;
-	request_parser_impl          d_request_parser;
-	response                     d_response;
-	int                          d_read_timeout;
-	int                          d_write_timeout;
-	boost::asio::deadline_timer  d_read_timer;
-	boost::asio::deadline_timer  d_write_timer;
+	boost::asio::io_service &    _io_service;
+	status_type                  _status;
+	boost::asio::ip::tcp::socket _socket;
+	connection_manager &         _connection_manager;
+	multiplexer        &         _request_handler;
+	std::array<char, 8192>       _buffer;
+	request                      _request;
+	request_parser_impl          _request_parser;
+	response                     _response;
+	int                          _read_timeout;
+	int                          _write_timeout;
+	boost::asio::deadline_timer  _read_timer;
+	boost::asio::deadline_timer  _write_timer;
 
 public:
 	connection(const connection&) = delete;
@@ -75,6 +75,7 @@ public:
 	 * @param socket the boost::asio socket for the connection
 	 * @param manager the connection manager that oversees this connection
 	 * @param handler the multiplexer responsible for routing requests
+	 * @param max_request_size_bytes maximum permitted size of a request
 	 * @param read_timer the timeout for reading, 0 is ignored
 	 * @param write_timer the timeout for writing, 0 is ignored
 	 */
@@ -82,8 +83,7 @@ public:
 	                   , boost::asio::ip::tcp::socket socket
 	                   , connection_manager &         manager
 	                   , multiplexer        &         handler
-	                   , size_t                       max_header_size_bytes
-	                   , size_t                       max_body_size_bytes
+	                   , size_t                       max_request_size_bytes
 	                   , int                          read_timeout
 	                   , int                          write_timeout );
 

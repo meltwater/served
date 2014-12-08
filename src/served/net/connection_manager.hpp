@@ -38,8 +38,8 @@ namespace served { namespace net {
  */
 class connection_manager
 {
-	std::set<connection_ptr> d_connections;
-	std::mutex               d_connections_mutex;
+	std::set<connection_ptr> _connections;
+	std::mutex               _connections_mutex;
 
 public:
 	connection_manager(const connection_manager&) = delete;
