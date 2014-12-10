@@ -51,11 +51,11 @@ typedef std::function<void(response &, request &)> served_plugin_req_handler;
  */
 class multiplexer
 {
-	typedef std::vector<served_plugin_req_handler>                      plugin_handler_list;
+	typedef std::vector<served_plugin_req_handler>                                   plugin_handler_list;
 
-	typedef std::vector<served::mux::segment_matcher_ptr>               path_compiled_segments;
-	typedef std::tuple<path_compiled_segments, served::methods_handler> path_handler_candidate;
-	typedef std::vector<path_handler_candidate>                         path_handler_candidates;
+	typedef std::vector<served::mux::segment_matcher_ptr>                            path_compiled_segments;
+	typedef std::tuple<path_compiled_segments, served::methods_handler, std::string> path_handler_candidate;
+	typedef std::vector<path_handler_candidate>                                      path_handler_candidates;
 
 	const std::string       _base_path;
 	path_compiled_segments  _base_path_segments;

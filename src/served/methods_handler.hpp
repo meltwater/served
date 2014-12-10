@@ -47,8 +47,8 @@ typedef std::map<std::string, served_method_list>         served_endpoint_list;
  */
 class methods_handler
 {
-	const std::string                            _path;
-	const std::string                            _info;
+	std::string                                  _path;
+	std::string                                  _info;
 	std::map<served::method, served_req_handler> _handlers;
 
 public:

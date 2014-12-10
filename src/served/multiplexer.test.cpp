@@ -198,7 +198,7 @@ TEST_CASE("multiplexer method routing", "[mux]")
 
 		// This route should be disregarded in favour of a 405 error from the previous route.
 		request_router_story s2;
-		s2.pattern = "/foo/bar";
+		s2.pattern = "/foo";
 
 		served::multiplexer mux;
 		mux.handle(s1.pattern)
@@ -263,6 +263,78 @@ TEST_CASE("multiplexer method routing", "[mux]")
 	}
 }
 
+TEST_CASE("multiplexer overwriting", "[mux]")
+{
+	SECTION("Confirm overwrite not accept GET")
+	{
+		request_router_story s1;
+		s1.pattern = "/foo/bar";
+
+		request_router_story s2;
+		s2.pattern = "/foo/bar";
+
+		served::multiplexer mux;
+		mux.handle(s1.pattern)
+			.post(path_collecting_functor(s1))
+			.del(path_collecting_functor(s1));
+
+		mux.handle(s2.pattern)
+			.get(path_collecting_functor(s2))
+			.head(path_collecting_functor(s2))
+			.put(path_collecting_functor(s2));
+
+		try
+		{
+			INFO("Confirming exception was 405 NOT ALLOWED");
+
+			served::response res;
+			served::request req;
+			served::uri url;
+
+			url.set_path(s1.pattern);
+			req.set_destination(url);
+			req.set_method(served::method::POST);
+
+			mux.forward_to_handler( res, req );
+
+			// Should have thrown by this point.
+			CHECK(false);
+		}
+		catch (const served::request_error & e)
+		{
+			INFO("Confirming exception was 405 NOT ALLOWED");
+			CHECK(e.get_status_code() == served::status_4XX::METHOD_NOT_ALLOWED);
+		}
+
+		{
+			served::response res;
+			served::request req;
+			served::uri url;
+
+			url.set_path(s1.pattern);
+			req.set_destination(url);
+
+			INFO("Checking accepts GET");
+			req.set_method(served::method::GET);
+			CHECK_NOTHROW(mux.forward_to_handler( res, req ));
+
+			INFO("Checking accepts HEAD");
+			req.set_method(served::method::HEAD);
+			CHECK_NOTHROW(mux.forward_to_handler( res, req ));
+
+			INFO("Checking accepts PUT");
+			req.set_method(served::method::PUT);
+			CHECK_NOTHROW(mux.forward_to_handler( res, req ));
+
+			INFO("Checking for no routed requests to overridden handler (0 requests)");
+			CHECK(s1.received.size() == 0);
+
+			INFO("Checking for all routed requests to override handler (3 requests)");
+			CHECK(s2.received.size() == 3);
+		}
+	}
+}
+
 TEST_CASE("multiplexer hierarchy test", "[mux]")
 {
 	SECTION("shorter pattern first")
@@ -278,7 +350,6 @@ TEST_CASE("multiplexer hierarchy test", "[mux]")
 		mux.handle("/"            ).get(expected_call);
 		mux.handle("/first/second").get(dummy_call);
 		mux.handle("/testing"     ).get(dummy_call);
-		mux.handle("/"            ).get(dummy_call);
 
 		served::response res;
 		served::request req;
