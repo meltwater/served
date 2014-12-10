@@ -117,8 +117,21 @@ multiplexer::get_segments(const std::string & path)
 served::methods_handler &
 multiplexer::handle(const std::string & path, const std::string info /* = "" */)
 {
+	// Remove any duplicates.
+	for ( auto it = _handler_candidates.begin(); it != _handler_candidates.end(); )
+	{
+		if ( std::get<2>(*it) == path )
+		{
+			it = _handler_candidates.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
+
 	_handler_candidates.push_back(
-		path_handler_candidate(get_segments(path), served::methods_handler(_base_path + path, info)));
+		path_handler_candidate(get_segments(path), served::methods_handler(_base_path + path, info), path));
 
 	return std::get<1>(_handler_candidates.back());
 }
