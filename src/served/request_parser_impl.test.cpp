@@ -57,6 +57,10 @@ TEST_CASE("request parser impl can parse http requests", "[request_parser_impl]"
 			REQUIRE(req.url().query()    == "reason=science");
 			REQUIRE(req.url().fragment() == "idet");
 		}
+		SECTION("check query")
+		{
+			REQUIRE(req.query["reason"] == "science");
+		}
 		SECTION("check fields")
 		{
 			REQUIRE(req.header("Host")           == "api.datasift.com");
@@ -71,7 +75,7 @@ TEST_CASE("request parser impl can handle utf-8", "[request_parser_impl]")
 	served::request req;
 	served::request_parser_impl parser(req);
 	const char* request =
-		u8"POST /you/got/served?reason=science#idet HTTP/1.1\r\n"
+		u8"POST /you/got/served?reason=science&reason2=theinternet&reason%25=the%24%24#idet HTTP/1.1\r\n"
 		u8"Host: api.datasift.com\r\n"
 		u8"Content-Type: text/xml; charset=utf-8\r\n"
 		u8"Content-Length: 22\r\n"
@@ -92,10 +96,16 @@ TEST_CASE("request parser impl can handle utf-8", "[request_parser_impl]")
 		}
 		SECTION("check uri")
 		{
-			REQUIRE(req.url().URI()      == u8"/you/got/served?reason=science");
+			REQUIRE(req.url().URI()      == u8"/you/got/served?reason=science&reason2=theinternet&reason%25=the%24%24");
 			REQUIRE(req.url().path()     == u8"/you/got/served");
-			REQUIRE(req.url().query()    == u8"reason=science");
+			REQUIRE(req.url().query()    == u8"reason=science&reason2=theinternet&reason%25=the%24%24");
 			REQUIRE(req.url().fragment() == u8"idet");
+		}
+		SECTION("check query")
+		{
+			REQUIRE(req.query["reason"] == u8"science");
+			REQUIRE(req.query["reason2"] == u8"theinternet");
+			REQUIRE(req.query["reason%"] == u8"the$$");
 		}
 		SECTION("check fields")
 		{
@@ -135,6 +145,7 @@ TEST_CASE("test parser states", "[request_parser_impl]")
 
 		CHECK(dummy_req.method() == served::method::GET);
 		CHECK(dummy_req.url().path() == "/endpoints/int/test");
+		CHECK(dummy_req.url().query() == "");
 		CHECK(dummy_req.header("host") == "localhost");
 		CHECK(dummy_req.header("agent") == "me");
 	}
@@ -157,6 +168,48 @@ TEST_CASE("test parser states", "[request_parser_impl]")
 			REQUIRE(std::get<1>(section) == parser.parse(s.c_str(), s.length()));
 		}
 	}
+
+	/*
+	TODO: Improve query string parsing so that these tests pass.
+
+	SECTION("GET bad request query")
+	{
+		served::request dummy_req;
+		served::request_parser_impl parser(dummy_req);
+		auto sections = section_stories {{
+			section_story { "GET /endpoint??thisiswrong& HTTP/1.1\r", status_type::ERROR },
+			section_story { "\nHost: localhost",                      status_type::ERROR },
+			section_story { "\r\nAgent: me\r\n",                      status_type::ERROR },
+			section_story { "\r\n",                                   status_type::ERROR },
+		}};
+
+		for ( const auto & section : sections )
+		{
+			const std::string s = std::get<0>(section);
+			INFO("section: " << s);
+			REQUIRE(std::get<1>(section) == parser.parse(s.c_str(), s.length()));
+		}
+	}
+
+	SECTION("GET bad request query 2")
+	{
+		served::request dummy_req;
+		served::request_parser_impl parser(dummy_req);
+		auto sections = section_stories {{
+			section_story { "GET /endpoint?t=r&wrong HTTP/1.1\r", status_type::ERROR },
+			section_story { "\nHost: localhost",                  status_type::ERROR },
+			section_story { "\r\nAgent: me\r\n",                  status_type::ERROR },
+			section_story { "\r\n",                               status_type::ERROR },
+		}};
+
+		for ( const auto & section : sections )
+		{
+			const std::string s = std::get<0>(section);
+			INFO("section: " << s);
+			REQUIRE(std::get<1>(section) == parser.parse(s.c_str(), s.length()));
+		}
+	}
+	*/
 
 	SECTION("POST with body")
 	{

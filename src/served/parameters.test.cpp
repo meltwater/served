@@ -76,3 +76,63 @@ TEST_CASE("Test param const, ref and copy handling", "[parameters]")
 	test_const_copy(params);
 	test_const_ref (params);
 }
+
+TEST_CASE("Test param iteration", "[parameters]")
+{
+	auto values = std::map<std::string, std::string>{{
+		{ "key1", "value1" },
+		{ "key2", "value2" },
+		{ "key3", "value3" },
+		{ "key4", "value4" },
+	}};
+
+	served::parameters params;
+
+	for ( const auto & value : values )
+	{
+		params[value.first] = value.second;
+	}
+
+	auto test_copy = [&](served::parameters p)
+	{
+		int count = 0;
+		for ( const auto & param : p )
+		{
+			count++;
+			CHECK(param.second == values[param.first]);
+		}
+		CHECK(count == values.size());
+	};
+
+	auto test_const_copy = [&](const served::parameters p)
+	{
+		int count = 0;
+		for ( const auto & param : p )
+		{
+			count++;
+			CHECK(param.second == values[param.first]);
+		}
+		CHECK(count == values.size());
+	};
+
+	SECTION("iterate copy params")
+	{
+		test_copy(params);
+	}
+
+	SECTION("iterate const copy params")
+	{
+		test_const_copy(params);
+	}
+
+	SECTION("iterate params")
+	{
+		int count = 0;
+		for ( const auto & param : params )
+		{
+			count++;
+			CHECK(param.second == values[param.first]);
+		}
+		CHECK(count == values.size());
+	}
+}

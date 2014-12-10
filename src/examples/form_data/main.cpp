@@ -33,27 +33,8 @@ int main(int argc, char const* argv[])
 				// example.
 				served::response::stock_reply(400, res);
 			} else {
-				// copy the query string as we will be deleting parts as we
-				// iterate through each key / value pair.
-				std::string query = req.url().query();
-				size_t pos = 0;
-
-				// find each pair of key / value strings delimeted by '&'
-				while ((pos = query.find("&")) != std::string::npos) {
-					// save the key / value pair, and look for the index of the
-					// divider, delimited by '='
-				    std::string pair = query.substr(0, pos);
-					size_t div_index = pair.find('=');
-
-					// write the key and value to the response string, just to
-					// prove we correctly parsed the query string
-					if (div_index != std::string::npos) {
-						res << "Key: " << pair.substr(0, div_index) << ", Value: " 
-							<< pair.substr(div_index + 1, std::string::npos) << "\n";
-					}
-
-					// erase the pair we just processed from the query string
-				    query.erase(0, pos + 1);
+				for ( const auto & query_param : req.query ) {
+					res << "Key: " << query_param.first << ", Value: " << query_param.second << "\n";
 				}
 			}
 		});
