@@ -165,6 +165,7 @@ public:
 	//  -----  public members  -----
 
 	parameters params;
+	parameters query;
 };
 
 } // served

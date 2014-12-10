@@ -128,7 +128,40 @@ request_parser_impl::query_string( const char * data
                                  , const char * at
                                  , size_t       length )
 {
-	_request.url().set_query(std::string(at, length));
+	std::string query = std::string(at, length);
+	_request.url().set_query(query);
+
+	// find each pair of key / value strings delimeted by '&'
+	while ( query.length() > 0 )
+	{
+		size_t pos = query.find("&");
+
+		std::string pair;
+		if ( pos != std::string::npos )
+		{
+			pair = query.substr(0, pos);
+		}
+		else
+		{
+			pair = query;
+			pos = query.length() - 1;
+		}
+
+		// save the key / value pair, and look for the index of the
+		// divider, delimited by '='
+		size_t div_index = pair.find('=');
+
+		if (div_index != std::string::npos)
+		{
+			std::string key = query_unescape(pair.substr(0, div_index));
+			std::string value = query_unescape(pair.substr(div_index + 1, std::string::npos));
+
+			_request.query[key] = value;
+		}
+
+		// erase the pair we just processed from the query string
+		query.erase(0, pos + 1);
+	}
 }
 
 void

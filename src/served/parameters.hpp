@@ -88,6 +88,14 @@ public:
 	 * @return the value of the parameter, or an empty string if the key is not matched.
 	 */
 	const std::string get(std::string const& key) const;
+
+	//  -----  iterators  -----
+
+	parameter_list::iterator begin() { return _list.begin(); }
+	parameter_list::iterator end  () { return _list.end  (); }
+
+	parameter_list::const_iterator begin() const { return _list.begin(); }
+	parameter_list::const_iterator end  () const { return _list.end  (); }
 };
 
 } // served
