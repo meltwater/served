@@ -54,6 +54,7 @@ connection::connection( boost::asio::io_service &    io_service
 void
 connection::start()
 {
+	_request.set_source(_socket.remote_endpoint().address().to_string());
 	do_read();
 
 	if ( _read_timeout > 0 )

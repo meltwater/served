@@ -36,7 +36,13 @@ void access_log(served::response & res, const served::request & req)
 	boost::posix_time::time_facet *facet = new boost::posix_time::time_facet("%d/%b/%Y:%H:%M:%S");
 	ss.imbue(std::locale(ss.getloc(), facet));
 
-	ss << "- - - [" << boost::posix_time::second_clock::local_time() << " -0000]";
+	std::string source = req.source();
+	if ( source.empty() )
+	{
+		source = "-";
+	}
+
+	ss << source << " - - [" << boost::posix_time::second_clock::local_time() << " -0000]";
 	ss << " \"" << method_to_string(req.method()) << " " << req.url().path() << " " << req.HTTP_version() << "\"";
 	ss << " " << res.status() << " " << res.body_size();
 
