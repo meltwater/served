@@ -64,3 +64,26 @@ Example:
 multiplexer mux;
 mux.handle("/endpoints").get(mux.get_endpoint_list_handler_YAML());
 ```
+
+## Handler order of precedence
+
+When defining handlers for your multiplexer it's important to consider the order of precedence each handler will have for a request. In Served, when a request is received, each handler is checked for a match in the order that they were defined, the first matching handler is always the handler that is chosen.
+
+## Overriding a pattern handler
+
+You may, whilst defining your handlers, overwrite a previously defined pattern with a new handler. When this happens the new handler will *not* be given the same position as the old handler. Instead, the old handler is removed entirely and the new handler takes the last position in the handler stack.
+
+For example, given the following handler definitions:
+
+```
+handle("/foo/bar").get(foo);
+handle("/foo").get(foo2);
+handle("/foo/bar").get(foo3);
+```
+
+Internally, this will be simplified by the multiplexer to become:
+
+```
+handle("/foo").get(foo2);
+handle("/foo/bar").get(foo3);
+```

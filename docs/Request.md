@@ -2,6 +2,15 @@
 
 Every registered handler gets access to a const request object, this is for obtaining any relevant information about the request and the client. Here is an overview of the object...
 
+## .source()
+###### Returns the remote IP address of the request client
+
+## .params
+###### Any REST parameters extracted from the request path as a <std::string, std::string> map.
+
+## .query
+###### Any query string parameters extracted from the request path as a <std::string, std::string> map.
+
 ## .method()
 ###### Returns the HTTP method of the request
 
