@@ -98,3 +98,29 @@ This pattern would match any of the following request resources:
 /first/second/foo/bar
 /first/second/foo/bar/baz
 ```
+
+###Empty Regex
+
+A regex segment where the regular expression itself is empty may be used to match complete or terminated paths (rather than path prefixes).
+
+The following pattern would compile into two static segments followed by an empty regex segment:
+
+```
+/first/second/{and_nothing_else:}
+```
+
+In this particular case the regular expression only matches the empty string (or empty segment):
+
+```
+/first/second/
+```
+
+but none of the following:
+
+```
+/first/second/50
+/first/second/hello
+/first/second/hello/
+/first/second/hello/dolly
+/first/second/file.jpg
+```
