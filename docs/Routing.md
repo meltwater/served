@@ -2,21 +2,21 @@
 
 Served supports a range of useful syntaxes to assist in defining RESTful resource patterns. Once compiled by the Served multiplexer, a pattern can be considered an array of segments, where each segment is constructed from the pattern once split by the path separator "**/**" character.
 
-Here is a break down of the various segment types.
+Here is a breakdown of the various segment types.
 
 ###Static
 
-This is the most simple type of segment, it is compiled from a static string, and matches only that exact string. The following pattern would compile into three static segments:
+This is the simplest type of segment. It is compiled from a static string, and matches only that exact string. The following pattern would compile into three static segments:
 
 ```
 /first/second/third
 ```
 
-And would only ever match a request path starting with: "**/first/second/third**"
+This would only ever match a request path starting with: "**/first/second/third**"
 
 ###Variable
 
-A variable segment is a RESTful resource parameter that can exist in any section of your pattern, it is defined between curly braces and can have an optional parameter name which will cause the variable to be parsed and captured in request.params under that name.
+A variable segment is a RESTful resource parameter which can exist in any section of your pattern. It is defined between curly braces and can have an optional parameter name that will cause the variable to be parsed and captured in request.params under that name.
 
 The syntax is as follows:
 
@@ -30,7 +30,7 @@ The following pattern would compile into two static segments followed by a varia
 /first/second/{variable1}
 ```
 
-And would match all of the following request paths:
+This would match all of the following request paths:
 
 ```
 /first/second/hello
@@ -38,9 +38,9 @@ And would match all of the following request paths:
 /first/second/file.jpg
 ```
 
-And, respectively, **variable1** would be placed in **req.params** with values: **hello**, **50** and **file.jpg**.
+Here, **variable1** would be placed in **req.params** with value, respectively: **hello**, **50** and **file.jpg**.
 
-The variable name can be left blank and causes the variable segment to essentially act as a wildcard, the following pattern would match all of the same paths as before:
+The variable name can be left blank and causes the variable segment essentially to act as a wildcard. The following pattern would match all of the same paths as before:
 
 ```
 /first/second/{}
@@ -48,7 +48,7 @@ The variable name can be left blank and causes the variable segment to essential
 
 ###Regex
 
-A regex segment is a RESTful resource parameter that must satisfy a regular expression before being considered a match. It is defined similarly to a variable segment between two curl braces, but also requests a colon character to separate the variable name with the regular expression.
+A regex segment is a RESTful resource parameter that must satisfy a regular expression before being considered a match. It is defined similarly to a variable segment between two curly braces, but also requests a colon character to separate the variable name from the regular expression.
 
 The syntax is as follows:
 
@@ -62,7 +62,7 @@ The following pattern would compile into two static segments followed by a regex
 /first/second/{variable1:[0-9]+}
 ```
 
-In this particular case the regular expression only matches numbers, therefore the pattern would match all of the following request paths:
+In this particular case the regular expression only matches numbers. Therefore, this pattern would match all of the following request paths:
 
 ```
 /first/second/50
@@ -70,7 +70,7 @@ In this particular case the regular expression only matches numbers, therefore t
 /first/second/80
 ```
 
-But none of the following:
+but none of the following:
 
 ```
 /first/second/hello
@@ -89,7 +89,7 @@ The following pattern would compile into two static segments followed by an empt
 /first/second/
 ```
 
-And this pattern would match any of the following request resources:
+This pattern would match any of the following request resources:
 
 ```
 /first/second/

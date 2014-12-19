@@ -6,9 +6,9 @@ Served wants you to plug in. A Served plugin is a std::function of the signature
 void(served::response &, served::request &)
 ```
 
-Which is called for every single request. Since the request object in this signature is non const you are free to write plugins that modify the request object.
+which is called for every single request. Since the request object in this signature is non const you are free to write plugins that modify the request object.
 
-Served plugins can either be set to run before each request is sent to a registered handler, or afterwards. Plugins set to run after the registered handler will be run even if the handler throws an exception. The syntax for setting plugins is as follows:
+Served plugins can be set to run either before each request is sent to a registered handler, or afterwards. Plugins set to run after the registered handler will be run even if the handler throws an exception. The syntax for setting plugins is as follows:
 
 ```
 // Register a plugin to run before a handler

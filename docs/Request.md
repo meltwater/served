@@ -1,6 +1,6 @@
 #Request Object
 
-Every registered handler gets access to a const request object, this is for obtaining any relevant information about the request and the client. Here is an overview of the object...
+Every registered handler gets access to a const request object; this is for obtaining any relevant information about the request and the client. Here is an overview of the object:
 
 ## .source()
 ###### Returns the remote IP address of the request client

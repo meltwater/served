@@ -6,7 +6,7 @@ The multiplexer object allows you to register HTTP request handlers for pattern 
 ## .handle(const std::string & pattern, const std::string & summary = "")
 ###### Registers a new resource pattern, returns a methods_handler object for declaring handlers.
 
-Examples of valid handle patterns can be found in Routing.md. The summary argument is optional and should contain a short summary of the endpoint resource, this is then used when generating human readable lists of the available endoints.
+Examples of valid handle patterns can be found in Routing.md. The summary argument is optional and should contain a short summary of the endpoint resource; this is then used when generating human-readable lists of the available endoints.
 
 The returned **methods_handler** object can then be used to register a handler for each HTTP method of interest.
 
@@ -31,7 +31,7 @@ The returned **methods_handler** object can then be used to register a handler f
 #### .method(const served::method method, served::served_req_handler handler)
 ###### Registers a handler for a specific HTTP method.
 
-Calls to the methods_handler object can be daisy chained.
+Calls to the methods_handler object can be daisy-chained.
 
 Example:
 
@@ -67,7 +67,7 @@ mux.handle("/endpoints").get(mux.get_endpoint_list_handler_YAML());
 
 ## Handler order of precedence
 
-When defining handlers for your multiplexer it's important to consider the order of precedence each handler will have for a request. In Served, when a request is received, each handler is checked for a match in the order that they were defined, the first matching handler is always the handler that is chosen.
+When defining handlers for your multiplexer it's important to consider the order of precedence each handler will have for a request. In Served, when a request is received, each handler is checked for a match in the order that they were defined; the first matching handler is always the handler that is chosen.
 
 ## Overriding a pattern handler
 

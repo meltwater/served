@@ -1,11 +1,11 @@
 #Response Object
 
-Every registered handler gets access to a response object, this is used to construct your response to the client. Here is an overview of the object...
+Every registered handler gets access to a response object; this is used to construct your response to the client. Here is an overview of the object:
 
 ## .set_header(const std::string & header, const std::string & value)
 ###### Sets a header to a value, overriding any previous value.
 
-The header key is case insensitive here for the purposes of identifying a single header and setting a single value, however, the key itself as written here is exactly what will be sent to the client.
+The header key is case-insensitive here for the purposes of identifying a single header and setting a single value; however, the key itself as written here is exactly what will be sent to the client.
 
 For example, after calling the following:
 
@@ -51,7 +51,7 @@ res << "you got served.";
 ## served::response::stock_reply(int status_code, response & res)
 ###### Configures a response object to be a generic response for a particular status code
 
-This is a short hand way of setting the responses status code and body for a particular response.
+This is a short-hand way of setting the responses status code and body for a particular response.
 
 Example:
 
