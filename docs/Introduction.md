@@ -28,3 +28,7 @@ The handler chosen will be the one registered with the pattern:
 ```
 
 Since this is the first registered pattern that is fully matched within the request resource.
+
+##Caveat 2 - Chunked encoding is missing
+
+Currently, chunked encoding support is not implemented. This is on the TODO list.

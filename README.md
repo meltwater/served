@@ -134,6 +134,12 @@ OS           | Compiler      | Status
 Linux        | GCC 4.8       | Working
 OSX          | Clang 3.5     | Working
 
+## Missing
+
+Currently the HTTP 1.1 spec is mostly supported, but the following major features are still on the TODO list:
+
+- Chunked encoding support
+
 ## Contributing
 
 Pull requests are welcome.
