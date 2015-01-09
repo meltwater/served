@@ -21,16 +21,16 @@
 #
 # Locate project sources
 #
-FILE (GLOB_RECURSE handlers_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp)
+FILE (GLOB_RECURSE eg_handlers_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp)
 
 #
 # Configure common project settings
 #
-SET (handlers_LIBS ${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+SET (eg_handlers_LIBS ${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 #
 # Executable build rules
 #
-ADD_EXECUTABLE (handlers ${handlers_SRCS})
-TARGET_LINK_LIBRARIES (handlers ${handlers_LIBS})
-INSTALL (TARGETS handlers DESTINATION bin)
+ADD_EXECUTABLE (eg_handlers ${eg_handlers_SRCS})
+TARGET_LINK_LIBRARIES (eg_handlers ${eg_handlers_LIBS})
+INSTALL (TARGETS eg_handlers DESTINATION bin)

@@ -26,6 +26,12 @@
 #include <fstream>
 #include <sstream>
 
+/* binary_data example
+ *
+ * This example is a quick demo of sending a binary file over HTTP. Notice that you do not have to
+ * explicitly set the Content-Length header because if this value is omitted then served calculates
+ * it for you based on the response length.
+ */
 int main(int argc, char const* argv[])
 {
 	served::multiplexer mux;
@@ -41,21 +47,11 @@ int main(int argc, char const* argv[])
 				(std::istreambuf_iterator<char>()    )
 			));
 			res.set_header("content-type", "image/png");
-		})
-		.head([&](served::response & res, const served::request & req) {
-			std::ifstream ifs(image_name);
-			std::string content(
-				(std::istreambuf_iterator<char>(ifs) ),
-				(std::istreambuf_iterator<char>()    )
-			);
-			std::stringstream ss;
-			ss << content.length();
-
-			res.set_header("content-type", "image/png");
-			res.set_header("content-length", ss.str());
 		});
 
-	served::net::server server("0.0.0.0", "8080", mux);
+	std::cout << "Try this example by opening http://localhost:8123/picture in a browser" << std::endl;
+
+	served::net::server server("0.0.0.0", "8123", mux);
 	server.run(10);
 
 	return (EXIT_SUCCESS);

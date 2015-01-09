@@ -28,6 +28,16 @@
 
 #include <unistd.h>
 
+/* list_endpoints example
+ *
+ * This example demonstrates how to expose a list of registered API endpoints using the
+ * mux.get_endpoints_list() method, which returns an iterable vector of endpoints.
+ *
+ * A version of this endpoints handler that prints endpoints in YAML is already written, and you can
+ * use it like so:
+ *
+ * mux.handler("/endpoints").get(mux.get_endpoint_list_handler_YAML());
+ */
 int main(int argc, char const* argv[])
 {
 	served::multiplexer mux;
@@ -40,6 +50,7 @@ int main(int argc, char const* argv[])
 		.post([](served::response & res, const served::request & req) {
 			res << "create big_whoop";
 		});
+
 	mux.handle("/big_whoop/{id}")
 		.get([](served::response & res, const served::request & req) {
 			res << "read big_whoop: ";
@@ -58,15 +69,20 @@ int main(int argc, char const* argv[])
 	mux.handle("/endpoints")
 		.get([&mux](served::response & res, const served::request & req) {
 			const served::served_endpoint_list endpoints = mux.get_endpoint_list();
-			for (auto& endpoint : endpoints) {
-				for (auto& method : std::get<1>(endpoint.second)) {
-					std::cout << method << " " << endpoint.first << std::endl;
+			for (auto& endpoint : endpoints)
+			{
+				for (auto& method : std::get<1>(endpoint.second))
+				{
+					res << method << " " << endpoint.first << "\n";
 				}
 			}
 		}
 	);
 
-	served::net::server server("127.0.0.1", "8000", mux);
+	std::cout << "Try this example with:" << std::endl;
+	std::cout << " curl http://localhost:8123/endpoints" << std::endl;
+
+	served::net::server server("127.0.0.1", "8123", mux);
 	server.run(10);
 
 	return (EXIT_SUCCESS);

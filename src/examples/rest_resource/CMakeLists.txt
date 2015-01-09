@@ -21,16 +21,16 @@
 #
 # Locate project sources
 #
-FILE (GLOB_RECURSE rest_resource_plugin_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp)
+FILE (GLOB_RECURSE eg_rest_resource_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp)
 
 #
 # Configure common project settings
 #
-SET (rest_resource_plugin_LIBS ${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+SET (eg_rest_resource_LIBS ${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 #
 # Executable build rules
 #
-ADD_EXECUTABLE (rest_resource_plugin ${rest_resource_plugin_SRCS})
-TARGET_LINK_LIBRARIES (rest_resource_plugin ${rest_resource_plugin_LIBS})
-INSTALL (TARGETS rest_resource_plugin DESTINATION bin)
+ADD_EXECUTABLE (eg_rest_resource ${eg_rest_resource_SRCS})
+TARGET_LINK_LIBRARIES (eg_rest_resource ${eg_rest_resource_LIBS})
+INSTALL (TARGETS eg_rest_resource DESTINATION bin)

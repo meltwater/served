@@ -21,16 +21,16 @@
 #
 # Locate project sources
 #
-FILE (GLOB_RECURSE request_logger_plugin_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp)
+FILE (GLOB_RECURSE eg_request_logger_plugin_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp)
 
 #
 # Configure common project settings
 #
-SET (request_logger_plugin_LIBS ${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+SET (eg_request_logger_plugin_LIBS ${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 #
 # Executable build rules
 #
-ADD_EXECUTABLE (request_logger_plugin ${request_logger_plugin_SRCS})
-TARGET_LINK_LIBRARIES (request_logger_plugin ${request_logger_plugin_LIBS})
-INSTALL (TARGETS request_logger_plugin DESTINATION bin)
+ADD_EXECUTABLE (eg_request_logger_plugin ${eg_request_logger_plugin_SRCS})
+TARGET_LINK_LIBRARIES (eg_request_logger_plugin ${eg_request_logger_plugin_LIBS})
+INSTALL (TARGETS eg_request_logger_plugin DESTINATION bin)

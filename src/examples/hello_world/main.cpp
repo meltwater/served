@@ -21,40 +21,25 @@
  */
 
 #include <served/served.hpp>
-#include <served/request_error.hpp>
-#include <served/status.hpp>
-#include <served/plugins.hpp>
 
+/* hello_world example
+ *
+ * This is the most basic example of served in action.
+ */
 int main(int argc, char const* argv[])
 {
-	std::function<void()> stop_call;
-
 	served::multiplexer mux;
-
-	mux.use_after(served::plugin::access_log);
 
 	mux.handle("/hello")
 		.get([](served::response & res, const served::request & req) {
 			res << "Hello world";
 		});
 
-	mux.handle("/throw/{variable}")
-		.get([](served::response & res, const served::request & req) {
-			throw served::request_error(served::status_4XX::BAD_REQUEST, req.params["variable"]);
-		});
+	std::cout << "Try this example with:" << std::endl;
+	std::cout << " curl http://localhost:8123/hello" << std::endl;
 
-	mux.handle("/shutdown")
-		.get([&](served::response & res, const served::request & req) {
-			stop_call();
-		});
-
-	served::net::server server("127.0.0.1", "8080", mux);
-	stop_call = [&](){
-		server.stop();
-	};
-
-	// Run with a thread pool of 10 threads.
-	server.run(10);
+	served::net::server server("127.0.0.1", "8123", mux);
+	server.run(10); // Run with a pool of 10 threads.
 
 	return 0;
 }

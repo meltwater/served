@@ -21,16 +21,16 @@
 #
 # Locate project sources
 #
-FILE (GLOB_RECURSE form_data_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp)
+FILE (GLOB_RECURSE eg_form_data_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp)
 
 #
 # Configure common project settings
 #
-SET (form_data_LIBS ${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+SET (eg_form_data_LIBS ${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 #
 # Executable build rules
 #
-ADD_EXECUTABLE (form_data ${form_data_SRCS})
-TARGET_LINK_LIBRARIES (form_data ${form_data_LIBS})
-INSTALL (TARGETS form_data DESTINATION bin)
+ADD_EXECUTABLE (eg_form_data ${eg_form_data_SRCS})
+TARGET_LINK_LIBRARIES (eg_form_data ${eg_form_data_LIBS})
+INSTALL (TARGETS eg_form_data DESTINATION bin)

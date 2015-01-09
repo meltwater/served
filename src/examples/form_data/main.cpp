@@ -22,24 +22,31 @@
 
 #include <served/served.hpp>
 
+/* form_data example
+ *
+ * This example demonstrates how you might specify and validate a form endpoint.
+ */
 int main(int argc, char const* argv[])
 {
 	served::multiplexer mux;
 	mux.handle("/form_post")
 		.post([&](served::response & res, const served::request & req) {
 			// check headers for the correct content type
-			if (req.header("content-type") != "application/x-www-form-urlencoded") {
-				// return 400 bad request if the content type is wrong for this
-				// example.
+			if ( req.header("content-type") != "application/x-www-form-urlencoded" )
+			{
+				// return 400 bad request if the content type is wrong for this example.
 				served::response::stock_reply(400, res);
-			} else {
-				for ( const auto & query_param : req.query ) {
-					res << "Key: " << query_param.first << ", Value: " << query_param.second << "\n";
-				}
+			}
+			else
+			{
+				res << "Body data: " << req.body();
 			}
 		});
 
-	served::net::server server("0.0.0.0", "8080", mux);
+	std::cout << "Try this example with:" << std::endl;
+	std::cout << " curl http://localhost:8123/form_post -d \"hello world!\"" << std::endl;
+
+	served::net::server server("0.0.0.0", "8123", mux);
 	server.run(10);
 
 	return (EXIT_SUCCESS);

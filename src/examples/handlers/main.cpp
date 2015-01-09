@@ -28,22 +28,14 @@
 
 #include <unistd.h>
 
+/* handlers example
+ *
+ * This is a demonstration of using various handler mechanisms, including REST parameters with rejex
+ * based value validation.
+ */
 int main(int argc, char const* argv[])
 {
 	served::multiplexer mux;
-
-	// GET /handlers
-	mux.handle("/handlers")
-		.get([](served::response & res, const served::request & req) {
-			res << "You got served";
-		});
-
-	// GET /handlers/{id}
-	mux.handle("/handlers/{id}")
-		.get([](served::response & res, const served::request & req) {
-			res << "id: ";
-			res << req.params["id"];
-		});
 
 	// GET or POST /handlers/{id}/{number:[0-9]+}
 	mux.handle("/handlers/{id}/{number:[0-9]+}")
@@ -62,9 +54,26 @@ int main(int argc, char const* argv[])
 			std::cout << req.body() << std::endl;
 		});
 
-	served::net::server server("127.0.0.1", "8000", mux);
-	server.set_read_timeout(5000);
-	server.set_max_request_bytes(4096);
+	// GET /handlers/{id}
+	mux.handle("/handlers/{id}")
+		.get([](served::response & res, const served::request & req) {
+			res << "id: ";
+			res << req.params["id"];
+		});
+
+	// GET /handlers
+	mux.handle("/handlers")
+		.get([](served::response & res, const served::request & req) {
+			res << "You got served";
+		});
+
+	std::cout << "Try this example with:" << std::endl;
+	std::cout << " curl http://localhost:8123/handlers" << std::endl;
+	std::cout << " curl http://localhost:8123/handlers/test" << std::endl;
+	std::cout << " curl http://localhost:8123/handlers/test/10" << std::endl;
+	std::cout << " curl http://localhost:8123/handlers/test/NaN" << std::endl;
+
+	served::net::server server("127.0.0.1", "8123", mux);
 	server.run(10);
 
 	return (EXIT_SUCCESS);

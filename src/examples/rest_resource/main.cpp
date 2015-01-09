@@ -28,6 +28,10 @@
 
 #include <unistd.h>
 
+/* rest_resource example
+ *
+ * This example demonstrates how you might use served to create REST resources.
+ */
 int main(int argc, char const* argv[])
 {
 	served::multiplexer mux;
@@ -39,6 +43,7 @@ int main(int argc, char const* argv[])
 		.post([](served::response & res, const served::request & req) {
 			// create customer
 		});
+
 	mux.handle("/customers/{id}")
 		.get([](served::response & res, const served::request & req) {
 			// read customer req.params["id"]
@@ -50,7 +55,7 @@ int main(int argc, char const* argv[])
 			// delete customer req.params["id"]
 		});
 
-	served::net::server server("127.0.0.1", "8000", mux);
+	served::net::server server("127.0.0.1", "8123", mux);
 	server.run(10);
 
 	return (EXIT_SUCCESS);

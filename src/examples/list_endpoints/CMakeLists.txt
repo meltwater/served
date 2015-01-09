@@ -21,16 +21,16 @@
 #
 # Locate project sources
 #
-FILE (GLOB_RECURSE list_endpoints_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp)
+FILE (GLOB_RECURSE eg_list_endpoints_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp)
 
 #
 # Configure common project settings
 #
-SET (list_endpoints_LIBS ${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+SET (eg_list_endpoints_LIBS ${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 #
 # Executable build rules
 #
-ADD_EXECUTABLE (list_endpoints ${list_endpoints_SRCS})
-TARGET_LINK_LIBRARIES (list_endpoints ${list_endpoints_LIBS})
-INSTALL (TARGETS list_endpoints DESTINATION bin)
+ADD_EXECUTABLE (eg_list_endpoints ${eg_list_endpoints_SRCS})
+TARGET_LINK_LIBRARIES (eg_list_endpoints ${eg_list_endpoints_LIBS})
+INSTALL (TARGETS eg_list_endpoints DESTINATION bin)

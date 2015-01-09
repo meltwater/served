@@ -26,8 +26,16 @@
 
 #include <iostream>
 
-#include <unistd.h>
-
+/* request_logger_plugin example
+ *
+ * Here we demonstrate how you can implement a simple request logger using the mux.use_before plugin
+ * register. The method gets called before each request is handled.
+ *
+ * If you want to log requests apache style then this logger is already implemented in
+ * src/served/plugins.hpp, it has to be registered with mux.use_after, like so:
+ *
+ * mux.use_after(served::plugins::access_log);
+ */
 int main(int argc, char const* argv[])
 {
 	served::multiplexer mux;
@@ -46,6 +54,10 @@ int main(int argc, char const* argv[])
 	mux.use_before([](served::response & res, const served::request & req) {
 		std::cout << "request: " << req.url().URI() << std::endl;
 	});
+
+	std::cout << "Try this example with:" << std::endl;
+	std::cout << " curl http://localhost:1337/served" << std::endl;
+	std::cout << " curl http://localhost:1337/itson" << std::endl;
 
 	served::net::server server("127.0.0.1", "1337", mux);
 	server.run(10);

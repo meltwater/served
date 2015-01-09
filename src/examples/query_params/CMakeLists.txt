@@ -18,19 +18,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# 
+#
 # Locate project sources
 #
-FILE (GLOB_RECURSE http2zmq_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp)
+FILE (GLOB_RECURSE eg_query_params_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp)
 
 #
 # Configure common project settings
 #
-SET (http2zmq_LIBS ${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${ZeroMQ_LIBRARIES})
+SET (eg_query_params_LIBS ${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 #
 # Executable build rules
 #
-ADD_EXECUTABLE (http2zmq ${http2zmq_SRCS})
-TARGET_LINK_LIBRARIES (http2zmq ${http2zmq_LIBS})
-INSTALL (TARGETS http2zmq DESTINATION bin)
+ADD_EXECUTABLE (eg_query_params ${eg_query_params_SRCS})
+TARGET_LINK_LIBRARIES (eg_query_params ${eg_query_params_LIBS})
+INSTALL (TARGETS eg_query_params DESTINATION bin)

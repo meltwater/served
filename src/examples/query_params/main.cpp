@@ -21,29 +21,30 @@
  */
 
 #include <served/served.hpp>
-#include <served/request_error.hpp>
-#include <served/status.hpp>
 
-#include <zmq.h>
-
-#include <iostream>
-#include <unistd.h>
-
-void init_zmq() {
-	// TODO: create push socket
-	// TODO: create sub socket
-}
-
+/* query_params example
+ *
+ * This example demonstrates how you can iterate and locate query parameters from the request URL,
+ * since the query string is already parsed for you.
+ */
 int main(int argc, char const* argv[])
 {
 	served::multiplexer mux;
-	mux.handle("/{part1}")
-		.get([](served::response & res, const served::request & req) {
-			// TODO: convert to zmq message
-			// TODO: convert to http response
+	mux.handle("/query")
+		.get([&](served::response & res, const served::request & req) {
+			// iterate all query params
+			for ( const auto & query_param : req.query )
+			{
+				res << "Key: " << query_param.first << ", Value: " << query_param.second << "\n";
+			}
+			// get a specific param value, returns an empty string if it doesn't exist.
+			res << "test: " << req.query["test"] << "\n";
 		});
 
-	served::net::server server("127.0.0.1", "8080", mux);
+	std::cout << "Try this example with:" << std::endl;
+	std::cout << " curl \"http://localhost:8123/query?test=example&other=param\"" << std::endl;
+
+	served::net::server server("0.0.0.0", "8123", mux);
 	server.run(10);
 
 	return (EXIT_SUCCESS);
