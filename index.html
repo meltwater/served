@@ -1,0 +1,179 @@
+<html>
+	<head>
+		<meta charset="UTF-8">
+        <meta name="description" content="A C++11 library for quickly building RESTful web servers">
+        <meta name="robots" content="index,follow">
+        <meta name="keywords" content="Served, C++, C++ HTTP Library, C++11 REST">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Served</title>
+        <link rel="shortcut icon" href="favicon.ico">
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="css/ds-font.css?v=v1.1.0-17-g3ce5df2">
+        <link rel="stylesheet" type="text/css" href="css/creepy.css?v=v1.1.0-17-g3ce5df2">
+        <script type="text/javascript" src="js/creepy.js?v=v1.1.0-17-g3ce5df2"></script>
+	</head>
+	<body>
+		<div class="light-blue">
+			<div class="container">
+				<div class="cols-2">
+					<div class="pad-s mid-align-container">
+						<h1 class="logo-tight">Served</h1>
+						<p><strong>A C++11 library for quickly building RESTful web servers.</strong></p>
+						<br class="show-m show-l">
+						<div class="show-m show-l">
+							<a target="_blank" class="margin-s button dark-grey" href="https://github.com/datasift/served">
+								<strong><i class="fa fa-github-alt"></i> CODE</strong>
+							</a>
+							<a target="_blank" class="margin-s button dark-grey" href="https://github.com/datasift/served/tree/master/docs">
+								<strong><i class="fa fa-book"></i> DOCS</strong>
+							</a>
+							<a target="_blank" class="margin-s button dark-grey" href="https://github.com/datasift/served/tree/master/src/examples">
+								<strong><i class="fa fa-code"></i> E.G.</strong>
+							</a>
+						</div>
+					</div>
+				</div>
+				<div class="cols-2 mid-align-container">
+					<img style="vertical-align: middle" class="img-m" src="images/served-logo.png" alt="Served">
+				</div>
+				<div class="cols-4 show-s show-xs mid-align-container">
+					<a target="_blank" class="margin-s button dark-grey" href="https://github.com/datasift/served">
+						<strong><i class="fa fa-github-alt"></i> CODE</strong>
+					</a>
+					<a target="_blank" class="margin-s button dark-grey" href="https://github.com/datasift/served/tree/master/docs">
+						<strong><i class="fa fa-book"></i> DOCS</strong>
+					</a>
+					<a target="_blank" class="margin-s button dark-grey" href="https://github.com/datasift/served/tree/master/src/examples">
+						<strong><i class="fa fa-code"></i> E.G.</strong>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="white">
+			<div class="container white">
+				<div class="cols-4">
+					<div class="p-margins pad-l">
+						<h2 class="mid-align-container">Focus on simplicity</h2>
+						<p><strong>
+Served was designed primarily to create RESTful C++ web services with ease and simplicity.
+						</strong></p>
+						<p>
+	To demonstrate, here's an example hello world application:
+						</p>
+<pre><code class="lang-cpp"><span class="hljs-preprocessor">#<span class="hljs-keyword">include</span> &lt;served/served.hpp&gt;</span>
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> <span class="hljs-keyword">const</span>* argv[])</span> </span>{
+	<span class="hljs-comment">// Create a multiplexer for handling requests</span>
+	served::multiplexer mux;
+
+	<span class="hljs-comment">// GET /hello</span>
+	mux.handle(<span class="hljs-string">"/hello"</span>)
+		.get([](served::response &amp; res, <span class="hljs-keyword">const</span> served::request &amp; req) {
+			res &lt;&lt; <span class="hljs-string">"Hello world!"</span>;
+		});
+
+	<span class="hljs-comment">// Create the server and run with 10 handler threads.</span>
+	served::net::<span class="hljs-function">server <span class="hljs-title">server</span><span class="hljs-params">("127.0.0.1", "8080", mux)</span></span>;
+	server.run(<span class="hljs-number">10</span>);
+
+	<span class="hljs-keyword">return</span> (EXIT_SUCCESS);
+}
+</code></pre>
+<pre>
+$ curl http://localhost:8080/hello
+Hello world!
+</pre>
+					</div>
+				</div>
+			</div>
+		</div>
+        <div class="ash">
+			<div class="container">
+				<div class="cols-4">
+					<div class="p-margins pad-l">
+						<h2 class="mid-align-container">URL Parameters out of the box</h2>
+						<p><strong>
+Served supports URL parameters for easy RESTification.
+						</strong></p>
+<pre class="white"><code class="lang-cpp">mux.handle(<span class="hljs-string">"/users/{id}"</span>)
+	.get([](served::response &amp; res, <span class="hljs-keyword">const</span> served::request &amp; req) {
+		res &lt;&lt; <span class="hljs-string">"User: "</span> &lt;&lt; req.params[<span class="hljs-string">"id"</span>];
+	});
+</code></pre>
+<pre class="white">
+$ curl http://localhost:8080/users/bob
+User: bob
+</pre>
+					<p><strong>
+	You can also specify regex restrictions on those parameters.
+					</strong></p>
+<pre class="white"><code class="lang-cpp">mux.handle(<span class="hljs-string">"/users/{id:[0-9]+}"</span>)
+	.get([](served::response &amp; res, <span class="hljs-keyword">const</span> served::request &amp; req) {
+		res &lt;&lt; <span class="hljs-string">"Num id: "</span> &lt;&lt; req.params[<span class="hljs-string">"id"</span>];
+	});
+
+mux.handle(<span class="hljs-string">"/users/{id:[a-zA-Z]+}"</span>)
+	.get([](served::response &amp; res, <span class="hljs-keyword">const</span> served::request &amp; req) {
+		res &lt;&lt; <span class="hljs-string">"Text id: "</span> &lt;&lt; req.params[<span class="hljs-string">"id"</span>];
+	});
+</code></pre>
+<pre class="white">
+$ curl http://localhost:8080/users/1234
+Num id: 1234
+
+$ curl http://localhost:8080/users/test
+Text id: test
+</pre>
+					</div>
+				</div>
+			</div>
+		</div>
+        <div class="white">
+			<div class="container">
+				<div class="cols-1-3">
+					<div class="pad-m mid-align-container">
+						<h2>There's more!</h2>
+						<p><strong>
+Read the documentation:
+						</strong></p>
+						<a class="" href="https://github.com/datasift/served/tree/master/docs">
+							<i class="extra-large-icon fa fa-bookmark"></i>
+						</a>
+					</div>
+				</div>
+				<div class="cols-1-3">
+					<div class="pad-m mid-align-container">
+						<h2>MIT License</h2>
+						<p><strong>
+Find it here:
+						</strong></p>
+						<a class="" href="https://github.com/datasift/served/blob/master/LICENSE">
+							<i class="extra-large-icon fa fa-file-text-o"></i>
+						</a>
+					</div>
+				</div>
+				<div class="cols-1-3">
+					<div class="pad-m mid-align-container">
+						<h2>Try it</h2>
+						<p><strong>
+The code is on github:
+						</strong></p>
+						<a class="" href="https://github.com/datasift/served">
+							<i class="extra-large-icon fa fa-github"></i>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+        <div class="dark-grey">
+			<div class="container">
+				<div class="cols-4 mid-align-container small-print">
+					<a href="http://datasift.com" alt="datasift">
+						<img style="height: 20px; vertical-align: middle; padding-right: 1em" src="images/ds_logo.png" alt="DataSift">
+					</a>
+					<i class="fa fa-copyright"></i> Copyright DataSift Limited 2014
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
