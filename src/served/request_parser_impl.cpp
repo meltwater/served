@@ -35,6 +35,16 @@ request_parser_impl::http_field( const char * data
                                , size_t       vlen  )
 {
 	std::string header(field, flen), val(value, vlen);
+
+	/* If multiple matching header field names are sent these must be safe to append via comma
+	 * ref: (http://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.2)
+	 */
+	std::string existing = _request.header(header);
+	if ( !existing.empty() )
+	{
+		val = existing + "," + val;
+	}
+
 	_request.set_header(header, val);
 }
 

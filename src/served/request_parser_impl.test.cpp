@@ -35,6 +35,9 @@ TEST_CASE("request parser impl can parse http requests", "[request_parser_impl]"
 		"Host: api.datasift.com\r\n"
 		"Content-Type: text/xml; charset=utf-8\r\n"
 		"Content-Length: 15\r\n"
+		"X-Example-Dup: val1\r\n"
+		"X-Example-Dup: val2\r\n"
+		"X-Example-Dup: val3\r\n"
 		"\r\n"
 		"you got served!";
 
@@ -66,6 +69,7 @@ TEST_CASE("request parser impl can parse http requests", "[request_parser_impl]"
 			REQUIRE(req.header("Host")           == "api.datasift.com");
 			REQUIRE(req.header("Content-Type")   == "text/xml; charset=utf-8");
 			REQUIRE(req.header("CONTENT-LENGTH") == "15");
+			REQUIRE(req.header("X-EXAMPLE-DUP")  == "val1,val2,val3");
 		}
 	}
 }
