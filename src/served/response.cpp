@@ -102,11 +102,14 @@ response::to_buffer()
 	{
 		ss << std::get<0>(header.second) << ": " << std::get<1>(header.second) << "\r\n";
 	}
+
 	// If content length not specified we check body size
 	if ( _headers.find("content-length") == _headers.end() )
 	{
 		ss << "Content-Length: " << body_size() << "\r\n";
 	}
+
+	ss << "X-Clacks-Overhead: GNU Terry Pratchett\r\n";
 
 	ss << "\r\n";
 	ss << _body.str();
