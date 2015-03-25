@@ -59,7 +59,17 @@ request_parser_impl::parse(const char *data, size_t len)
 	}
 	else if ( _status == status_type::READ_HEADER )
 	{
-		size_t _len = execute(data, len);
+		size_t extra_len = 0;
+		try
+		{
+			extra_len = execute(data, len);
+		}
+		catch (...)
+		{
+			_status = status_type::ERROR;
+			return _status;
+		}
+
 		request_parser::status status = get_status();
 
 		if ( request_parser::FINISHED == status )
@@ -80,7 +90,7 @@ request_parser_impl::parse(const char *data, size_t len)
 			else if ( 0 != _body_expected )
 			{
 				_status = request_parser_impl::READ_BODY;
-				parse_body(data + _len, len - _len);
+				parse_body(data + extra_len, len - extra_len);
 			}
 			else
 			{

@@ -74,6 +74,43 @@ TEST_CASE("request parser impl can parse http requests", "[request_parser_impl]"
 	}
 }
 
+TEST_CASE("request parser impl can parse bad requests", "[request_parser_impl]")
+{
+	SECTION("Bad HTTP method")
+	{
+		served::request req;
+		served::request_parser_impl parser(req);
+		const char* request =
+			"OGERTY /you/got/served HTTP/1.1\r\n"
+			"Host: api.datasift.com\r\n"
+			"Content-Type: text/xml; charset=utf-8\r\n"
+			"Content-Length: 15\r\n"
+			"\r\n"
+			"you got played!";
+
+		auto status = parser.parse(request, strlen(request));
+
+		REQUIRE(status == served::request_parser_impl::ERROR);
+	}
+
+	SECTION("Unrecognised HTTP protocol")
+	{
+		served::request req;
+		served::request_parser_impl parser(req);
+		const char* request =
+			"POST /you/got/served HTTPZ/-09\r\n"
+			"Host: api.datasift.com\r\n"
+			"Content-Type: text/xml; charset=utf-8\r\n"
+			"Content-Length: 15\r\n"
+			"\r\n"
+			"you got played!";
+
+		auto status = parser.parse(request, strlen(request));
+
+		REQUIRE(status == served::request_parser_impl::ERROR);
+	}
+}
+
 TEST_CASE("request parser impl can handle utf-8", "[request_parser_impl]")
 {
 	served::request req;
