@@ -527,6 +527,59 @@ TEST_CASE("multiplexer test plugins", "[mux]")
 	}
 }
 
+TEST_CASE("multiplexer test wrapped plugins", "[mux]")
+{
+	SECTION("wrapped plugin deterministic ordering")
+	{
+		int touches = 0;
+		served::multiplexer mux;
+
+		mux.handle("/test")
+			.get([&](served::response & res, const served::request & req) {
+				if ( touches == 3 )
+				{
+					touches++;
+				}
+			});
+
+		mux.use_wrapper([&](served::response & res, served::request & req, std::function<void()> func) {
+			if ( touches == 0 )
+			{
+				touches++;
+			}
+			func();
+		});
+		mux.use_wrapper([&](served::response & res, served::request & req, std::function<void()> func) {
+			if ( touches == 1 )
+			{
+				touches++;
+			}
+			func();
+		});
+		mux.use_wrapper([&](served::response & res, served::request & req, std::function<void()> func) {
+			if ( touches == 2 )
+			{
+				touches++;
+			}
+			func();
+		});
+
+		served::response res;
+		served::request req;
+		served::uri url;
+
+		url.set_path("/test");
+		req.set_destination(url);
+		req.set_method(served::method::GET);
+
+		mux.forward_to_handler(res, req);
+		mux.on_request_handled(res, req);
+
+		CHECK(touches == 4);
+	}
+}
+
+
 bool search(std::vector<std::string> & vec, std::string s)
 {
 	for ( auto & v : vec )
