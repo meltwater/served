@@ -55,6 +55,12 @@ multiplexer::use_after(served_plugin_req_handler plugin)
 	_plugin_post_handlers.push_back(plugin);
 }
 
+void
+multiplexer::use_wrapper(served_plugin_req_wrapper plugin)
+{
+	_plugin_wrappers.push_back(plugin);
+}
+
 //  -----  path parsing  -----
 
 std::vector<std::string>
@@ -136,10 +142,8 @@ multiplexer::handle(const std::string & path, const std::string info /* = "" */)
 	return std::get<1>(_handler_candidates.back());
 }
 
-//  -----  request forwarding  -----
-
 void
-multiplexer::forward_to_handler(served::response & res, served::request & req)
+multiplexer::handler(served::response & res, served::request & req)
 {
 	bool pattern_matched = false;
 
@@ -237,6 +241,34 @@ multiplexer::forward_to_handler(served::response & res, served::request & req)
 	if ( ! pattern_matched )
 	{
 		throw served::request_error(served::status_4XX::NOT_FOUND, "Path not found");
+	}
+}
+
+//  -----  request forwarding  -----
+
+void
+multiplexer::forward_to_handler(served::response & res, served::request & req)
+{
+	if ( _plugin_wrappers.size() > 0 )
+	{
+		int wrapper_index = 0;
+		std::function<void()> iterate_wrappers = [&]() {
+			if ( wrapper_index == _plugin_wrappers.size() )
+			{
+				handler(res, req);
+			}
+			else
+			{
+				auto wrapper = _plugin_wrappers[wrapper_index];
+				wrapper_index++;
+				wrapper(res, req, iterate_wrappers);
+			}
+		};
+		iterate_wrappers();
+	}
+	else
+	{
+		handler(res, req);
 	}
 }
 
