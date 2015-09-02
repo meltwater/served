@@ -149,4 +149,4 @@ Pull requests are welcome.
 
 ## Copyright
 
-See [LICENSE](LICENSE) document
+See [LICENSE.md](LICENSE.md) document
