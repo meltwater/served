@@ -1,0 +1,54 @@
+language: cpp
+
+os:
+  - linux
+  
+compiler:
+  - clang
+
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+  - sudo apt-get update
+  - sudo apt-get install g++-4.8
+  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 90
+  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 90
+  - sudo apt-get install libstdc++-4.8-dev
+  - sudo apt-get install git
+  - sudo apt-add-repository -y ppa:boost-latest/ppa
+  - sudo apt-get update
+  - sudo apt-get install -y libboost1.55-all-dev
+  - export CMAKE_VERSION="3.1.0"
+  - wget "http://www.cmake.org/files/v3.1/cmake-${CMAKE_VERSION}.tar.gz"
+  - openssl sha1 "cmake-${CMAKE_VERSION}.tar.gz"
+  - tar xf "cmake-${CMAKE_VERSION}.tar.gz"
+  - cd "cmake-${CMAKE_VERSION}"
+  - ./bootstrap --prefix=~
+  - make
+  - make install
+  - export PATH="~/bin:${PATH}"
+  - cd ..
+  - which cmake
+  - cmake --version
+  - which g++
+  - g++ -v
+  - git clone https://github.com/google/re2.git
+  - cd re2
+  - git checkout fcdcf25d1a3209355411c57c342e8db115fc9582
+  - make
+  - make test
+  - sudo make install
+  - sudo make testinstall
+  - cd ..
+
+script:
+  - mkdir build && cd build
+  - cmake .. && make
+
+notifications:
+  email:
+    recipients:
+      - henderson.geoffrey@gmail.com
+    on_success: change
+    on_failure: change

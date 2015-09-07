@@ -3,6 +3,8 @@ Served
 
 ![Served Logo](served-logo.png)
 
+[![Build Status](https://travis-ci.org/bowlofstew/served.png)](https://travis-ci.org/bowlofstew/served)
+
 ## Overview
 
 Served is a C++ library for building high performance RESTful web servers.
