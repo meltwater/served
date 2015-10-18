@@ -46,7 +46,7 @@ class connection
 	: public std::enable_shared_from_this<connection>
 {
 public:
-	enum status_type { READING = 0, DONE };
+	enum status_type { READING = 0, PENDING_PROCESS, PROCESSING, PENDING_WRITE, WRITING, DONE };
 
 private:
 	boost::asio::io_service &    _io_service;
