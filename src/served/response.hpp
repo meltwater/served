@@ -26,7 +26,8 @@
 #include <sstream>
 #include <iostream>
 #include <map>
-
+#include <functional>
+ 
 #include <served/status.hpp>
 
 namespace served {
@@ -138,6 +139,8 @@ public:
 	 * @param res the response object to modify
 	 */
 	static void stock_reply(int status_code, response & res);
+
+	std::function<void()> onComplete;
 };
 
 } // served

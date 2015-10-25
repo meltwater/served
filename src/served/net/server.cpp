@@ -67,6 +67,10 @@ server::server( const std::string & address
 	do_accept();
 }
 
+//The user program must call this function
+//do_accept() will create an outstanding asynchronous operation by calling async_accept
+//those thread will handle both reading and writing socket, but not handle processing socket
+//processing socket will be handled by TBB task
 void
 server::run(int n_threads /* = 1 */)
 {

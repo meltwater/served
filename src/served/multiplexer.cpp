@@ -142,6 +142,7 @@ multiplexer::handle(const std::string & path, const std::string info /* = "" */)
 	return std::get<1>(_handler_candidates.back());
 }
 
+//Only one handler will be called
 void
 multiplexer::handler(served::response & res, served::request & req)
 {

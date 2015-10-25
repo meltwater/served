@@ -36,6 +36,7 @@
 namespace served {
 
 typedef std::function<void(response &, request &)>                        served_plugin_req_handler;
+typedef std::function<void(response const &, request const &)>            served_plugin_req_handler_const;
 typedef std::function<void(response &, request &, std::function<void()>)> served_plugin_req_wrapper;
 
 /*
@@ -53,6 +54,7 @@ typedef std::function<void(response &, request &, std::function<void()>)> served
 class multiplexer
 {
 	typedef std::vector<served_plugin_req_handler>                                   plugin_handler_list;
+	typedef std::vector<served_plugin_req_handler_const>                             plugin_handler_const_list;
 	typedef std::vector<served_plugin_req_wrapper>                                   plugin_wrapper_list;
 
 	typedef std::vector<served::mux::segment_matcher_ptr>                            path_compiled_segments;
@@ -64,7 +66,7 @@ class multiplexer
 
 	path_handler_candidates _handler_candidates;
 	plugin_handler_list     _plugin_pre_handlers;
-	plugin_handler_list     _plugin_post_handlers;
+	plugin_handler_const_list     _plugin_post_handlers;
 	plugin_wrapper_list     _plugin_wrappers;
 
 public:
@@ -110,7 +112,7 @@ public:
 	 *
 	 * @param plugin the plugin request handler
 	 */
-	void use_after (served_plugin_req_handler plugin);
+	void use_after (served_plugin_req_handler_const plugin);
 
 	/*
 	 * Register a plugin as a wrapper around the actual handler.
@@ -121,7 +123,8 @@ public:
 	 * handled and add that measure to a header in the response.
 	 *
 	 * Multiple wrappers can be defined, and they will be nested with the first defined being
-	 * the first called.
+	 * the first called. "Nested" means the first defined wrapper contains the the second wrapper
+	 * etc
 	 *
 	 * @param plugin the plugin wrapper request handler
 	 */

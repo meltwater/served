@@ -25,7 +25,8 @@
 
 #include <set>
 #include <mutex>
-
+#include <tbb/task_group.h>
+ 
 #include "connection.hpp"
 
 namespace served { namespace net {
@@ -40,7 +41,7 @@ class connection_manager
 {
 	std::set<connection_ptr> _connections;
 	std::mutex               _connections_mutex;
-
+	tbb:task_group 			 m_tg;
 public:
 	connection_manager(const connection_manager&) = delete;
 

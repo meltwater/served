@@ -32,6 +32,7 @@
 
 #include <array>
 #include <memory>
+#include <tbb/task_group.h>
 
 namespace served { namespace net {
 
@@ -46,7 +47,7 @@ class connection
 	: public std::enable_shared_from_this<connection>
 {
 public:
-	enum status_type { READING = 0, PENDING_PROCESS, PROCESSING, PENDING_WRITE, WRITING, DONE };
+	enum status_type { READING = 0, PROCESSING, WRITING, DONE };
 
 private:
 	boost::asio::io_service &    _io_service;
@@ -62,7 +63,7 @@ private:
 	int                          _write_timeout;
 	boost::asio::deadline_timer  _read_timer;
 	boost::asio::deadline_timer  _write_timer;
-
+	tbb::task_group & 		 	 m_tg;
 public:
 	connection(const connection&) = delete;
 
@@ -85,7 +86,8 @@ public:
 	                   , multiplexer        &         handler
 	                   , size_t                       max_request_size_bytes
 	                   , int                          read_timeout
-	                   , int                          write_timeout );
+	                   , int                          write_timeout 
+	                   , task_group			&		  tg);
 
 	/*
 	 * Prompts the connection to start reading from its TCP socket.
