@@ -37,7 +37,6 @@ namespace served {
 
 typedef std::function<void(response &, request &)>                        served_plugin_req_handler;
 typedef std::function<void(response const &, request const &)>            served_plugin_req_handler_const;
-typedef std::function<void(response &, request &, std::function<void()>)> served_plugin_req_wrapper;
 
 /*
  * Used to register endpoint handlers.
@@ -55,7 +54,6 @@ class multiplexer
 {
 	typedef std::vector<served_plugin_req_handler>                                   plugin_handler_list;
 	typedef std::vector<served_plugin_req_handler_const>                             plugin_handler_const_list;
-	typedef std::vector<served_plugin_req_wrapper>                                   plugin_wrapper_list;
 
 	typedef std::vector<served::mux::segment_matcher_ptr>                            path_compiled_segments;
 	typedef std::tuple<path_compiled_segments, served::methods_handler, std::string> path_handler_candidate;
@@ -67,7 +65,6 @@ class multiplexer
 	path_handler_candidates _handler_candidates;
 	plugin_handler_list     _plugin_pre_handlers;
 	plugin_handler_const_list     _plugin_post_handlers;
-	plugin_wrapper_list     _plugin_wrappers;
 
 public:
 	//  -----  constructors  -----
@@ -113,22 +110,6 @@ public:
 	 * @param plugin the plugin request handler
 	 */
 	void use_after (served_plugin_req_handler_const plugin);
-
-	/*
-	 * Register a plugin as a wrapper around the actual handler.
-	 *
-	 * The wrapper is responsible for calling the actual request handler, this is useful for when
-	 * a plugin needs full visibility of the result from a handler before the response is
-	 * dispatched. For example, this could be used to record the time taken for a request to be
-	 * handled and add that measure to a header in the response.
-	 *
-	 * Multiple wrappers can be defined, and they will be nested with the first defined being
-	 * the first called. "Nested" means the first defined wrapper contains the the second wrapper
-	 * etc
-	 *
-	 * @param plugin the plugin wrapper request handler
-	 */
-	 void use_wrapper(served_plugin_req_wrapper);
 
 	//  -----  http request handlers  -----
 
