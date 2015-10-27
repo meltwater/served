@@ -26,7 +26,7 @@ FILE (GLOB_RECURSE eg_hello_world_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CM
 #
 # Configure common project settings
 #
-SET (eg_hello_world_LIBS ${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+SET (eg_hello_world_LIBS ${PROJECT_NAME} ${Boost_LIBRARIES} ${TBB_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 #
 # Executable build rules
