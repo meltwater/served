@@ -50,7 +50,7 @@ multiplexer::use_before(served_plugin_req_handler plugin)
 }
 
 void
-multiplexer::use_after(served_plugin_req_handler plugin)
+multiplexer::use_after(served_plugin_req_handler_const plugin)
 {
 	_plugin_post_handlers.push_back(plugin);
 }

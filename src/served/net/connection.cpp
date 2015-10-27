@@ -38,7 +38,7 @@ connection::connection( boost::asio::io_service &    io_service
                       , size_t                       max_req_size_bytes
                       , int                          read_timeout
                       , int                          write_timeout
-                      , tbb::task_group	&			 tg;
+                      , tbb::task_group	&			 tg
                       )
 	: _io_service(io_service)
 	, _status(status_type::READING)

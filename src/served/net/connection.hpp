@@ -87,7 +87,7 @@ public:
 	                   , size_t                       max_request_size_bytes
 	                   , int                          read_timeout
 	                   , int                          write_timeout 
-	                   , task_group			&		  tg);
+	                   , tbb::task_group    &		  tg);
 
 	/*
 	 * Prompts the connection to start reading from its TCP socket.
@@ -109,6 +109,8 @@ private:
 	 * An asynchronous call that triggers a TCP write to the socket.
 	 */
 	void do_write();
+
+	void do_write_1();
 };
 
 typedef std::shared_ptr<connection> connection_ptr;

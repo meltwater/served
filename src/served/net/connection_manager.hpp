@@ -41,8 +41,9 @@ class connection_manager
 {
 	std::set<connection_ptr> _connections;
 	std::mutex               _connections_mutex;
-	tbb:task_group 			 m_tg;
 public:
+	tbb::task_group          m_tg;
+
 	connection_manager(const connection_manager&) = delete;
 
 	connection_manager& operator=(const connection_manager&) = delete;

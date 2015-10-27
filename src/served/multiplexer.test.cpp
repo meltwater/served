@@ -505,7 +505,7 @@ TEST_CASE("multiplexer test plugins", "[mux]")
 				touches++;
 			}
 		});
-		mux.use_after([&](served::response & res, const served::request & req) {
+		mux.use_after([&](const served::response & res, const served::request & req) {
 			if ( touches == 2 )
 			{
 				touches++;
