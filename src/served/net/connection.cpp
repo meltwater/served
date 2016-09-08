@@ -54,7 +54,15 @@ connection::connection( boost::asio::io_service &    io_service
 void
 connection::start()
 {
-	_request.set_source(_socket.remote_endpoint().address().to_string());
+	boost::system::error_code ec;
+	boost::asio::ip::tcp::endpoint endpoint = _socket.remote_endpoint(ec);
+	if (ec)
+	{
+		_connection_manager.stop(shared_from_this());
+		return;
+	}
+
+	_request.set_source(endpoint.address().to_string());
 	do_read();
 
 	if ( _read_timeout > 0 )
