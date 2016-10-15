@@ -38,6 +38,10 @@ find_library(RE2_LIBRARY NAMES ${RE2_NAMES} NO_DEFAULT_PATH PATHS
   /usr/local/re2/lib
   /opt/local/lib
   /usr/lib
+  /lib/i386-linux-gnu
+  /lib/x86_64-linux-gnu
+  /usr/lib/i386-linux-gnu
+  /usr/lib/x86_64-linux-gnu
 )
 
 if (RE2_INCLUDE_DIR AND RE2_LIBRARY)
