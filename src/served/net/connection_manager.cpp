@@ -37,6 +37,15 @@ connection_manager::start(connection_ptr c) {
 }
 
 void
+connection_manager::restart(connection_ptr c) {
+	{
+		std::lock_guard<std::mutex> lock(_connections_mutex);
+		_connections.erase(c);
+	}
+	start(std::make_shared<connection>(*c));
+}
+
+void
 connection_manager::stop(connection_ptr c) {
 	{
 		std::lock_guard<std::mutex> lock(_connections_mutex);

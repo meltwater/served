@@ -58,13 +58,14 @@ private:
 	request                      _request;
 	request_parser_impl          _request_parser;
 	response                     _response;
+	size_t                       _max_req_size_bytes;
 	int                          _read_timeout;
 	int                          _write_timeout;
 	boost::asio::deadline_timer  _read_timer;
 	boost::asio::deadline_timer  _write_timer;
 
 public:
-	connection(const connection&) = delete;
+	explicit connection(connection&);
 
 	connection& operator=(const connection&) = delete;
 

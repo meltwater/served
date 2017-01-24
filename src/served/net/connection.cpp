@@ -44,11 +44,27 @@ connection::connection( boost::asio::io_service &    io_service
 	, _connection_manager(manager)
 	, _request_handler(handler)
 	, _request()
-	, _request_parser(_request, max_req_size_bytes)
+	, _max_req_size_bytes(_max_req_size_bytes)
+	, _request_parser(_request, _max_req_size_bytes)
 	, _read_timeout(read_timeout)
 	, _write_timeout(write_timeout)
 	, _read_timer(_io_service, boost::posix_time::milliseconds(read_timeout))
 	, _write_timer(_io_service, boost::posix_time::milliseconds(write_timeout))
+{}
+
+connection::connection( connection & conn )
+	: _io_service(conn._io_service)
+	, _status(status_type::READING)
+	, _socket(std::move(conn._socket))
+	, _connection_manager(conn._connection_manager)
+	, _request_handler(conn._request_handler)
+	, _request()
+	, _max_req_size_bytes(conn._max_req_size_bytes)
+	, _request_parser(_request, _max_req_size_bytes)
+	, _read_timeout(conn._read_timeout)
+	, _write_timeout(conn._write_timeout)
+	, _read_timer(_io_service, boost::posix_time::milliseconds(_read_timeout))
+	, _write_timer(_io_service, boost::posix_time::milliseconds(_write_timeout))
 {}
 
 void
@@ -81,6 +97,9 @@ connection::start()
 void
 connection::stop()
 {
+	boost::system::error_code ignored_ec;
+	_socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both,
+		ignored_ec);
 	_socket.close();
 }
 
@@ -194,14 +213,9 @@ connection::do_write()
 				}
 				else
 				{
-					// Otherwise we initiate graceful connection closure.
-
+					// Otherwise we initiate a socket recycle.
 					_write_timer.cancel();
-
-					boost::system::error_code ignored_ec;
-					_socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both,
-						ignored_ec);
-					_connection_manager.stop(shared_from_this());
+					_connection_manager.restart(shared_from_this());
 				}
 			}
 			else if ( ec != boost::asio::error::operation_aborted )
