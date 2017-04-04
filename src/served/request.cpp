@@ -32,6 +32,16 @@ namespace served {
 //  -----  mutators  -----
 
 void
+request::clear()
+{
+	_method = served::method::GET;
+	_destination = uri();
+	_HTTP_version = "";
+	_source = "";
+	_body = "";
+}
+
+void
 request::set_method(const enum method & method)
 {
 	_method = method;

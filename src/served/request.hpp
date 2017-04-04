@@ -59,6 +59,11 @@ public:
 	//  -----  mutators  -----
 
 	/*
+	 * Clear all request fields back to their default values.
+	 */
+	void clear();
+
+	/*
 	 * Set the HTTP method of this request.
 	 *
 	 * @param method the HTTP method

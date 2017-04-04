@@ -63,6 +63,11 @@ public:
 	//  -----  response mutators  -----
 
 	/*
+	 * Sets all response fields back to their default values.
+	 */
+	void clear();
+
+	/*
 	 * Sets a header field.
 	 *
 	 * Setting the same header twice will overwrite the previous, and header keys are case

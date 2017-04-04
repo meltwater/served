@@ -45,6 +45,7 @@ class connection_manager;
 class connection
 	: public std::enable_shared_from_this<connection>
 {
+	typedef std::shared_ptr<request_parser_impl> parser_ptr;
 public:
 	enum status_type { READING = 0, DONE };
 
@@ -56,7 +57,7 @@ private:
 	multiplexer        &         _request_handler;
 	std::array<char, 8192>       _buffer;
 	request                      _request;
-	request_parser_impl          _request_parser;
+	parser_ptr                   _request_parser;
 	response                     _response;
 	size_t                       _max_req_size_bytes;
 	int                          _read_timeout;
@@ -65,8 +66,6 @@ private:
 	boost::asio::deadline_timer  _write_timer;
 
 public:
-	explicit connection(connection&);
-
 	connection& operator=(const connection&) = delete;
 
 	/*
@@ -92,6 +91,8 @@ public:
 	 * Prompts the connection to start reading from its TCP socket.
 	 */
 	void start();
+
+	void restart();
 
 	/*
 	 * Prompts the connection to close the TCP connection early.

@@ -56,13 +56,6 @@ public:
 	void start(connection_ptr c);
 
 	/*
-	 * Recycles an underlying socket with a new connection and prompts it to begin.
-	 *
-	 * @param c a pointer to an open connection
-	 */
-	void restart(connection_ptr c);
-
-	/*
 	 * Stops a connection and removes it from the stack.
 	 *
 	 * @param c a pointer to an open connection

@@ -38,6 +38,15 @@ response::response()
 //  -----  response mutators  -----
 
 void
+response::clear()
+{
+	_status = status_2XX::OK;
+	_headers.clear();
+	_body.clear();
+	_buffer = "";
+}
+
+void
 response::set_header(std::string const& header, std::string const& value)
 {
 	// All headers set to lower case.
