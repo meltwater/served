@@ -44,8 +44,8 @@ connection::connection( boost::asio::io_service &    io_service
 	, _connection_manager(manager)
 	, _request_handler(handler)
 	, _request()
-	, _max_req_size_bytes(_max_req_size_bytes)
-	, _request_parser(new request_parser_impl(_request, _max_req_size_bytes))
+	, _max_req_size_bytes(max_req_size_bytes)
+	, _request_parser(_request, _max_req_size_bytes)
 	, _read_timeout(read_timeout)
 	, _write_timeout(write_timeout)
 	, _read_timer(_io_service, boost::posix_time::milliseconds(read_timeout))
@@ -80,23 +80,8 @@ connection::start()
 }
 
 void
-connection::restart()
-{
-	_status = status_type::READING;
-
-	_request.clear();
-	_request_parser.reset(new request_parser_impl(_request, _max_req_size_bytes));
-	_response.clear();
-
-	start();
-}
-
-void
 connection::stop()
 {
-	boost::system::error_code ignored_ec;
-	_socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both,
-		ignored_ec);
 	_socket.close();
 }
 
@@ -110,7 +95,7 @@ connection::do_read()
 			if (!ec)
 			{
 				request_parser_impl::status_type result;
-				result = _request_parser->parse(_buffer.data(), bytes_transferred);
+				result = _request_parser.parse(_buffer.data(), bytes_transferred);
 
 				if ( request_parser_impl::FINISHED == result )
 				{
@@ -207,15 +192,17 @@ connection::do_write()
 				{
 					// If we're still reading from the client then continue
 					do_read();
+					return;
 				}
 				else
 				{
-					// Otherwise we initiate a parser recycle.
-					_write_timer.cancel();
-					restart();
+					// Initiate graceful connection closure.
+					boost::system::error_code ignored_ec;
+					_socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, ignored_ec);
 				}
 			}
-			else if ( ec != boost::asio::error::operation_aborted )
+
+			if ( ec != boost::asio::error::operation_aborted )
 			{
 				_connection_manager.stop(shared_from_this());
 			}

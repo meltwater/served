@@ -45,7 +45,6 @@ class connection_manager;
 class connection
 	: public std::enable_shared_from_this<connection>
 {
-	typedef std::shared_ptr<request_parser_impl> parser_ptr;
 public:
 	enum status_type { READING = 0, DONE };
 
@@ -56,17 +55,19 @@ private:
 	connection_manager &         _connection_manager;
 	multiplexer        &         _request_handler;
 	std::array<char, 8192>       _buffer;
-	request                      _request;
-	parser_ptr                   _request_parser;
-	response                     _response;
 	size_t                       _max_req_size_bytes;
 	int                          _read_timeout;
 	int                          _write_timeout;
+	request                      _request;
+	request_parser_impl          _request_parser;
+	response                     _response;
 	boost::asio::deadline_timer  _read_timer;
 	boost::asio::deadline_timer  _write_timer;
 
 public:
 	connection& operator=(const connection&) = delete;
+	connection() = delete;
+	connection(const connection&) = delete;
 
 	/*
 	 * Constructs a new connection.
