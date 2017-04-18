@@ -1,8 +1,8 @@
-#Response Object
+# Response Object
 
 Every registered handler gets access to a response object; this is used to construct your response to the client. For a detailed overview of the response object please refer to the header file at ./src/served/response.hpp.
 
-##Setting headers
+## Setting headers
 
 The header key is case-insensitive for the purposes of identifying a single header and setting a single value; however, the key itself as written here is exactly what will be sent to the client.
 

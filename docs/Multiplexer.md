@@ -14,7 +14,7 @@ mux.handle("/foo/bar")
 	.del(del_handler);
 ```
 
-##Order matters
+## Order matters
 
 A request is dispatched to the first matching pattern found in the order that they were defined, irrespective of all other patterns. Patterns will be considered a match if all of their components are found in the request resource, therefore the pattern "**/**" will match all requests unless registered *after* any of your more specific patterns.
 
@@ -60,13 +60,13 @@ handle("/foo").get(foo2);
 handle("/foo/bar").get(foo3);
 ```
 
-#Request Routing
+# Request Routing
 
 Served supports a range of useful syntaxes to assist in defining RESTful resource patterns. Once compiled by the Served multiplexer, a pattern can be considered an array of segments, where each segment is constructed from the pattern once split by the path separator "**/**" character.
 
 Here is a breakdown of the various segment types.
 
-###Static
+### Static
 
 This is the simplest type of segment. It is compiled from a static string, and matches only that exact string. The following pattern would compile into three static segments:
 
@@ -76,7 +76,7 @@ This is the simplest type of segment. It is compiled from a static string, and m
 
 This would only ever match a request path starting with: "**/first/second/third**"
 
-###Variable
+### Variable
 
 A variable segment is a RESTful resource parameter which can exist in any section of your pattern. It is defined between curly braces and can have an optional parameter name that will cause the variable to be parsed and captured in request.params under that name.
 
@@ -108,7 +108,7 @@ The variable name can be left blank and causes the variable segment essentially 
 /first/second/{}
 ```
 
-###Regex
+### Regex
 
 A regex segment is a RESTful resource parameter that must satisfy a regular expression before being considered a match. It is defined similarly to a variable segment between two curly braces, but also requests a colon character to separate the variable name from the regular expression.
 
@@ -141,7 +141,7 @@ but none of the following:
 
 The rules of capturing variables is the same here as for variable segments.
 
-###Empty
+### Empty
 
 An empty segment is compiled from a trailing path separator. This is a special case where the segment will match any value or no value.
 
@@ -161,7 +161,7 @@ This pattern would match any of the following request resources:
 /first/second/foo/bar/baz
 ```
 
-###Empty Regex
+### Empty Regex
 
 A regex segment where the regular expression itself is empty may be used to match complete or terminated paths (rather than path prefixes).
 
