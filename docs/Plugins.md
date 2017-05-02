@@ -1,4 +1,4 @@
-#Plugins
+# Plugins
 
 Served wants you to plug in. A Served plugin is a std::function of the signature:
 
