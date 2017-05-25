@@ -26,7 +26,8 @@
 #include <sstream>
 #include <iostream>
 #include <map>
-
+#include <functional>
+ 
 #include <served/status.hpp>
 
 namespace served {
@@ -49,7 +50,7 @@ class response
 
 	int               _status;
 	header_list       _headers;
-	std::stringstream _body;
+	mutable std::stringstream _body; //for body_size()
 	std::string       _buffer;
 
 public:
@@ -110,14 +111,14 @@ public:
 	 *
 	 * @return the status of the response
 	 */
-	const int status();
+	const int status() const;
 
 	/*
 	 * Get the byte count of the response body.
 	 *
 	 * @return the size of the response body
 	 */
-	const size_t body_size();
+	const size_t body_size() const;
 
 	//  -----  serializer  -----
 
@@ -143,6 +144,8 @@ public:
 	 * @param res the response object to modify
 	 */
 	static void stock_reply(int status_code, response & res);
+
+	std::function<void()> onComplete;
 };
 
 } // served

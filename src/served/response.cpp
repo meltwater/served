@@ -81,13 +81,13 @@ response::operator<<(std::string const& rhs)
 //  -----  accessors  -----
 
 const int
-response::status()
+response::status() const
 {
 	return _status;
 }
 
 const size_t
-response::body_size()
+response::body_size() const
 {
 	_body.seekp(0, std::ios::end);
 	return _body.tellp();

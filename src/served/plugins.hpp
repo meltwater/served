@@ -38,7 +38,7 @@ namespace served { namespace plugin {
  * @param res the response object for the HTTP connection
  * @param request the request object for the HTTP connection
  */
-void access_log(served::response & res, const served::request & request);
+void access_log(const served::response & res, const served::request & request);
 
 /*
  * NOT IMPLEMENTED: Generates a static file handler.

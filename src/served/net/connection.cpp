@@ -29,6 +29,7 @@
 #include <vector>
 
 using namespace served::net;
+using namespace tbb;
 
 connection::connection( boost::asio::io_service &    io_service
                       , boost::asio::ip::tcp::socket socket
@@ -37,6 +38,7 @@ connection::connection( boost::asio::io_service &    io_service
                       , size_t                       max_req_size_bytes
                       , int                          read_timeout
                       , int                          write_timeout
+                      , tbb::task_group	&			 tg
                       )
 	: _io_service(io_service)
 	, _status(status_type::READING)
@@ -50,6 +52,7 @@ connection::connection( boost::asio::io_service &    io_service
 	, _write_timeout(write_timeout)
 	, _read_timer(_io_service, boost::posix_time::milliseconds(read_timeout))
 	, _write_timer(_io_service, boost::posix_time::milliseconds(write_timeout))
+	, m_tg(tg)
 {}
 
 void
@@ -102,41 +105,28 @@ connection::do_read()
 					// Parsing is finished, stop reading and send response.
 
 					_read_timer.cancel();
-					_status = status_type::DONE;
-
-					try
+					_status = status_type::PROCESSING;
+					_response.onComplete = [this, self]() {this->do_write_1();};
+					m_tg.run([this, self]()
 					{
-						_request_handler.forward_to_handler(_response, _request);
-					}
-					catch (const served::request_error & e)
-					{
-						_response.set_status(e.get_status_code());
-						_response.set_header("Content-Type", e.get_content_type());
-						_response.set_body(e.what());
-					}
-					catch (...)
-					{
-						response::stock_reply(status_5XX::INTERNAL_SERVER_ERROR, _response);
-					}
-
-					if ( _write_timeout > 0 )
-					{
-						_write_timer.async_wait([this, self](const boost::system::error_code& error) {
-							if ( error.value() != boost::system::errc::operation_canceled )
-							{
-								_connection_manager.stop(shared_from_this());
-							}
-						});
-					}
-					do_write();
-
-					try
-					{
-						_request_handler.on_request_handled(_response, _request);
-					}
-					catch (...)
-					{
-					}
+						try
+						{
+							_request_handler.forward_to_handler(_response, _request);
+						}
+						catch (const served::request_error & e)
+						{
+							_response.set_status(e.get_status_code());
+							_response.set_header("Content-Type", e.get_content_type());
+							_response.set_body(e.what());
+							do_write();
+						}
+						catch (...)
+						{
+							response::stock_reply(status_5XX::INTERNAL_SERVER_ERROR, _response);
+							do_write();
+						}
+					});
+					return; //not necessary but put this statement to make sure exit after start the task
 				}
 				else if ( request_parser_impl::EXPECT_CONTINUE == result )
 				{
@@ -149,7 +139,6 @@ connection::do_read()
 				       || request_parser_impl::READ_BODY   == result )
 				{
 					// Not finished reading response, continue.
-
 					do_read();
 				}
 				else if ( request_parser_impl::REJECTED_REQUEST_SIZE == result )
@@ -208,4 +197,47 @@ connection::do_write()
 			}
 		}
 	);
+}
+
+void
+connection::do_write_1()
+{
+	auto self(shared_from_this());
+
+	if ( _write_timeout > 0 )
+	{
+		_write_timer.async_wait([this, self](const boost::system::error_code& error) {
+			if ( error.value() != boost::system::errc::operation_canceled )
+			{
+				_connection_manager.stop(shared_from_this());
+			}
+		});
+	}
+
+	boost::asio::async_write(_socket, boost::asio::buffer(_response.to_buffer()),
+		[this, self](boost::system::error_code ec, std::size_t) {
+			if ( !ec )
+			{
+				_write_timer.cancel();
+
+				boost::system::error_code ignored_ec;
+				_socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both,
+					ignored_ec);
+				_connection_manager.stop(shared_from_this());
+				
+			}
+			else if ( ec != boost::asio::error::operation_aborted )
+			{
+				_connection_manager.stop(shared_from_this());
+			}
+		}
+	);
+	//post plug in and write response has no relationship
+	try
+	{
+		_request_handler.on_request_handled(_response, _request);
+	}
+	catch (...)
+	{
+	}
 }

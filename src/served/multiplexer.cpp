@@ -50,15 +50,9 @@ multiplexer::use_before(served_plugin_req_handler plugin)
 }
 
 void
-multiplexer::use_after(served_plugin_req_handler plugin)
+multiplexer::use_after(served_plugin_req_handler_const plugin)
 {
 	_plugin_post_handlers.push_back(plugin);
-}
-
-void
-multiplexer::use_wrapper(served_plugin_req_wrapper plugin)
-{
-	_plugin_wrappers.push_back(plugin);
 }
 
 //  -----  path parsing  -----
@@ -142,6 +136,7 @@ multiplexer::handle(const std::string & path, const std::string info /* = "" */)
 	return std::get<1>(_handler_candidates.back());
 }
 
+//Only one handler will be called
 void
 multiplexer::handler(served::response & res, served::request & req)
 {
@@ -249,27 +244,7 @@ multiplexer::handler(served::response & res, served::request & req)
 void
 multiplexer::forward_to_handler(served::response & res, served::request & req)
 {
-	if ( _plugin_wrappers.size() > 0 )
-	{
-		int wrapper_index = 0;
-		std::function<void()> iterate_wrappers = [&]() {
-			if ( wrapper_index == _plugin_wrappers.size() )
-			{
-				handler(res, req);
-			}
-			else
-			{
-				auto wrapper = _plugin_wrappers[wrapper_index];
-				wrapper_index++;
-				wrapper(res, req, iterate_wrappers);
-			}
-		};
-		iterate_wrappers();
-	}
-	else
-	{
-		handler(res, req);
-	}
+	handler(res, req);
 }
 
 void
