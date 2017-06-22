@@ -21,9 +21,9 @@
  */
 
 #define CATCH_CONFIG_MAIN
-#include "../test/catch.hpp"
+#include <test/catch.hpp>
 
-#include "uri.hpp"
+#include <served/uri.hpp>
 
 TEST_CASE("Test uri const, ref and copy handling", "[uri]")
 {

@@ -21,10 +21,10 @@
  */
 
 #define CATCH_CONFIG_MAIN
-#include "../test/catch.hpp"
+#include <test/catch.hpp>
 
-#include "response.hpp"
-#include "version.hpp"
+#include <served/response.hpp>
+#include <served/version.hpp>
 
 TEST_CASE("can chain response streaming operator", "[response]") {
 	served::response res;

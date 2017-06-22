@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-#include "connection_manager.hpp"
+#include <served/net/connection_manager.hpp>
 
 using namespace served::net;
 

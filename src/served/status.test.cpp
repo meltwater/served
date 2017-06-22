@@ -21,9 +21,9 @@
  */
 
 #define CATCH_CONFIG_MAIN
-#include "../test/catch.hpp"
+#include <test/catch.hpp>
 
-#include "status.hpp"
+#include <served/status.hpp>
 
 TEST_CASE("convert status to reason", "[status]")
 {

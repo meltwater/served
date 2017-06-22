@@ -26,7 +26,7 @@
 #include <set>
 #include <mutex>
 
-#include "connection.hpp"
+#include <served/net/connection.hpp>
 
 namespace served { namespace net {
 

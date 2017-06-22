@@ -21,10 +21,10 @@
  */
 
 #define CATCH_CONFIG_MAIN
-#include "../test/catch.hpp"
+#include <test/catch.hpp>
 
-#include "served/status.hpp"
-#include "served/request_error.hpp"
+#include <served/status.hpp>
+#include <served/request_error.hpp>
 
 TEST_CASE("Test request error", "[request_error]")
 {
