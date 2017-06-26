@@ -251,7 +251,7 @@ multiplexer::forward_to_handler(served::response & res, served::request & req)
 {
 	if ( _plugin_wrappers.size() > 0 )
 	{
-		int wrapper_index = 0;
+		unsigned int wrapper_index = 0;
 		std::function<void()> iterate_wrappers = [&]() {
 			if ( wrapper_index == _plugin_wrappers.size() )
 			{

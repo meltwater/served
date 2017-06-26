@@ -43,11 +43,11 @@ connection::connection( boost::asio::io_service &    io_service
 	, _socket(std::move(socket))
 	, _connection_manager(manager)
 	, _request_handler(handler)
-	, _request()
 	, _max_req_size_bytes(max_req_size_bytes)
-	, _request_parser(_request, _max_req_size_bytes)
 	, _read_timeout(read_timeout)
 	, _write_timeout(write_timeout)
+	, _request()
+	, _request_parser(_request, _max_req_size_bytes)
 	, _read_timer(_io_service, boost::posix_time::milliseconds(read_timeout))
 	, _write_timer(_io_service, boost::posix_time::milliseconds(write_timeout))
 {}
