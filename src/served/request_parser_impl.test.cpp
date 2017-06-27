@@ -20,8 +20,9 @@
  * SOFTWARE.
  */
 
-#define CATCH_CONFIG_MAIN
 #include <test/catch.hpp>
+
+#include <cstring>
 
 #include <served/methods.hpp>
 #include <served/request_parser_impl.hpp>

@@ -33,6 +33,15 @@ $ mkdir served.build && cd served.build
 $ cmake ../served && make
 ```
 
+Or, using [bazel](https://bazel.build/):
+
+```bash
+$ git clone git@github.com:datasift/served.git
+$ cd served
+$ bazel build :served
+$ bazel test :served-test
+```
+
 ### Getting Started
 
 The most basic example of creating a server and handling a `HTTP GET` for the path `/hello`:

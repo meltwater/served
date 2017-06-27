@@ -20,7 +20,6 @@
  * SOFTWARE.
  */
 
-#define CATCH_CONFIG_MAIN
 #include <test/catch.hpp>
 
 #include <vector>
@@ -181,7 +180,7 @@ TEST_CASE("multiplexer path routing", "[mux]")
 
 			INFO( "comparing size of received for pattern: " << story.pattern );
 			CHECK( story.expected_200s.size() == story.received.size() );
-			for ( int i = 0; i < story.expected_200s.size(); i++ )
+			for ( unsigned int i = 0; i < story.expected_200s.size(); i++ )
 			{
 				CHECK( story.expected_200s[i] == story.received[i] );
 			}

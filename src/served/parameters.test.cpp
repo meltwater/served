@@ -20,10 +20,10 @@
  * SOFTWARE.
  */
 
-#define CATCH_CONFIG_MAIN
 #include <test/catch.hpp>
 
-#include "served/parameters.hpp"
+#include <map>
+#include <served/parameters.hpp>
 
 TEST_CASE("Test param const, ref and copy handling", "[parameters]")
 {

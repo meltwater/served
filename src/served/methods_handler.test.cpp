@@ -20,12 +20,11 @@
  * SOFTWARE.
  */
 
-#define CATCH_CONFIG_MAIN
 #include <test/catch.hpp>
 
 #include <served/methods_handler.hpp>
 
-bool search(std::vector<std::string> & vec, std::string s)
+bool search_method(std::vector<std::string> & vec, std::string s)
 {
 	for ( auto & v : vec )
 	{
@@ -74,10 +73,10 @@ TEST_CASE("test methods handling", "[methods_handler]")
 		CHECK(std::get<1>(methods).size() == 4);
 		CHECK(std::get<0>(methods).empty());
 
-		CHECK(search(std::get<1>(methods), "POST"));
-		CHECK(search(std::get<1>(methods), "GET"));
-		CHECK(search(std::get<1>(methods), "CONNECT"));
-		CHECK(search(std::get<1>(methods), "PUT"));
+		CHECK(search_method(std::get<1>(methods), "POST"));
+		CHECK(search_method(std::get<1>(methods), "GET"));
+		CHECK(search_method(std::get<1>(methods), "CONNECT"));
+		CHECK(search_method(std::get<1>(methods), "PUT"));
 	}
 
 	SECTION("check endpoint propagation with description")
@@ -98,8 +97,8 @@ TEST_CASE("test methods handling", "[methods_handler]")
 		CHECK(3 == std::get<1>(methods).size());
 		CHECK("This is an endpoint for great stuff" == std::get<0>(methods));
 
-		CHECK(search(std::get<1>(methods), "GET"));
-		CHECK(search(std::get<1>(methods), "PUT"));
-		CHECK(search(std::get<1>(methods), "DELETE"));
+		CHECK(search_method(std::get<1>(methods), "GET"));
+		CHECK(search_method(std::get<1>(methods), "PUT"));
+		CHECK(search_method(std::get<1>(methods), "DELETE"));
 	}
 }

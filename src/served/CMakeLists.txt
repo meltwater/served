@@ -86,6 +86,7 @@ ENDIF (SERVED_BUILD_SHARED)
 # Configure common test settings
 #
 SET (test_LIBS ${Boost_LIBRARIES} ${PROJECT_NAME})
+SET (test_HDRS "../test/catch.cpp")
 
 #
 # Test build rules
