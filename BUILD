@@ -54,9 +54,9 @@ cc_library(
     strip_include_prefix = "src/",
     visibility = ["//visibility:public"],
     deps = [
-		"//third_party/boost:system",
-		"//third_party/boost:asio",
-		"//third_party/boost:date_time",
+        "//third_party/boost:system",
+        "//third_party/boost:asio",
+        "//third_party/boost:date_time",
         "@com_googlesource_code_re2//:re2",
     ],
 )
