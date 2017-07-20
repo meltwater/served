@@ -1,0 +1,105 @@
+[submodule "third_party/boost/upstream/assert"]
+	path = third_party/boost/upstream/assert
+	url = https://github.com/boostorg/assert
+[submodule "third_party/boost/upstream/config"]
+	path = third_party/boost/upstream/config
+	url = https://github.com/boostorg/config
+[submodule "third_party/boost/upstream/core"]
+	path = third_party/boost/upstream/core
+	url = https://github.com/boostorg/core
+[submodule "third_party/boost/upstream/predef"]
+	path = third_party/boost/upstream/predef
+	url = https://github.com/boostorg/predef
+[submodule "third_party/boost/upstream/system"]
+	path = third_party/boost/upstream/system
+	url = https://github.com/boostorg/system
+[submodule "third_party/boost/upstream/throw_exception"]
+	path = third_party/boost/upstream/throw_exception
+	url = https://github.com/boostorg/throw_exception
+[submodule "third_party/boost/upstream/asio"]
+	path = third_party/boost/upstream/asio
+	url = https://github.com/boostorg/asio
+[submodule "third_party/boost/upstream/detail"]
+	path = third_party/boost/upstream/detail
+	url = https://github.com/boostorg/detail
+[submodule "third_party/boost/upstream/functional"]
+	path = third_party/boost/upstream/functional
+	url = https://github.com/boostorg/functional
+[submodule "third_party/boost/upstream/io"]
+	path = third_party/boost/upstream/io
+	url = https://github.com/boostorg/io
+[submodule "third_party/boost/upstream/static_assert"]
+	path = third_party/boost/upstream/static_assert
+	url = https://github.com/boostorg/static_assert
+[submodule "third_party/boost/upstream/iterator"]
+	path = third_party/boost/upstream/iterator
+	url = https://github.com/boostorg/iterator
+[submodule "third_party/boost/upstream/concept_check"]
+	path = third_party/boost/upstream/concept_check
+	url = https://github.com/boostorg/concept_check
+[submodule "third_party/boost/upstream/optional"]
+	path = third_party/boost/upstream/optional
+	url = https://github.com/boostorg/optional
+[submodule "third_party/boost/upstream/range"]
+	path = third_party/boost/upstream/range
+	url = https://github.com/boostorg/range
+[submodule "third_party/boost/upstream/align"]
+	path = third_party/boost/upstream/align
+	url = https://github.com/boostorg/align
+[submodule "third_party/boost/upstream/utility"]
+	path = third_party/boost/upstream/utility
+	url = https://github.com/boostorg/utility
+[submodule "third_party/boost/upstream/smart_ptr"]
+	path = third_party/boost/upstream/smart_ptr
+	url = https://github.com/boostorg/smart_ptr
+[submodule "third_party/boost/upstream/preprocessor"]
+	path = third_party/boost/upstream/preprocessor
+	url = https://github.com/boostorg/preprocessor
+[submodule "third_party/boost/upstream/move"]
+	path = third_party/boost/upstream/move
+	url = https://github.com/boostorg/move
+[submodule "third_party/boost/upstream/mpl"]
+	path = third_party/boost/upstream/mpl
+	url = https://github.com/boostorg/mpl
+[submodule "third_party/boost/upstream/type_traits"]
+	path = third_party/boost/upstream/type_traits
+	url = https://github.com/boostorg/type_traits
+[submodule "third_party/boost/upstream/filesystem"]
+	path = third_party/boost/upstream/filesystem
+	url = https://github.com/boostorg/filesystem
+[submodule "third_party/boost/upstream/date_time"]
+	path = third_party/boost/upstream/date_time
+	url = https://github.com/boostorg/date_time
+[submodule "third_party/boost/upstream/bind"]
+	path = third_party/boost/upstream/bind
+	url = https://github.com/boostorg/bind
+[submodule "third_party/boost/upstream/function"]
+	path = third_party/boost/upstream/function
+	url = https://github.com/boostorg/function
+[submodule "third_party/boost/upstream/algorithm"]
+	path = third_party/boost/upstream/algorithm
+	url = https://github.com/boostorg/algorithm
+[submodule "third_party/boost/upstream/regex"]
+	path = third_party/boost/upstream/regex
+	url = https://github.com/boostorg/regex
+[submodule "third_party/boost/upstream/integer"]
+	path = third_party/boost/upstream/integer
+	url = https://github.com/boostorg/integer
+[submodule "third_party/boost/upstream/lexical_cast"]
+	path = third_party/boost/upstream/lexical_cast
+	url = https://github.com/boostorg/lexical_cast
+[submodule "third_party/boost/upstream/numeric_conversion"]
+	path = third_party/boost/upstream/numeric_conversion
+	url = https://github.com/boostorg/numeric_conversion
+[submodule "third_party/boost/upstream/array"]
+	path = third_party/boost/upstream/array
+	url = https://github.com/boostorg/array
+[submodule "third_party/boost/upstream/container"]
+	path = third_party/boost/upstream/container
+	url = https://github.com/boostorg/container
+[submodule "third_party/boost/upstream/math"]
+	path = third_party/boost/upstream/math
+	url = https://github.com/boostorg/math
+[submodule "third_party/boost/upstream/tokenizer"]
+	path = third_party/boost/upstream/tokenizer
+	url = https://github.com/boostorg/tokenizer
