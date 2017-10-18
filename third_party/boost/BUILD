@@ -2,7 +2,7 @@ licenses(["notice"])
 
 boost_path = "upstream"
 
-load("/third_party/boost/tool", "boost_library")
+load("//third_party/boost:tool.bzl", "boost_library")
 
 boost_library(
   name = "assert",
