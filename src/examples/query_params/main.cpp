@@ -29,6 +29,8 @@
  */
 int main(int argc, char const* argv[])
 {
+	(void) argc;
+	(void) argv;
 	served::multiplexer mux;
 	mux.handle("/query")
 		.get([&](served::response & res, const served::request & req) {

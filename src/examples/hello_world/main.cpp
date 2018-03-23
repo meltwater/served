@@ -28,10 +28,13 @@
  */
 int main(int argc, char const* argv[])
 {
+	(void) argc;
+	(void) argv;
+
 	served::multiplexer mux;
 
 	mux.handle("/hello")
-		.get([](served::response & res, const served::request & req) {
+		.get([](served::response & res, const served::request &) {
 			res << "Hello world";
 		});
 

@@ -34,24 +34,36 @@
  */
 int main(int argc, char const* argv[])
 {
+	(void) argc;
+	(void) argv;
 	served::multiplexer mux;
 
 	mux.handle("/customers")
 		.get([](served::response & res, const served::request & req) {
+			(void) res;
+			(void) req;
 			// list customers
 		})
 		.post([](served::response & res, const served::request & req) {
+			(void) res;
+			(void) req;
 			// create customer
 		});
 
 	mux.handle("/customers/{id}")
 		.get([](served::response & res, const served::request & req) {
+			(void) res;
+			(void) req;
 			// read customer req.params["id"]
 		})
 		.put([](served::response & res, const served::request & req) {
+			(void) res;
+			(void) req;
 			// update customer req.params["id"]
 		})
 		.del([](served::response & res, const served::request & req) {
+			(void) res;
+			(void) req;
 			// delete customer req.params["id"]
 		});
 

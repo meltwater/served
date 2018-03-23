@@ -38,20 +38,22 @@
  */
 int main(int argc, char const* argv[])
 {
+	(void) argc;
+	(void) argv;
 	served::multiplexer mux;
 
 	// register one or more handlers
 	mux.handle("/served")
-		.get([](served::response & res, const served::request & req) {
+		.get([](served::response & res, const served::request &) {
 			res << "You got served!";
 		});
 	mux.handle("/itson")
-		.get([](served::response & res, const served::request & req) {
+		.get([](served::response & res, const served::request &) {
 			res << "Oh, it's on!";
 		});
 
 	// register middleware / plugin
-	mux.use_before([](served::response & res, const served::request & req) {
+	mux.use_before([](served::response &, const served::request & req) {
 		std::cout << "request: " << req.url().URI() << std::endl;
 	});
 

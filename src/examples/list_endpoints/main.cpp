@@ -40,14 +40,16 @@
  */
 int main(int argc, char const* argv[])
 {
+	(void) argc;
+	(void) argv;
 	served::multiplexer mux;
 
 	// serve up some big whoop
 	mux.handle("/big_whoop")
-		.get([](served::response & res, const served::request & req) {
+		.get([](served::response & res, const served::request &) {
 			res << "list big_whoop";
 		})
-		.post([](served::response & res, const served::request & req) {
+		.post([](served::response & res, const served::request &) {
 			res << "create big_whoop";
 		});
 
@@ -67,7 +69,7 @@ int main(int argc, char const* argv[])
 
 	// GET /endpoints
 	mux.handle("/endpoints")
-		.get([&mux](served::response & res, const served::request & req) {
+		.get([&mux](served::response & res, const served::request &) {
 			const served::served_endpoint_list endpoints = mux.get_endpoint_list();
 			for (auto& endpoint : endpoints)
 			{

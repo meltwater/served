@@ -28,6 +28,9 @@
  */
 int main(int argc, char const* argv[])
 {
+	(void) argc;
+	(void) argv;
+
 	served::multiplexer mux;
 	mux.handle("/form_post")
 		.post([&](served::response & res, const served::request & req) {

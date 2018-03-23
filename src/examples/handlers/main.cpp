@@ -35,6 +35,9 @@
  */
 int main(int argc, char const* argv[])
 {
+	(void) argc;
+	(void) argv;
+
 	served::multiplexer mux;
 
 	// GET or POST /handlers/{id}/{number:[0-9]+}
@@ -63,7 +66,7 @@ int main(int argc, char const* argv[])
 
 	// GET /handlers
 	mux.handle("/handlers")
-		.get([](served::response & res, const served::request & req) {
+		.get([](served::response & res, const served::request &) {
 			res << "You got served";
 		});
 

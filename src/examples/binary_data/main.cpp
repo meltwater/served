@@ -34,13 +34,16 @@
  */
 int main(int argc, char const* argv[])
 {
+	(void) argc;
+	(void) argv;
+
 	served::multiplexer mux;
 	mux.use_after(served::plugin::access_log);
 
 	const std::string image_name("served-logo.png");
 
 	mux.handle("/picture")
-		.get([&](served::response & res, const served::request & req) {
+		.get([&](served::response & res, const served::request &) {
 			std::ifstream ifs(image_name);
 			res.set_body(std::string(
 				(std::istreambuf_iterator<char>(ifs) ),
