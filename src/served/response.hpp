@@ -110,14 +110,14 @@ public:
 	 *
 	 * @return the status of the response
 	 */
-	const int status();
+	int status();
 
 	/*
 	 * Get the byte count of the response body.
 	 *
 	 * @return the size of the response body
 	 */
-	const size_t body_size();
+	size_t body_size();
 
 	//  -----  serializer  -----
 

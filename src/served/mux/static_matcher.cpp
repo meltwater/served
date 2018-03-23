@@ -44,6 +44,8 @@ static_matcher::check_match(const std::string & path_segment)
 void
 static_matcher::get_param(served::parameters & params, const std::string & path_segment)
 {
+	(void) path_segment;
+	(void) params;
 }
 
 } } // mux, served

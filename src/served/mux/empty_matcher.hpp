@@ -46,6 +46,7 @@ public:
 	 */
 	virtual bool check_match(const std::string & path_segment) override
 	{
+		(void) path_segment;
 		return true;
 	}
 
@@ -58,7 +59,10 @@ public:
 	 * @param path_segment the segment of path the variable should be extracted from
 	 */
 	virtual void get_param(served::parameters & params, const std::string & path_segment) override
-	{}
+	{
+		(void) params;
+		(void) path_segment;
+	}
 };
 
 } } // mux, served

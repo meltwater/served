@@ -40,7 +40,7 @@ TEST_CASE("test methods handling", "[methods_handler]")
 {
 	SECTION("create handlers")
 	{
-		auto dummy = [](served::response & res, const served::request & req) {};
+		auto dummy = [](served::response &, const served::request &) {};
 
 		served::methods_handler h("/dummy");
 		h.post(dummy).get(dummy).method(served::method::CONNECT, dummy).put(dummy);
@@ -57,7 +57,7 @@ TEST_CASE("test methods handling", "[methods_handler]")
 
 	SECTION("check endpoint propagation no description")
 	{
-		auto dummy = [](served::response & res, const served::request & req) {};
+		auto dummy = [](served::response &, const served::request &) {};
 
 		served::methods_handler h("/this/path/is/great");
 		h.post(dummy).get(dummy).method(served::method::CONNECT, dummy).put(dummy);
@@ -81,7 +81,7 @@ TEST_CASE("test methods handling", "[methods_handler]")
 
 	SECTION("check endpoint propagation with description")
 	{
-		auto dummy = [](served::response & res, const served::request & req) {};
+		auto dummy = [](served::response &, const served::request &) {};
 
 		served::methods_handler h("/this/path/is/great", "This is an endpoint for great stuff");
 		h.get(dummy).put(dummy).del(dummy);

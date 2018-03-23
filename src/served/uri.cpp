@@ -54,7 +54,7 @@ query_escape(const std::string& s) {
 	const unsigned char* src_ptr = (const unsigned char*)s.c_str();
 	const size_t         src_len = s.length();
 
-	unsigned char        tmp[src_len * 3];
+	unsigned char* const tmp = new unsigned char[src_len * 3];
 	unsigned char*       end = tmp;
 
 	const unsigned char * const eol = src_ptr + src_len;
@@ -73,7 +73,9 @@ query_escape(const std::string& s) {
 			*end++ = hex_table[*src_ptr & 0x0F];
 		}
 	}
-	return std::string((char*)tmp, (char*)end);
+	std::string result((char*)tmp, (char*)end);
+	delete[] tmp;
+	return result;
 }
 
 std::string
@@ -84,7 +86,7 @@ query_unescape(const std::string& s) {
 	const unsigned char* const eol = src_ptr + src_len;
 	const unsigned char* const last_decodable = eol - 2;
 
-	char  tmp[src_len];
+	char* const tmp = new char[src_len];
 	char* end = tmp;
 
 	while (src_ptr < last_decodable) {
@@ -104,8 +106,9 @@ query_unescape(const std::string& s) {
 	while (src_ptr < eol) {
 		*end++ = *src_ptr++;
 	}
-
-	return std::string((char*)tmp, (char*)end);
+	std::string result((char*)tmp, (char*)end);
+	delete[] tmp;
+	return result;
 }
 
 //  -----  constructors  -----

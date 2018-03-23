@@ -227,6 +227,9 @@ request_parser::request_parser()
 	: cs(0)
 	, d_offset(0)
 {
+	// Ragel generates an unused constant for the entry point.
+	// The following will suppress the resulting warning.
+	(void) request_parser_en_main;
 	%% write init;
 }
 

@@ -71,7 +71,7 @@ split_path(const std::string & path)
 	const char * path_ptr = path.c_str();
 	const size_t path_len = path.length();
 
-	char   tmp[path.length()];
+	char * const tmp = new char[path.length()];
 	char * end = tmp;
 
 	const char * const eol = path_ptr + path_len;
@@ -101,7 +101,7 @@ split_path(const std::string & path)
 		// Push back an empty string for paths ending in /
 		chunks.push_back("");
 	}
-
+	delete[] tmp;
 	return chunks;
 }
 
@@ -298,6 +298,7 @@ served_req_handler
 multiplexer::get_endpoint_list_handler_YAML()
 {
 	return [this](served::response & res, const served::request & req) {
+		(void) req;
 	    res.set_header("Content-Type", "text/yaml");
 
 		res << "%YAML 1.2\n---";
