@@ -33,11 +33,8 @@
  * This is a demonstration of using various handler mechanisms, including REST parameters with rejex
  * based value validation.
  */
-int main(int argc, char const* argv[])
+int main(int, char const**)
 {
-	(void) argc;
-	(void) argv;
-
 	served::multiplexer mux;
 
 	// GET or POST /handlers/{id}/{number:[0-9]+}

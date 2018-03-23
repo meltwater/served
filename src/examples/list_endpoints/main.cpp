@@ -38,10 +38,8 @@
  *
  * mux.handler("/endpoints").get(mux.get_endpoint_list_handler_YAML());
  */
-int main(int argc, char const* argv[])
+int main(int, char const**)
 {
-	(void) argc;
-	(void) argv;
 	served::multiplexer mux;
 
 	// serve up some big whoop

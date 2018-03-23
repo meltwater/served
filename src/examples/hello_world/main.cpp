@@ -26,11 +26,8 @@
  *
  * This is the most basic example of served in action.
  */
-int main(int argc, char const* argv[])
+int main(int, char const**)
 {
-	(void) argc;
-	(void) argv;
-
 	served::multiplexer mux;
 
 	mux.handle("/hello")

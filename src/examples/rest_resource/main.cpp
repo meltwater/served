@@ -32,10 +32,8 @@
  *
  * This example demonstrates how you might use served to create REST resources.
  */
-int main(int argc, char const* argv[])
+int main(int, char const**)
 {
-	(void) argc;
-	(void) argv;
 	served::multiplexer mux;
 
 	mux.handle("/customers")

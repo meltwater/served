@@ -26,11 +26,8 @@
  *
  * This example demonstrates how you might specify and validate a form endpoint.
  */
-int main(int argc, char const* argv[])
+int main(int, char const**)
 {
-	(void) argc;
-	(void) argv;
-
 	served::multiplexer mux;
 	mux.handle("/form_post")
 		.post([&](served::response & res, const served::request & req) {

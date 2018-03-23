@@ -27,10 +27,8 @@
  * This example demonstrates how you can iterate and locate query parameters from the request URL,
  * since the query string is already parsed for you.
  */
-int main(int argc, char const* argv[])
+int main(int, char const**)
 {
-	(void) argc;
-	(void) argv;
 	served::multiplexer mux;
 	mux.handle("/query")
 		.get([&](served::response & res, const served::request & req) {

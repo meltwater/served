@@ -36,10 +36,8 @@
  *
  * mux.use_after(served::plugins::access_log);
  */
-int main(int argc, char const* argv[])
+int main(int, char const**)
 {
-	(void) argc;
-	(void) argv;
 	served::multiplexer mux;
 
 	// register one or more handlers

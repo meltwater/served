@@ -297,9 +297,8 @@ multiplexer::get_endpoint_list()
 served_req_handler
 multiplexer::get_endpoint_list_handler_YAML()
 {
-	return [this](served::response & res, const served::request & req) {
-		(void) req;
-	    res.set_header("Content-Type", "text/yaml");
+	return [this](served::response & res, const served::request &) {
+		res.set_header("Content-Type", "text/yaml");
 
 		res << "%YAML 1.2\n---";
 

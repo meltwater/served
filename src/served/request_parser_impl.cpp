@@ -28,13 +28,12 @@
 namespace served {
 
 void
-request_parser_impl::http_field( const char * data
+request_parser_impl::http_field( const char *
                                , const char * field
                                , size_t       flen
                                , const char * value
                                , size_t       vlen  )
 {
-	(void) data;
 	std::string header(field, flen), val(value, vlen);
 
 	/* If multiple matching header field names are sent these must be safe to append via comma
@@ -113,47 +112,42 @@ request_parser_impl::parse(const char *data, size_t len)
 }
 
 void
-request_parser_impl::request_method( const char * data
+request_parser_impl::request_method( const char *
                                    , const char * at
                                    , size_t       length )
 {
-	(void) data;
 	_request.set_method(method_from_string(std::string(at, length)));
 }
 
 void
-request_parser_impl::request_uri( const char * data
+request_parser_impl::request_uri( const char *
                                 , const char * at
                                 , size_t       length )
 {
-	(void) data;
 	_request.url().set_URI(std::string(at, length));
 }
 
 void
-request_parser_impl::fragment( const char * data
+request_parser_impl::fragment( const char *
                              , const char * at
                              , size_t       length )
 {
-	(void) data;
 	_request.url().set_fragment(std::string(at, length));
 }
 
 void
-request_parser_impl::request_path( const char * data
+request_parser_impl::request_path( const char *
                                  , const char * at
                                  , size_t       length )
 {
-	(void) data;
 	_request.url().set_path(std::string(at, length));
 }
 
 void
-request_parser_impl::query_string( const char * data
+request_parser_impl::query_string( const char *
                                  , const char * at
                                  , size_t       length )
 {
-	(void) data;
 	std::string query = std::string(at, length);
 	_request.url().set_query(query);
 
@@ -191,22 +185,18 @@ request_parser_impl::query_string( const char * data
 }
 
 void
-request_parser_impl::http_version( const char * data
+request_parser_impl::http_version( const char *
                                  , const char * at
                                  , size_t       length )
 {
-	(void) data;
 	_request.set_HTTP_version(std::string(at, length));
 }
 
 void
-request_parser_impl::header_done( const char * data
-                                , const char * at
-                                , size_t       length )
+request_parser_impl::header_done( const char *
+                                , const char *
+                                , size_t      )
 {
-	(void) data;
-	(void) at;
-	(void) length;
 	// NOTE: Body parsing instigated in "parse"
 }
 
