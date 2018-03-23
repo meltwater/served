@@ -26,12 +26,12 @@
  *
  * This is the most basic example of served in action.
  */
-int main(int argc, char const* argv[])
+int main(int, char const**)
 {
 	served::multiplexer mux;
 
 	mux.handle("/hello")
-		.get([](served::response & res, const served::request & req) {
+		.get([](served::response & res, const served::request &) {
 			res << "Hello world";
 		});
 

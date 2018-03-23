@@ -32,7 +32,7 @@
  * explicitly set the Content-Length header because if this value is omitted then served calculates
  * it for you based on the response length.
  */
-int main(int argc, char const* argv[])
+int main(int, char const**)
 {
 	served::multiplexer mux;
 	mux.use_after(served::plugin::access_log);
@@ -40,7 +40,7 @@ int main(int argc, char const* argv[])
 	const std::string image_name("served-logo.png");
 
 	mux.handle("/picture")
-		.get([&](served::response & res, const served::request & req) {
+		.get([&](served::response & res, const served::request &) {
 			std::ifstream ifs(image_name);
 			res.set_body(std::string(
 				(std::istreambuf_iterator<char>(ifs) ),

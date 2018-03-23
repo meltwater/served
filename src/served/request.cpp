@@ -91,7 +91,7 @@ request::url()
 
 //  -----  component accessors  -----
 
-const enum method
+enum method
 request::method() const
 {
 	return _method;

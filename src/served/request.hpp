@@ -127,7 +127,7 @@ public:
 	 *
 	 * @return HTTP method of the request
 	 */
-	const enum method method() const;
+	enum method method() const;
 
 	/*
 	 * Get the URL of this request.

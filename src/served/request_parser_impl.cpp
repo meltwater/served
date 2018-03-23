@@ -28,7 +28,7 @@
 namespace served {
 
 void
-request_parser_impl::http_field( const char * data
+request_parser_impl::http_field( const char *
                                , const char * field
                                , size_t       flen
                                , const char * value
@@ -112,7 +112,7 @@ request_parser_impl::parse(const char *data, size_t len)
 }
 
 void
-request_parser_impl::request_method( const char * data
+request_parser_impl::request_method( const char *
                                    , const char * at
                                    , size_t       length )
 {
@@ -120,7 +120,7 @@ request_parser_impl::request_method( const char * data
 }
 
 void
-request_parser_impl::request_uri( const char * data
+request_parser_impl::request_uri( const char *
                                 , const char * at
                                 , size_t       length )
 {
@@ -128,7 +128,7 @@ request_parser_impl::request_uri( const char * data
 }
 
 void
-request_parser_impl::fragment( const char * data
+request_parser_impl::fragment( const char *
                              , const char * at
                              , size_t       length )
 {
@@ -136,7 +136,7 @@ request_parser_impl::fragment( const char * data
 }
 
 void
-request_parser_impl::request_path( const char * data
+request_parser_impl::request_path( const char *
                                  , const char * at
                                  , size_t       length )
 {
@@ -144,7 +144,7 @@ request_parser_impl::request_path( const char * data
 }
 
 void
-request_parser_impl::query_string( const char * data
+request_parser_impl::query_string( const char *
                                  , const char * at
                                  , size_t       length )
 {
@@ -185,7 +185,7 @@ request_parser_impl::query_string( const char * data
 }
 
 void
-request_parser_impl::http_version( const char * data
+request_parser_impl::http_version( const char *
                                  , const char * at
                                  , size_t       length )
 {
@@ -193,9 +193,9 @@ request_parser_impl::http_version( const char * data
 }
 
 void
-request_parser_impl::header_done( const char * data
-                                , const char * at
-                                , size_t       length )
+request_parser_impl::header_done( const char *
+                                , const char *
+                                , size_t      )
 {
 	// NOTE: Body parsing instigated in "parse"
 }

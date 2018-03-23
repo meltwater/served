@@ -33,7 +33,7 @@
  * This is a demonstration of using various handler mechanisms, including REST parameters with rejex
  * based value validation.
  */
-int main(int argc, char const* argv[])
+int main(int, char const**)
 {
 	served::multiplexer mux;
 
@@ -63,7 +63,7 @@ int main(int argc, char const* argv[])
 
 	// GET /handlers
 	mux.handle("/handlers")
-		.get([](served::response & res, const served::request & req) {
+		.get([](served::response & res, const served::request &) {
 			res << "You got served";
 		});
 

@@ -64,6 +64,7 @@ protected:
 	virtual void http_field(const char *data, const char *field, size_t flen,
 			const char *value, size_t vlen) override
 	{
+		(void) data;
 		d_header.fields.push_back(make_tuple(string(field, flen), string(value, vlen)));
 		CAPTURE(string(field, flen));
 		CAPTURE(string(value, vlen));
@@ -72,6 +73,7 @@ protected:
 	virtual void request_method(const char *data, const char *at,
 			size_t length) override
 	{
+		(void) data;
 		d_header.method = string(at, length);
 		CAPTURE(d_header.method);
 	}
@@ -79,6 +81,7 @@ protected:
 	virtual void request_uri(const char *data, const char *at,
 			size_t length) override
 	{
+		(void) data;
 		d_header.uri.uri = string(at, length);
 		CAPTURE(d_header.uri.uri);
 	}
@@ -86,6 +89,7 @@ protected:
 	virtual void fragment(const char *data, const char *at,
 			size_t length) override
 	{
+		(void) data;
 		d_header.uri.fragment = string(at, length);
 		CAPTURE(d_header.uri.fragment);
 	}
@@ -93,6 +97,7 @@ protected:
 	virtual void request_path(const char *data, const char *at,
 			size_t length) override
 	{
+		(void) data;
 		d_header.uri.path = string(at, length);
 		CAPTURE(d_header.uri.path);
 	}
@@ -100,6 +105,7 @@ protected:
 	virtual void query_string(const char *data, const char *at,
 			size_t length) override
 	{
+		(void) data;
 		d_header.uri.query = string(at, length);
 		CAPTURE(d_header.uri.query);
 	}
@@ -107,6 +113,7 @@ protected:
 	virtual void http_version(const char *data, const char *at,
 			size_t length) override
 	{
+		(void) data;
 		d_header.http_version = string(at, length);
 		CAPTURE(d_header.http_version);
 	}
@@ -114,6 +121,7 @@ protected:
 	virtual void header_done(const char *data, const char *at,
 			size_t length) override
 	{
+		(void) data;
 		d_header.content = string(at, length);
 		CAPTURE(string(at, length));
 	}

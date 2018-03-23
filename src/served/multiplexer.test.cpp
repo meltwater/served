@@ -51,6 +51,7 @@ public:
 
 	void operator()(served::response & response, const served::request & request)
 	{
+		(void) response;
 		_story_obj.received.push_back(request.url().path());
 		_story_obj.params = request.params;
 	}
@@ -340,8 +341,8 @@ TEST_CASE("multiplexer hierarchy test", "[mux]")
 	{
 		bool correct_call = false;
 
-		auto dummy_call    = [&](served::response & res, const served::request & req) {};
-		auto expected_call = [&](served::response & res, const served::request & req) {
+		auto dummy_call    = [&](served::response &, const served::request &) {};
+		auto expected_call = [&](served::response &, const served::request &) {
 			correct_call = true;
 		};
 
@@ -367,8 +368,8 @@ TEST_CASE("multiplexer hierarchy test", "[mux]")
 	{
 		bool correct_call = false;
 
-		auto dummy_call    = [&](served::response & res, const served::request & req) {};
-		auto expected_call = [&](served::response & res, const served::request & req) {
+		auto dummy_call    = [&](served::response &, const served::request &) {};
+		auto expected_call = [&](served::response &, const served::request &) {
 			correct_call = true;
 		};
 
@@ -421,9 +422,11 @@ TEST_CASE("multiplexer test base path", "[mux]")
 	{
 		served::multiplexer mux("/base/path");
 		mux.handle("/end").get([](served::response & res, const served::request & req){
+			(void) req;
 			res.set_status(served::status_2XX::ACCEPTED);
 		});
 		mux.handle("/").get([](served::response & res, const served::request & req){
+			(void) req;
 			res.set_status(served::status_2XX::NO_CONTENT);
 		});
 
@@ -468,6 +471,7 @@ TEST_CASE("multiplexer test base path", "[mux]")
 	{
 		served::multiplexer mux("/base/{TEST}");
 		mux.handle("/end").get([](served::response & res, const served::request & req) {
+			(void) req;
 			res.set_status(served::status_2XX::OK);
 		});
 
@@ -492,19 +496,19 @@ TEST_CASE("multiplexer test plugins", "[mux]")
 		int touches = 0;
 		served::multiplexer mux;
 		mux.handle("/test")
-			.get([&](served::response & res, const served::request & req) {
+			.get([&](served::response &, const served::request &) {
 				if ( touches == 1 )
 				{
 					touches++;
 				}
 			});
-		mux.use_before([&](served::response & res, const served::request & req) {
+		mux.use_before([&](served::response &, const served::request &) {
 			if ( touches == 0 )
 			{
 				touches++;
 			}
 		});
-		mux.use_after([&](served::response & res, const served::request & req) {
+		mux.use_after([&](served::response &, const served::request &) {
 			if ( touches == 2 )
 			{
 				touches++;
@@ -534,28 +538,28 @@ TEST_CASE("multiplexer test wrapped plugins", "[mux]")
 		served::multiplexer mux;
 
 		mux.handle("/test")
-			.get([&](served::response & res, const served::request & req) {
+			.get([&](served::response &, const served::request &) {
 				if ( touches == 3 )
 				{
 					touches++;
 				}
 			});
 
-		mux.use_wrapper([&](served::response & res, served::request & req, std::function<void()> func) {
+		mux.use_wrapper([&](served::response &, served::request &, std::function<void()> func) {
 			if ( touches == 0 )
 			{
 				touches++;
 			}
 			func();
 		});
-		mux.use_wrapper([&](served::response & res, served::request & req, std::function<void()> func) {
+		mux.use_wrapper([&](served::response &, served::request &, std::function<void()> func) {
 			if ( touches == 1 )
 			{
 				touches++;
 			}
 			func();
 		});
-		mux.use_wrapper([&](served::response & res, served::request & req, std::function<void()> func) {
+		mux.use_wrapper([&](served::response &, served::request &, std::function<void()> func) {
 			if ( touches == 2 )
 			{
 				touches++;
@@ -595,7 +599,7 @@ TEST_CASE("multiplexer test endpoint list", "[mux]")
 {
 	SECTION("without base path")
 	{
-		auto dummy = [](served::response & res, const served::request & req){};
+		auto dummy = [](served::response &, const served::request &){};
 
 		served::multiplexer mux;
 		mux.handle("/first/test", "This is first").get(dummy).post(dummy).del(dummy);
@@ -647,7 +651,7 @@ TEST_CASE("multiplexer test endpoint list", "[mux]")
 
 	SECTION("with base path")
 	{
-		auto dummy = [](served::response & res, const served::request & req){};
+		auto dummy = [](served::response &, const served::request &){};
 
 		served::multiplexer mux("/base/path");
 		mux.handle("/first/test", "This is first").get(dummy).post(dummy).del(dummy);
@@ -702,7 +706,7 @@ TEST_CASE("multiplexer endpoint list YAML", "[mux]")
 {
 	SECTION("request router stories")
 	{
-		auto dummy = [](served::response & res, const served::request & req){};
+		auto dummy = [](served::response &, const served::request &){};
 
 		served::multiplexer mux;
 		mux.handle("/first/test", "This is first").get(dummy).post(dummy).del(dummy);
