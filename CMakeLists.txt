@@ -66,7 +66,7 @@ SET (CMAKE_MODULE_PATH "${MAINFOLDER}/cmake")
 INCLUDE_DIRECTORIES ("${MAINFOLDER}/src")
 
 #
-# Locate Project Prerequisites 
+# Locate Project Prerequisites
 #
 FIND_PACKAGE (Boost 1.53 COMPONENTS "system" REQUIRED)
 INCLUDE_DIRECTORIES (${Boost_INCLUDE_DIRS})
@@ -83,6 +83,11 @@ FIND_PACKAGE (Threads)
 
 INCLUDE (EnableStdCXX11)
 ENABLE_STDCXX11 ()
+
+#
+# Enable warnings
+#
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Wno-missing-field-initializers")
 
 #
 # Configure Files
@@ -123,5 +128,5 @@ ENDIF (SERVED_BUILD_DEB)
 IF (SERVED_BUILD_RPM)
     INCLUDE(CPackConfigRPM)
 ENDIF (SERVED_BUILD_RPM)
- 
+
 INCLUDE(CPack)
