@@ -66,6 +66,8 @@ public:
 	 * Stops all remaining open connections.
 	 */
 	void stop_all();
+
+    ~connection_manager();
 };
 
 } } // net, served

@@ -54,3 +54,6 @@ connection_manager::stop_all() {
 	}
 	_connections.clear();
 }
+
+connection_manager::~connection_manager()
+{}

@@ -28,6 +28,7 @@
 #include <utility>
 #include <vector>
 
+using namespace served;
 using namespace served::net;
 
 connection::connection( boost::asio::io_service &    io_service

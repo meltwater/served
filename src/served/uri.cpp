@@ -26,7 +26,7 @@ namespace served {
 
 static const char hex_table[] = "0123456789ABCDEF";
 
-static const char dec_to_hex[256] = {
+static const signed char dec_to_hex[256] = {
     /*       0  1  2  3   4  5  6  7   8  9  A  B   C  D  E  F */
     /* 0 */ -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
     /* 1 */ -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1, -1,-1,-1,-1,
@@ -91,7 +91,7 @@ query_unescape(const std::string& s) {
 
 	while (src_ptr < last_decodable) {
 		if (*src_ptr == '%') {
-			char dec1, dec2;
+			signed char dec1, dec2;
 			if (-1 != (dec1 = dec_to_hex[*(src_ptr + 1)])
 				&& -1 != (dec2 = dec_to_hex[*(src_ptr + 2)]))
 			{

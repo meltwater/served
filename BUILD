@@ -4,9 +4,7 @@ exports_files(["LICENSE.md"])
 
 cc_library(
     name = "served",
-    copts = [
-        "-Iexternal/com_googlesource_code_re2",
-    ],
+    copts = [],
     srcs = [
         "src/served/methods_handler.cpp",
         "src/served/multiplexer.cpp",
@@ -56,17 +54,13 @@ cc_library(
     deps = [
         "//third_party/boost:system",
         "//third_party/boost:asio",
-        "//third_party/boost:date_time",
-        "@com_googlesource_code_re2//:re2",
+        "//third_party/boost:date_time"
     ],
 )
 
 cc_test(
     name = "served-test",
-    copts = [
-        "-Iexternal/com_googlesource_code_re2",
-        "-Isrc",
-    ],
+    copts = ["-Isrc",],
     srcs = [
         "src/served/methods_handler.test.cpp",
         "src/served/multiplexer.test.cpp",

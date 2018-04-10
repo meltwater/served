@@ -2,7 +2,7 @@ language: cpp
 
 os:
   - linux
-  
+
 compiler:
   - clang
 
@@ -33,13 +33,6 @@ before_install:
   - cmake --version
   - which g++
   - g++ -v
-  - git clone https://github.com/google/re2.git
-  - cd re2
-  - git checkout fcdcf25d1a3209355411c57c342e8db115fc9582
-  - make
-  - make test
-  - sudo make install
-  - sudo make testinstall
   - cd ..
 
 script:

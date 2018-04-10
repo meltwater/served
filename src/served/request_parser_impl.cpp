@@ -24,6 +24,7 @@
 #include <served/methods.hpp>
 
 #include <algorithm>
+#include <string>
 
 namespace served {
 
