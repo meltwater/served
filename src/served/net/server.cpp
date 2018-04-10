@@ -26,6 +26,7 @@
 
 #include <served/net/server.hpp>
 
+using namespace served;
 using namespace served::net;
 
 server::server( const std::string & address
@@ -144,9 +145,9 @@ server::do_accept()
 					                            , std::move(_socket)
 					                            , _connection_manager
 					                            , _request_handler
+					                            , _req_max_bytes
 					                            , _read_timeout
 					                            , _write_timeout
-					                            , _req_max_bytes
 					                            ));
 			}
 			do_accept();

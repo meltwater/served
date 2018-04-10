@@ -26,8 +26,6 @@
 
 #include <iostream>
 
-#include <unistd.h>
-
 /* rest_resource example
  *
  * This example demonstrates how you might use served to create REST resources.

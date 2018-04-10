@@ -26,8 +26,6 @@
 
 #include <iostream>
 
-#include <unistd.h>
-
 /* handlers example
  *
  * This is a demonstration of using various handler mechanisms, including REST parameters with rejex

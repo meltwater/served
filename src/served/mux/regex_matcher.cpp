@@ -30,21 +30,14 @@ namespace served { namespace mux {
 regex_matcher::regex_matcher(const std::string & variable_name, const std::string & regex)
 	: _variable_name(variable_name)
 	, _regex(regex)
-{
-	if (!_regex.ok()) {
-		throw std::runtime_error(_regex.error());
-	}
-}
+{ }
 
 //  -----  matching logic  -----
 
 bool
 regex_matcher::check_match(const std::string & path_segment)
 {
-	if (_regex.ok()) {
-		return (re2::RE2::FullMatch(path_segment, _regex));
-	}
-	return false;
+    return std::regex_match(path_segment, _regex);
 }
 
 //  -----  REST param collecting  -----

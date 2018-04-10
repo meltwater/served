@@ -22,7 +22,6 @@ Features:
 ### Requirements
 
 * [Required] - [Boost 1.56](http://www.boost.org/)
-* [Required] - [RE2](http://code.google.com/p/re2/)
 * [Optional] - [Ragel](http://www.complang.org/ragel/)
 
 ### Building

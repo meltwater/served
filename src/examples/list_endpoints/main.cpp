@@ -26,8 +26,6 @@
 
 #include <iostream>
 
-#include <unistd.h>
-
 /* list_endpoints example
  *
  * This example demonstrates how to expose a list of registered API endpoints using the
