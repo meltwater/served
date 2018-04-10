@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <string>
+#include <sstream>
 
 namespace served {
 
@@ -224,7 +225,9 @@ request_parser_impl::expecting_body()
 			size_t len = 0;
 			try
 			{
-				len = std::stoi(length);
+				std::stringstream convert;
+				convert << length;
+				convert >> len;
 			}
 			catch (...) {}
 
