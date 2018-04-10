@@ -34,7 +34,7 @@ namespace served {
 void
 request::clear()
 {
-	_method = served::method::GET;
+	_method = served::method::Get;
 	_destination = uri();
 	_HTTP_version = "";
 	_source = "";
@@ -42,7 +42,7 @@ request::clear()
 }
 
 void
-request::set_method(const enum method & method)
+request::set_method(const served::method & method)
 {
 	_method = method;
 }
@@ -91,7 +91,7 @@ request::url()
 
 //  -----  component accessors  -----
 
-enum method
+served::method
 request::method() const
 {
 	return _method;

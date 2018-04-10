@@ -42,19 +42,19 @@ namespace served {
  */
 class request_parser_impl : public served::request_parser {
 public:
-	enum status_type
+	enum status
 	{
-		ERROR = 0,
-		READ_HEADER,
-		EXPECT_CONTINUE,
-		READ_BODY,
-		FINISHED,
-		REJECTED_REQUEST_SIZE
+		Error = 0,
+		ReadHeader,
+		ExpectContinue,
+		ReadBody,
+		Finished,
+		RejectedRequestSize
 	};
 
 private:
 	request &         _request;
-	status_type       _status;
+	status            _status;
 	size_t            _body_expected;
 	std::stringstream _body_stream;
 	size_t            _max_req_size_bytes;
@@ -70,7 +70,7 @@ public:
 	explicit request_parser_impl(request & req, size_t max_req_size_bytes = 0)
 		: served::request_parser()
 		, _request(req)
-		, _status(status_type::READ_HEADER)
+		, _status(ReadHeader)
 		, _body_expected(0)
 		, _body_stream()
 		, _max_req_size_bytes(max_req_size_bytes)
@@ -85,7 +85,7 @@ public:
 	 *
 	 * @return the new state of the parser
 	 */
-	status_type parse(const char *data, size_t len);
+	status parse(const char *data, size_t len);
 
 protected:
 	/*
@@ -170,7 +170,7 @@ private:
 	 *
 	 * @return status_type of request_parser_impl, FINISHED indicates the body is fully read
 	 */
-	status_type parse_body(const char *data, size_t len);
+	status parse_body(const char *data, size_t len);
 };
 
 } // served namespace

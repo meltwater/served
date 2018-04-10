@@ -46,11 +46,11 @@ class connection
 	: public std::enable_shared_from_this<connection>
 {
 public:
-	enum status_type { READING = 0, DONE };
+	enum status { Reading = 0, Done };
 
 private:
 	boost::asio::io_service &    _io_service;
-	status_type                  _status;
+	status                       _status;
 	boost::asio::ip::tcp::socket _socket;
 	connection_manager &         _connection_manager;
 	multiplexer        &         _request_handler;

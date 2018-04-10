@@ -3449,15 +3449,15 @@ request_parser::get_status()
 {
 	if ( parser_error() )
 	{
-		return ERROR;
+		return status::Error;
 	}
 	else if ( parser_finished() )
 	{
-		return FINISHED;
+		return status::Finished;
 	}
 	else
 	{
-		return RUNNING;
+		return status::Running;
 	}
 }
 

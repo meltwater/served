@@ -48,12 +48,12 @@ class request
 	// Appropriate map type for request may differ from response
 	typedef std::unordered_map<std::string, std::string> header_list;
 
-	enum method _method;
-	uri         _destination;
-	std::string _HTTP_version;
-	std::string _source;
-	header_list _headers;
-	std::string _body;
+	served::method _method;
+	uri            _destination;
+	std::string    _HTTP_version;
+	std::string    _source;
+	header_list    _headers;
+	std::string    _body;
 
 public:
 	//  -----  mutators  -----
@@ -68,7 +68,7 @@ public:
 	 *
 	 * @param method the HTTP method
 	 */
-	void set_method(const enum method & method);
+	void set_method(const served::method & method);
 
 	/*
 	 * Set the destination of this request.
@@ -127,7 +127,7 @@ public:
 	 *
 	 * @return HTTP method of the request
 	 */
-	enum method method() const;
+	served::method method() const;
 
 	/*
 	 * Get the URL of this request.

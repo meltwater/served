@@ -49,16 +49,16 @@ request_parser_impl::http_field( const char *
 	_request.set_header(header, val);
 }
 
-request_parser_impl::status_type
+request_parser_impl::status
 request_parser_impl::parse(const char *data, size_t len)
 {
 	_bytes_parsed += len;
 
 	if ( _max_req_size_bytes > 0 && _bytes_parsed > _max_req_size_bytes )
 	{
-		_status = request_parser_impl::REJECTED_REQUEST_SIZE;
+		_status = RejectedRequestSize;
 	}
-	else if ( _status == status_type::READ_HEADER )
+	else if ( _status == ReadHeader )
 	{
 		size_t extra_len = 0;
 		try
@@ -67,13 +67,13 @@ request_parser_impl::parse(const char *data, size_t len)
 		}
 		catch (...)
 		{
-			_status = status_type::ERROR;
+			_status = Error;
 			return _status;
 		}
 
 		request_parser::status status = get_status();
 
-		if ( request_parser::FINISHED == status )
+		if ( request_parser::status::Finished == status )
 		{
 			_body_expected = expecting_body();
 
@@ -81,30 +81,30 @@ request_parser_impl::parse(const char *data, size_t len)
 			{
 				if ( 0 == _body_expected )
 				{
-					_status = request_parser_impl::ERROR;
+					_status = Error;
 				}
 				else
 				{
-					_status = request_parser_impl::EXPECT_CONTINUE;
+					_status = ExpectContinue;
 				}
 			}
 			else if ( 0 != _body_expected )
 			{
-				_status = request_parser_impl::READ_BODY;
+				_status = ReadBody;
 				parse_body(data + extra_len, len - extra_len);
 			}
 			else
 			{
-				_status = request_parser_impl::FINISHED;
+				_status = Finished;
 			}
 		}
-		else if ( request_parser::ERROR == status )
+		else if ( request_parser::status::Error == status )
 		{
-			_status = request_parser_impl::ERROR;
+			_status = Error;
 		}
 	}
-	else if ( _status == status_type::EXPECT_CONTINUE
-	       || _status == status_type::READ_BODY       )
+	else if ( _status == ExpectContinue
+	       || _status == ReadBody       )
 	{
 		parse_body(data, len);
 	}
@@ -212,8 +212,8 @@ request_parser_impl::expecting_body()
 {
 	switch (_request.method())
 	{
-	case method::PUT:
-	case method::POST:
+	case method::Put:
+	case method::Post:
 	{
 		std::string type   = _request.header("content-type");
 		std::string length = _request.header("content-length");
@@ -238,7 +238,7 @@ request_parser_impl::expecting_body()
 	return 0;
 }
 
-request_parser_impl::status_type
+request_parser_impl::status
 request_parser_impl::parse_body(const char *data, size_t len)
 {
 	if ( len > _body_expected )
@@ -253,11 +253,11 @@ request_parser_impl::parse_body(const char *data, size_t len)
 	{
 		_request.set_body(_body_stream.str());
 		_body_stream.str(std::string());
-		_status = status_type::FINISHED;
+		_status = Finished;
 	}
 	else
 	{
-		_status = status_type::READ_BODY;
+		_status = ReadBody;
 	}
 
 	return _status;

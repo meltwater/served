@@ -31,8 +31,8 @@ namespace served {
 /*
  * HTTP method enum
  */
-enum method {
-	GET, POST, HEAD, PUT, DELETE, OPTIONS, TRACE, CONNECT, BREW
+enum class method {
+	Get, Post, Head, Put, Delete, Options, Trace, Connect, Brew
 };
 
 /*
@@ -43,27 +43,27 @@ enum method {
  * @return the method enum as a string
  */
 inline std::string
-method_to_string(enum method m)
+method_to_string(method m)
 {
 	switch(m)
 	{
-		case method::GET:
+		case method::Get:
 			return "GET";
-		case method::POST:
+		case method::Post:
 			return "POST";
-		case method::HEAD:
+		case method::Head:
 			return "HEAD";
-		case method::PUT:
+		case method::Put:
 			return "PUT";
-		case method::DELETE:
+		case method::Delete:
 			return "DELETE";
-		case method::OPTIONS:
+		case method::Options:
 			return "OPTIONS";
-		case method::TRACE:
+		case method::Trace:
 			return "TRACE";
-		case method::CONNECT:
+		case method::Connect:
 			return "CONNECT";
-		case method::BREW:
+		case method::Brew:
 			return "BREW";
 	}
 	return "";
@@ -76,35 +76,35 @@ method_to_string(enum method m)
  *
  * @return the string converted to an enum
  */
-inline enum method
+inline method
 method_from_string(const std::string & str)
 {
 	if ( "GET" == str ) {
-		return method::GET;
+		return method::Get;
 	}
 	if ( "POST" == str ) {
-		return method::POST;
+		return method::Post;
 	}
 	if ( "HEAD" == str ) {
-		return method::HEAD;
+		return method::Head;
 	}
 	if ( "PUT" == str ) {
-		return method::PUT;
+		return method::Put;
 	}
 	if ( "DELETE" == str ) {
-		return method::DELETE;
+		return method::Delete;
 	}
 	if ( "OPTIONS" == str ) {
-		return method::OPTIONS;
+		return method::Options;
 	}
 	if ( "TRACE" == str ) {
-		return method::TRACE;
+		return method::Trace;
 	}
 	if ( "CONNECT" == str ) {
-		return method::CONNECT;
+		return method::Connect;
 	}
 	if ( "BREW" == str ) {
-		return method::BREW;
+		return method::Brew;
 	}
 	throw std::runtime_error("method string not recognised");
 }

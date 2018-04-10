@@ -143,7 +143,7 @@ TEST_CASE("request parser can parse http requests", "[request_parser]")
 	{
 		SECTION("will parse header without errors")
 		{
-			REQUIRE(served::request_parser::FINISHED == parser.get_status());
+			REQUIRE(served::request_parser::status::Finished == parser.get_status());
 		}
 		SECTION("parse returns offset to beginning of content")
 		{
@@ -205,7 +205,7 @@ TEST_CASE("request parser can handle utf-8", "[request_parser]")
 	{
 		SECTION("will parse header without errors")
 		{
-			REQUIRE(served::request_parser::FINISHED == parser.get_status());
+			REQUIRE(served::request_parser::status::Finished == parser.get_status());
 		}
 		SECTION("parse returns offset to beginning of content")
 		{
@@ -272,7 +272,7 @@ TEST_CASE("request parser can handle request in chunks", "[request_parser]")
 	{
 		SECTION("will parse chunked header without errors")
 		{
-			REQUIRE(parser.get_status() == mock_request_parser::FINISHED);
+			REQUIRE(parser.get_status() == mock_request_parser::status::Finished);
 		}
 	}
 	SECTION("header is parsed correctly")

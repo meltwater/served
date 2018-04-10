@@ -37,35 +37,35 @@ methods_handler::methods_handler(const std::string path, const std::string info 
 methods_handler &
 methods_handler::get (served_req_handler handler)
 {
-	_handlers[served::method::GET] = handler;
+	_handlers[served::method::Get] = handler;
 	return *this;
 }
 
 methods_handler &
 methods_handler::post(served_req_handler handler)
 {
-	_handlers[served::method::POST] = handler;
+	_handlers[served::method::Post] = handler;
 	return *this;
 }
 
 methods_handler &
 methods_handler::head(served_req_handler handler)
 {
-	_handlers[served::method::HEAD] = handler;
+	_handlers[served::method::Head] = handler;
 	return *this;
 }
 
 methods_handler &
 methods_handler::put (served_req_handler handler)
 {
-	_handlers[served::method::PUT] = handler;
+	_handlers[served::method::Put] = handler;
 	return *this;
 }
 
 methods_handler &
 methods_handler::del (served_req_handler handler)
 {
-	_handlers[served::method::DELETE] = handler;
+	_handlers[served::method::Delete] = handler;
 	return *this;
 }
 

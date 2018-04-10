@@ -43,16 +43,16 @@ TEST_CASE("test methods handling", "[methods_handler]")
 		auto dummy = [](served::response &, const served::request &) {};
 
 		served::methods_handler h("/dummy");
-		h.post(dummy).get(dummy).method(served::method::CONNECT, dummy).put(dummy);
+		h.post(dummy).get(dummy).method(served::method::Connect, dummy).put(dummy);
 
-		CHECK(h.method_supported(served::method::POST) == true);
-		CHECK(h.method_supported(served::method::GET) == true);
-		CHECK(h.method_supported(served::method::CONNECT) == true);
-		CHECK(h.method_supported(served::method::PUT) == true);
+		CHECK(h.method_supported(served::method::Post) == true);
+		CHECK(h.method_supported(served::method::Get) == true);
+		CHECK(h.method_supported(served::method::Connect) == true);
+		CHECK(h.method_supported(served::method::Put) == true);
 
-		CHECK(h.method_supported(served::method::DELETE) == false);
-		CHECK(h.method_supported(served::method::HEAD) == false);
-		CHECK(h.method_supported(served::method::BREW) == false);
+		CHECK(h.method_supported(served::method::Delete) == false);
+		CHECK(h.method_supported(served::method::Head) == false);
+		CHECK(h.method_supported(served::method::Brew) == false);
 	}
 
 	SECTION("check endpoint propagation no description")
@@ -60,7 +60,7 @@ TEST_CASE("test methods handling", "[methods_handler]")
 		auto dummy = [](served::response &, const served::request &) {};
 
 		served::methods_handler h("/this/path/is/great");
-		h.post(dummy).get(dummy).method(served::method::CONNECT, dummy).put(dummy);
+		h.post(dummy).get(dummy).method(served::method::Connect, dummy).put(dummy);
 
 		served::served_endpoint_list list;
 		h.propagate_endpoint(list);

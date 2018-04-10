@@ -40,7 +40,7 @@ connection::connection( boost::asio::io_service &    io_service
                       , int                          write_timeout
                       )
 	: _io_service(io_service)
-	, _status(status_type::READING)
+	, _status(Reading)
 	, _socket(std::move(socket))
 	, _connection_manager(manager)
 	, _request_handler(handler)
@@ -95,15 +95,15 @@ connection::do_read()
 		[this, self](boost::system::error_code ec, std::size_t bytes_transferred) {
 			if (!ec)
 			{
-				request_parser_impl::status_type result;
+				request_parser_impl::status result;
 				result = _request_parser.parse(_buffer.data(), bytes_transferred);
 
-				if ( request_parser_impl::FINISHED == result )
+				if ( request_parser_impl::Finished == result )
 				{
 					// Parsing is finished, stop reading and send response.
 
 					_read_timer.cancel();
-					_status = status_type::DONE;
+					_status = Done;
 
 					try
 					{
@@ -139,34 +139,34 @@ connection::do_read()
 					{
 					}
 				}
-				else if ( request_parser_impl::EXPECT_CONTINUE == result )
+				else if ( request_parser_impl::ExpectContinue == result )
 				{
 					// The client is expecting a 100-continue, so we serve it and continue reading.
 
 					response::stock_reply(served::status_1XX::CONTINUE, _response);
 					do_write();
 				}
-				else if ( request_parser_impl::READ_HEADER == result
-				       || request_parser_impl::READ_BODY   == result )
+				else if ( request_parser_impl::ReadHeader == result
+				       || request_parser_impl::ReadBody   == result )
 				{
 					// Not finished reading response, continue.
 
 					do_read();
 				}
-				else if ( request_parser_impl::REJECTED_REQUEST_SIZE == result )
+				else if ( request_parser_impl::RejectedRequestSize == result )
 				{
 					// The request is too large and has been rejected
 
-					_status = status_type::DONE;
+					_status = Done;
 
 					response::stock_reply(served::status_4XX::REQ_ENTITY_TOO_LARGE, _response);
 					do_write();
 				}
-				else if ( request_parser_impl::ERROR == result )
+				else if ( request_parser_impl::Error == result )
 				{
 					// Error occurred while parsing, respond with BAD_REQUEST
 
-					_status = status_type::DONE;
+					_status = Done;
 
 					response::stock_reply(served::status_4XX::BAD_REQUEST, _response);
 					do_write();
@@ -189,7 +189,7 @@ connection::do_write()
 		[this, self](boost::system::error_code ec, std::size_t) {
 			if ( !ec )
 			{
-				if ( status_type::READING == _status )
+				if ( Reading == _status )
 				{
 					// If we're still reading from the client then continue
 					do_read();

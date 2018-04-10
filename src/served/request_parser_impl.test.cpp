@@ -44,13 +44,13 @@ TEST_CASE("request parser impl can parse http requests", "[request_parser_impl]"
 
 	auto status = parser.parse(request, strlen(request));
 
-	REQUIRE(status == served::request_parser_impl::FINISHED);
+	REQUIRE(status == served::request_parser_impl::Finished);
 
 	SECTION("header is parsed correctly")
 	{
 		SECTION("check request")
 		{
-			REQUIRE(req.method()       == served::method::POST);
+			REQUIRE(req.method()       == served::method::Post);
 			REQUIRE(req.HTTP_version() == "HTTP/1.1");
 			REQUIRE(req.body()         == "you got served!");
 		}
@@ -91,7 +91,7 @@ TEST_CASE("request parser impl can parse bad requests", "[request_parser_impl]")
 
 		auto status = parser.parse(request, strlen(request));
 
-		REQUIRE(status == served::request_parser_impl::ERROR);
+		REQUIRE(status == served::request_parser_impl::Error);
 	}
 
 	SECTION("Unrecognised HTTP protocol")
@@ -108,7 +108,7 @@ TEST_CASE("request parser impl can parse bad requests", "[request_parser_impl]")
 
 		auto status = parser.parse(request, strlen(request));
 
-		REQUIRE(status == served::request_parser_impl::ERROR);
+		REQUIRE(status == served::request_parser_impl::Error);
 	}
 }
 
@@ -126,13 +126,13 @@ TEST_CASE("request parser impl can handle utf-8", "[request_parser_impl]")
 
 	auto status = parser.parse(request, strlen(request));
 
-	REQUIRE(status == served::request_parser_impl::FINISHED);
+	REQUIRE(status == served::request_parser_impl::Finished);
 
 	SECTION("header is parsed correctly")
 	{
 		SECTION("check request")
 		{
-			REQUIRE(req.method()       == served::method::POST);
+			REQUIRE(req.method()       == served::method::Post);
 			REQUIRE(req.HTTP_version() == u8"HTTP/1.1");
 			REQUIRE(req.body()         == u8"Unicode character: \u2018");
 		}
@@ -161,21 +161,21 @@ TEST_CASE("request parser impl can handle utf-8", "[request_parser_impl]")
 
 TEST_CASE("test parser states", "[request_parser_impl]")
 {
-	typedef served::request_parser_impl::status_type status_type;
-	typedef std::tuple<std::string, status_type>     section_story;
-	typedef std::vector<section_story>               section_stories;
+	typedef served::request_parser_impl::status  status_type;
+	typedef std::tuple<std::string, status_type> section_story;
+	typedef std::vector<section_story>           section_stories;
 
 	SECTION("GET req with no body")
 	{
 		served::request dummy_req;
 		served::request_parser_impl parser(dummy_req);
 		auto sections = section_stories {{
-			section_story { "GET /endpoints/int/test HTTP/1.1\r\n", status_type::READ_HEADER },
-			section_story { "Host: localhost\r\n",                  status_type::READ_HEADER },
-			section_story { "Agent: me\r\n",                        status_type::READ_HEADER },
-			section_story { "\r\n",                                 status_type::FINISHED    },
-			section_story { "this should be ig",                    status_type::FINISHED    },
-			section_story { "nored entirely",                       status_type::FINISHED    },
+			section_story { "GET /endpoints/int/test HTTP/1.1\r\n", status_type::ReadHeader },
+			section_story { "Host: localhost\r\n",                  status_type::ReadHeader },
+			section_story { "Agent: me\r\n",                        status_type::ReadHeader },
+			section_story { "\r\n",                                 status_type::Finished    },
+			section_story { "this should be ig",                    status_type::Finished    },
+			section_story { "nored entirely",                       status_type::Finished    },
 		}};
 
 		for ( const auto & section : sections )
@@ -185,7 +185,7 @@ TEST_CASE("test parser states", "[request_parser_impl]")
 			REQUIRE(std::get<1>(section) == parser.parse(s.c_str(), s.length()));
 		}
 
-		CHECK(dummy_req.method() == served::method::GET);
+		CHECK(dummy_req.method() == served::method::Get);
 		CHECK(dummy_req.url().path() == "/endpoints/int/test");
 		CHECK(dummy_req.url().query() == "");
 		CHECK(dummy_req.header("host") == "localhost");
@@ -197,10 +197,10 @@ TEST_CASE("test parser states", "[request_parser_impl]")
 		served::request dummy_req;
 		served::request_parser_impl parser(dummy_req);
 		auto sections = section_stories {{
-			section_story { "GET /endpoinMISTAKEHEREHTTP/1.1\r", status_type::ERROR },
-			section_story { "\nHost: localhost",                 status_type::ERROR },
-			section_story { "\r\nAgent: me\r\n",                 status_type::ERROR },
-			section_story { "\r\n",                              status_type::ERROR },
+			section_story { "GET /endpoinMISTAKEHEREHTTP/1.1\r", status_type::Error },
+			section_story { "\nHost: localhost",                 status_type::Error },
+			section_story { "\r\nAgent: me\r\n",                 status_type::Error },
+			section_story { "\r\n",                              status_type::Error },
 		}};
 
 		for ( const auto & section : sections )
@@ -219,10 +219,10 @@ TEST_CASE("test parser states", "[request_parser_impl]")
 		served::request dummy_req;
 		served::request_parser_impl parser(dummy_req);
 		auto sections = section_stories {{
-			section_story { "GET /endpoint??thisiswrong& HTTP/1.1\r", status_type::ERROR },
-			section_story { "\nHost: localhost",                      status_type::ERROR },
-			section_story { "\r\nAgent: me\r\n",                      status_type::ERROR },
-			section_story { "\r\n",                                   status_type::ERROR },
+			section_story { "GET /endpoint??thisiswrong& HTTP/1.1\r", status_type::Error },
+			section_story { "\nHost: localhost",                      status_type::Error },
+			section_story { "\r\nAgent: me\r\n",                      status_type::Error },
+			section_story { "\r\n",                                   status_type::Error },
 		}};
 
 		for ( const auto & section : sections )
@@ -238,10 +238,10 @@ TEST_CASE("test parser states", "[request_parser_impl]")
 		served::request dummy_req;
 		served::request_parser_impl parser(dummy_req);
 		auto sections = section_stories {{
-			section_story { "GET /endpoint?t=r&wrong HTTP/1.1\r", status_type::ERROR },
-			section_story { "\nHost: localhost",                  status_type::ERROR },
-			section_story { "\r\nAgent: me\r\n",                  status_type::ERROR },
-			section_story { "\r\n",                               status_type::ERROR },
+			section_story { "GET /endpoint?t=r&wrong HTTP/1.1\r", status_type::Error },
+			section_story { "\nHost: localhost",                  status_type::Error },
+			section_story { "\r\nAgent: me\r\n",                  status_type::Error },
+			section_story { "\r\n",                               status_type::Error },
 		}};
 
 		for ( const auto & section : sections )
@@ -251,20 +251,20 @@ TEST_CASE("test parser states", "[request_parser_impl]")
 			REQUIRE(std::get<1>(section) == parser.parse(s.c_str(), s.length()));
 		}
 	}
-	*/
 
+	*/
 	SECTION("POST with body")
 	{
 		served::request dummy_req;
 		served::request_parser_impl parser(dummy_req);
 		auto sections = section_stories {{
-			section_story { "POST /endpoints HTTP/1.1\r\n", status_type::READ_HEADER },
-			section_story { "Content-Type: text/html\r\n",  status_type::READ_HEADER },
-			section_story { "Content-Length: 40\r\n",       status_type::READ_HEADER },
-			section_story { "\r\nA small amoun",            status_type::READ_BODY   },
-			section_story { "t of body for you",            status_type::READ_BODY   },
-			section_story { "to enjoy plz thxx",            status_type::FINISHED    },
-			section_story { "plz ignore this..",            status_type::FINISHED    },
+			section_story { "POST /endpoints HTTP/1.1\r\n", status_type::ReadHeader },
+			section_story { "Content-Type: text/html\r\n",  status_type::ReadHeader },
+			section_story { "Content-Length: 40\r\n",       status_type::ReadHeader },
+			section_story { "\r\nA small amoun",            status_type::ReadBody   },
+			section_story { "t of body for you",            status_type::ReadBody   },
+			section_story { "to enjoy plz thxx",            status_type::Finished    },
+			section_story { "plz ignore this..",            status_type::Finished    },
 		}};
 
 		for ( const auto & section : sections )
@@ -282,13 +282,13 @@ TEST_CASE("test parser states", "[request_parser_impl]")
 		served::request dummy_req;
 		served::request_parser_impl parser(dummy_req);
 		auto sections = section_stories {{
-			section_story { "PUT /endpoints HTTP/1.1\r\n", status_type::READ_HEADER },
-			section_story { "Content-Type: text/html\r\n", status_type::READ_HEADER },
-			section_story { "Content-Length: 40\r\n",      status_type::READ_HEADER },
-			section_story { "\r\nA small amoun",           status_type::READ_BODY   },
-			section_story { "t of body for you",           status_type::READ_BODY   },
-			section_story { "to enjoy plz thxx",           status_type::FINISHED    },
-			section_story { "plz ignore this..",           status_type::FINISHED    },
+			section_story { "PUT /endpoints HTTP/1.1\r\n", status_type::ReadHeader },
+			section_story { "Content-Type: text/html\r\n", status_type::ReadHeader },
+			section_story { "Content-Length: 40\r\n",      status_type::ReadHeader },
+			section_story { "\r\nA small amoun",           status_type::ReadBody   },
+			section_story { "t of body for you",           status_type::ReadBody   },
+			section_story { "to enjoy plz thxx",           status_type::Finished    },
+			section_story { "plz ignore this..",           status_type::Finished    },
 		}};
 
 		for ( const auto & section : sections )
@@ -306,12 +306,12 @@ TEST_CASE("test parser states", "[request_parser_impl]")
 		served::request dummy_req;
 		served::request_parser_impl parser(dummy_req);
 		auto sections = section_stories {{
-			section_story { "PUT /endpoints HTTP/1.1\r\n", status_type::READ_HEADER },
-			section_story { "Content-Length: 40\r\n",      status_type::READ_HEADER },
-			section_story { "\r\nA small amoun",           status_type::FINISHED    },
-			section_story { "t of body for you",           status_type::FINISHED    },
-			section_story { "to enjoy plz thxx",           status_type::FINISHED    },
-			section_story { "plz ignore this..",           status_type::FINISHED    },
+			section_story { "PUT /endpoints HTTP/1.1\r\n", status_type::ReadHeader },
+			section_story { "Content-Length: 40\r\n",      status_type::ReadHeader },
+			section_story { "\r\nA small amoun",           status_type::Finished    },
+			section_story { "t of body for you",           status_type::Finished    },
+			section_story { "to enjoy plz thxx",           status_type::Finished    },
+			section_story { "plz ignore this..",           status_type::Finished    },
 		}};
 
 		for ( const auto & section : sections )
@@ -329,12 +329,12 @@ TEST_CASE("test parser states", "[request_parser_impl]")
 		served::request dummy_req;
 		served::request_parser_impl parser(dummy_req);
 		auto sections = section_stories {{
-			section_story { "PUT /endpoints HTTP/1.1\r\n", status_type::READ_HEADER },
-			section_story { "Content-Type: text/html\r\n", status_type::READ_HEADER },
-			section_story { "\r\nA small amoun",           status_type::FINISHED    },
-			section_story { "t of body for you",           status_type::FINISHED    },
-			section_story { "to enjoy plz thxx",           status_type::FINISHED    },
-			section_story { "plz ignore this..",           status_type::FINISHED    },
+			section_story { "PUT /endpoints HTTP/1.1\r\n", status_type::ReadHeader },
+			section_story { "Content-Type: text/html\r\n", status_type::ReadHeader },
+			section_story { "\r\nA small amoun",           status_type::Finished    },
+			section_story { "t of body for you",           status_type::Finished    },
+			section_story { "to enjoy plz thxx",           status_type::Finished    },
+			section_story { "plz ignore this..",           status_type::Finished    },
 		}};
 
 		for ( const auto & section : sections )
@@ -352,14 +352,14 @@ TEST_CASE("test parser states", "[request_parser_impl]")
 		served::request dummy_req;
 		served::request_parser_impl parser(dummy_req);
 		auto sections = section_stories {{
-			section_story { "PUT /endpoints HTTP/1.1\r\n", status_type::READ_HEADER     },
-			section_story { "Content-Type: text/html\r\n", status_type::READ_HEADER     },
-			section_story { "Content-Length: 40\r\n",      status_type::READ_HEADER     },
-			section_story { "Expect: 100-continue\r\n",    status_type::READ_HEADER     },
-			section_story { "\r\n",                        status_type::EXPECT_CONTINUE },
-			section_story { "A small amount of body f",    status_type::READ_BODY       },
-			section_story { "or youto enjoy plz thxx",     status_type::FINISHED        },
-			section_story { "plz ignore this..",           status_type::FINISHED        },
+			section_story { "PUT /endpoints HTTP/1.1\r\n", status_type::ReadHeader     },
+			section_story { "Content-Type: text/html\r\n", status_type::ReadHeader     },
+			section_story { "Content-Length: 40\r\n",      status_type::ReadHeader     },
+			section_story { "Expect: 100-continue\r\n",    status_type::ReadHeader     },
+			section_story { "\r\n",                        status_type::ExpectContinue },
+			section_story { "A small amount of body f",    status_type::ReadBody       },
+			section_story { "or youto enjoy plz thxx",     status_type::Finished        },
+			section_story { "plz ignore this..",           status_type::Finished        },
 		}};
 
 		for ( const auto & section : sections )
@@ -377,13 +377,13 @@ TEST_CASE("test parser states", "[request_parser_impl]")
 		served::request dummy_req;
 		served::request_parser_impl parser(dummy_req);
 		auto sections = section_stories {{
-			section_story { "PUT /endpoints HTTP/1.1\r\n", status_type::READ_HEADER },
-			section_story { "Content-Type: text/html\r\n", status_type::READ_HEADER },
-			section_story { "Expect: 100-continue\r\n",    status_type::READ_HEADER },
-			section_story { "\r\n",                        status_type::ERROR       },
-			section_story { "A small amount of body f",    status_type::ERROR       },
-			section_story { "or youto enjoy plz thxx",     status_type::ERROR       },
-			section_story { "plz ignore this..",           status_type::ERROR       },
+			section_story { "PUT /endpoints HTTP/1.1\r\n", status_type::ReadHeader },
+			section_story { "Content-Type: text/html\r\n", status_type::ReadHeader },
+			section_story { "Expect: 100-continue\r\n",    status_type::ReadHeader },
+			section_story { "\r\n",                        status_type::Error       },
+			section_story { "A small amount of body f",    status_type::Error       },
+			section_story { "or youto enjoy plz thxx",     status_type::Error       },
+			section_story { "plz ignore this..",           status_type::Error       },
 		}};
 
 		for ( const auto & section : sections )
@@ -399,12 +399,12 @@ TEST_CASE("test parser states", "[request_parser_impl]")
 		served::request dummy_req;
 		served::request_parser_impl parser(dummy_req, 122);
 		auto sections = section_stories {{
-			section_story { "POST /endpoints HTTP/1.1\r\n", status_type::READ_HEADER },
-			section_story { "Content-Type: text/html\r\n",  status_type::READ_HEADER },
-			section_story { "Content-Length: 40\r\n",       status_type::READ_HEADER },
-			section_story { "\r\nA small amoun",            status_type::READ_BODY   },
-			section_story { "t of body for you",            status_type::READ_BODY   },
-			section_story { "to enjoy plz thxx",            status_type::FINISHED    },
+			section_story { "POST /endpoints HTTP/1.1\r\n", status_type::ReadHeader },
+			section_story { "Content-Type: text/html\r\n",  status_type::ReadHeader },
+			section_story { "Content-Length: 40\r\n",       status_type::ReadHeader },
+			section_story { "\r\nA small amoun",            status_type::ReadBody   },
+			section_story { "t of body for you",            status_type::ReadBody   },
+			section_story { "to enjoy plz thxx",            status_type::Finished    },
 		}};
 
 		for ( const auto & section : sections )
@@ -422,13 +422,13 @@ TEST_CASE("test parser states", "[request_parser_impl]")
 		served::request dummy_req;
 		served::request_parser_impl parser(dummy_req, 115);
 		auto sections = section_stories {{
-			section_story { "POST /endpoints HTTP/1.1\r\n", status_type::READ_HEADER           },
-			section_story { "Content-Type: text/html\r\n",  status_type::READ_HEADER           },
-			section_story { "Content-Length: 40\r\n",       status_type::READ_HEADER           },
-			section_story { "\r\nA small amoun",            status_type::READ_BODY             },
-			section_story { "t of body for you",            status_type::READ_BODY             },
-			section_story { "to enjoy plz thxx",            status_type::REJECTED_REQUEST_SIZE },
-			section_story { "plz ignore this..",            status_type::REJECTED_REQUEST_SIZE },
+			section_story { "POST /endpoints HTTP/1.1\r\n", status_type::ReadHeader           },
+			section_story { "Content-Type: text/html\r\n",  status_type::ReadHeader           },
+			section_story { "Content-Length: 40\r\n",       status_type::ReadHeader           },
+			section_story { "\r\nA small amoun",            status_type::ReadBody             },
+			section_story { "t of body for you",            status_type::ReadBody             },
+			section_story { "to enjoy plz thxx",            status_type::RejectedRequestSize  },
+			section_story { "plz ignore this..",            status_type::RejectedRequestSize  },
 		}};
 
 		for ( const auto & section : sections )

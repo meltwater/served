@@ -156,7 +156,7 @@ TEST_CASE("multiplexer path routing", "[mux]")
 
 				served::request req;
 				req.set_destination(url);
-				req.set_method(served::method::GET);
+				req.set_method(served::method::Get);
 
 				served::response res;
 
@@ -171,7 +171,7 @@ TEST_CASE("multiplexer path routing", "[mux]")
 
 				served::request req;
 				req.set_destination(url);
-				req.set_method(served::method::GET);
+				req.set_method(served::method::Get);
 
 				served::response res;
 
@@ -220,7 +220,7 @@ TEST_CASE("multiplexer method routing", "[mux]")
 
 			url.set_path(s1.pattern);
 			req.set_destination(url);
-			req.set_method(served::method::GET);
+			req.set_method(served::method::Get);
 
 			mux.forward_to_handler( res, req );
 
@@ -242,19 +242,19 @@ TEST_CASE("multiplexer method routing", "[mux]")
 			req.set_destination(url);
 
 			INFO("Checking accepts PUT");
-			req.set_method(served::method::PUT);
+			req.set_method(served::method::Put);
 			CHECK_NOTHROW(mux.forward_to_handler( res, req ));
 
 			INFO("Checking accepts DEL");
-			req.set_method(served::method::DELETE);
+			req.set_method(served::method::Delete);
 			CHECK_NOTHROW(mux.forward_to_handler( res, req ));
 
 			INFO("Checking accepts HEAD");
-			req.set_method(served::method::HEAD);
+			req.set_method(served::method::Head);
 			CHECK_NOTHROW(mux.forward_to_handler( res, req ));
 
 			INFO("Checking accepts POST");
-			req.set_method(served::method::POST);
+			req.set_method(served::method::Post);
 			CHECK_NOTHROW(mux.forward_to_handler( res, req ));
 
 			INFO("Checking for correct routing (4 requests)");
@@ -293,7 +293,7 @@ TEST_CASE("multiplexer overwriting", "[mux]")
 
 			url.set_path(s1.pattern);
 			req.set_destination(url);
-			req.set_method(served::method::POST);
+			req.set_method(served::method::Post);
 
 			mux.forward_to_handler( res, req );
 
@@ -315,15 +315,15 @@ TEST_CASE("multiplexer overwriting", "[mux]")
 			req.set_destination(url);
 
 			INFO("Checking accepts GET");
-			req.set_method(served::method::GET);
+			req.set_method(served::method::Get);
 			CHECK_NOTHROW(mux.forward_to_handler( res, req ));
 
 			INFO("Checking accepts HEAD");
-			req.set_method(served::method::HEAD);
+			req.set_method(served::method::Head);
 			CHECK_NOTHROW(mux.forward_to_handler( res, req ));
 
 			INFO("Checking accepts PUT");
-			req.set_method(served::method::PUT);
+			req.set_method(served::method::Put);
 			CHECK_NOTHROW(mux.forward_to_handler( res, req ));
 
 			INFO("Checking for no routed requests to overridden handler (0 requests)");
@@ -357,7 +357,7 @@ TEST_CASE("multiplexer hierarchy test", "[mux]")
 
 		url.set_path("/first/second");
 		req.set_destination(url);
-		req.set_method(served::method::GET);
+		req.set_method(served::method::Get);
 
 		mux.forward_to_handler( res, req );
 
@@ -385,7 +385,7 @@ TEST_CASE("multiplexer hierarchy test", "[mux]")
 
 		url.set_path("/first/second");
 		req.set_destination(url);
-		req.set_method(served::method::GET);
+		req.set_method(served::method::Get);
 
 		mux.forward_to_handler( res, req );
 
@@ -408,7 +408,7 @@ TEST_CASE("multiplexer REST params test", "[mux]")
 
 		url.set_path("/base/expected_123/end");
 		req.set_destination(url);
-		req.set_method(served::method::GET);
+		req.set_method(served::method::Get);
 
 		mux.forward_to_handler( res, req );
 
@@ -437,7 +437,7 @@ TEST_CASE("multiplexer test base path", "[mux]")
 
 			url.set_path("/base/path/end");
 			req.set_destination(url);
-			req.set_method(served::method::GET);
+			req.set_method(served::method::Get);
 
 			mux.forward_to_handler( res, req );
 			CHECK( res.status() == served::status_2XX::ACCEPTED );
@@ -449,7 +449,7 @@ TEST_CASE("multiplexer test base path", "[mux]")
 
 			url.set_path("/base/path/");
 			req.set_destination(url);
-			req.set_method(served::method::GET);
+			req.set_method(served::method::Get);
 
 			mux.forward_to_handler( res, req );
 			CHECK( res.status() == served::status_2XX::NO_CONTENT );
@@ -461,7 +461,7 @@ TEST_CASE("multiplexer test base path", "[mux]")
 
 			url.set_path("/base/not/end");
 			req.set_destination(url);
-			req.set_method(served::method::GET);
+			req.set_method(served::method::Get);
 
 			CHECK_THROWS_AS(mux.forward_to_handler(res, req), served::request_error);
 		}
@@ -481,7 +481,7 @@ TEST_CASE("multiplexer test base path", "[mux]")
 
 		url.set_path("/base/expected_123/end");
 		req.set_destination(url);
-		req.set_method(served::method::GET);
+		req.set_method(served::method::Get);
 
 		mux.forward_to_handler( res, req );
 
@@ -521,7 +521,7 @@ TEST_CASE("multiplexer test plugins", "[mux]")
 
 		url.set_path("/test");
 		req.set_destination(url);
-		req.set_method(served::method::GET);
+		req.set_method(served::method::Get);
 
 		mux.forward_to_handler(res, req);
 		mux.on_request_handled(res, req);
@@ -573,7 +573,7 @@ TEST_CASE("multiplexer test wrapped plugins", "[mux]")
 
 		url.set_path("/test");
 		req.set_destination(url);
-		req.set_method(served::method::GET);
+		req.set_method(served::method::Get);
 
 		mux.forward_to_handler(res, req);
 		mux.on_request_handled(res, req);
@@ -719,7 +719,7 @@ TEST_CASE("multiplexer endpoint list YAML", "[mux]")
 
 		served::request req;
 		req.set_destination(url);
-		req.set_method(served::method::GET);
+		req.set_method(served::method::Get);
 
 		served::response res;
 
