@@ -58,6 +58,15 @@ cc_library(
     ],
 )
 
+cc_binary(
+    name = "example-handlers",
+    copts = ["-Isrc",],
+    srcs = [
+        "src/examples/handlers/main.cpp",
+    ],
+    deps = [ "//:served" ],
+)
+
 cc_test(
     name = "served-test",
     copts = ["-Isrc",],

@@ -32,7 +32,7 @@ namespace served {
  * HTTP method enum
  */
 enum method {
-	GET, POST, HEAD, PUT, DELETE, OPTIONS, TRACE, CONNECT, BREW
+	GET, POST, HEAD, PUT, DELETE, OPTIONS, TRACE, CONNECT, BREW, PATCH
 };
 
 /*
@@ -65,6 +65,8 @@ method_to_string(enum method m)
 			return "CONNECT";
 		case method::BREW:
 			return "BREW";
+		case method::PATCH:
+			return "PATCH";
 	}
 	return "";
 }
@@ -105,6 +107,9 @@ method_from_string(const std::string & str)
 	}
 	if ( "BREW" == str ) {
 		return method::BREW;
+	}
+	if ( "PATCH" == str ) {
+		return method::PATCH;
 	}
 	throw std::runtime_error("method string not recognised");
 }

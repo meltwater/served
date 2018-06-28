@@ -214,6 +214,7 @@ request_parser_impl::expecting_body()
 	{
 	case method::PUT:
 	case method::POST:
+	case method::PATCH:
 	{
 		std::string type   = _request.header("content-type");
 		std::string length = _request.header("content-length");

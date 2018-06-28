@@ -23,6 +23,7 @@
 #include <served/served.hpp>
 #include <served/request_error.hpp>
 #include <served/status.hpp>
+#include <served/methods.hpp>
 
 #include <iostream>
 
@@ -49,7 +50,15 @@ int main(int, char const**)
 			res << ", number: ";
 			res << req.params["number"];
 
-			std::cout << req.body() << std::endl;
+			std::cout << "POST: " << req.body() << std::endl;
+		})
+		.method(served::method::PATCH, [](served::response & res, const served::request & req) {
+			res << "id: ";
+			res << req.params["id"];
+			res << ", number: ";
+			res << req.params["number"];
+
+			std::cout << "PATCH: " << req.body() << std::endl;
 		});
 
 	// GET /handlers/{id}
