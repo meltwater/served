@@ -27,7 +27,7 @@ Features:
 ### Building
 
 ```bash
-$ git clone git@github.com:datasift/served.git
+$ git clone git@github.com:meltwater/served.git
 $ mkdir served.build && cd served.build
 $ cmake ../served && make
 ```
@@ -35,7 +35,7 @@ $ cmake ../served && make
 Or, using [bazel](https://bazel.build/):
 
 ```bash
-$ git clone git@github.com:datasift/served.git
+$ git clone git@github.com:meltwater/served.git
 $ cd served
 $ bazel build :served
 $ bazel test :served-test
@@ -154,7 +154,7 @@ Pull requests are welcome.
 
 ## Authors
 
-* [@bigdatadev](https://github.com/bigdatadev)
+* [@cjgdev](https://github.com/cjgdev)
 * [@Jeffail](https://github.com/Jeffail)
 
 ## Copyright

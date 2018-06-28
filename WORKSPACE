@@ -1,4 +1,4 @@
-workspace(name = "com_github_datasift_served")
+workspace(name = "com_github_meltwater_served")
 
 git_repository(
     name = "com_github_nelhage_rules_boost",
