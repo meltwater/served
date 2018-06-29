@@ -103,10 +103,10 @@ echo '#define APPLICATION_NAME \"Served HTTP REST Library\"' >> $@
 echo '#define APPLICATION_CODENAME \"served\"' >> $@
 echo '#define APPLICATION_COPYRIGHT_YEARS \"2014\"' >> $@
 echo '#define APPLICATION_VERSION_STRING \"1.4.3-DS1\"' >> $@
-echo '#define APPLICATION_VENDOR_ID \"com.datasift\"' >> $@
-echo '#define APPLICATION_VENDOR_NAME \"DataSift\"' >> $@
-echo '#define APPLICATION_VENDOR_URL \"datasift.com\"' >> $@
-echo '#define APPLICATION_ID = \"com.datasift.served\"' >> $@
+echo '#define APPLICATION_VENDOR_ID \"com.meltwater\"' >> $@
+echo '#define APPLICATION_VENDOR_NAME \"Meltwater\"' >> $@
+echo '#define APPLICATION_VENDOR_URL \"meltwater.com\"' >> $@
+echo '#define APPLICATION_ID = \"com.meltwater.served\"' >> $@
 echo '#endif' >> $@
   """,
 )
