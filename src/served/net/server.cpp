@@ -69,7 +69,7 @@ server::server( const std::string & address
 }
 
 void
-server::run(int n_threads /* = 1 */)
+server::run(int n_threads /* = 1 */, bool block /* = true */)
 {
 	/*
 	 * The io_service::run() call will block until all asynchronous operations
@@ -88,9 +88,16 @@ server::run(int n_threads /* = 1 */)
 		}
 		for ( auto & thread : v_threads )
 		{
-			if ( thread.joinable() )
+			if ( block )
 			{
-				thread.join();
+				if ( thread.joinable() )
+				{
+					thread.join();
+				}
+			}
+			else
+			{
+				thread.detach();
 			}
 		}
 	}

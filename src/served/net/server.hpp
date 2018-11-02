@@ -71,12 +71,13 @@ public:
 	/*
 	 * A call that prompts the server into listening for HTTP requests.
 	 *
-	 * This call blocks until the server is closed, it accepts a value for how large the thread
-	 * pool should be for distributing requests.
+	 * This call accepts a value for how large the thread pool should be for distributing requests
+	 * and another param which defines the blocking nature.
 	 *
 	 * @param n_threads the number of threads to pool for request handling
+	 * @param block if n_threads > 0, defines whether this operation is blocking or not
 	 */
-	void run(int n_threads = 1);
+	void run(int n_threads = 1, bool block = true);
 
 	/*
 	 * Stops the server from accepting requests.
