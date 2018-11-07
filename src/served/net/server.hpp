@@ -61,22 +61,25 @@ public:
 	 * @param address the address to bind to for incoming connections
 	 * @param port the port to bind to for incoming connections
 	 * @param mux the multiplexer to be used for forwarding requests to handlers
+	 * @param register_signals specifies whether POSIX signals are captured or not
 	 * @param read_timeout optional parameter that specifies a timeout for reading
 	 * @param write_timeout optional parameter that specifies a timeout for writing
 	 */
 	explicit server( const std::string & address
 	               , const std::string & port
-	               , multiplexer       & mux     );
+	               , multiplexer       & mux
+	               , bool              register_signals = true );
 
 	/*
 	 * A call that prompts the server into listening for HTTP requests.
 	 *
-	 * This call blocks until the server is closed, it accepts a value for how large the thread
-	 * pool should be for distributing requests.
+	 * This call accepts a value for how large the thread pool should be for distributing requests
+	 * and another param which defines the blocking nature.
 	 *
 	 * @param n_threads the number of threads to pool for request handling
+	 * @param block if n_threads > 0, defines whether this operation is blocking or not
 	 */
-	void run(int n_threads = 1);
+	void run(int n_threads = 1, bool block = true);
 
 	/*
 	 * Stops the server from accepting requests.

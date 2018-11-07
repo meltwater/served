@@ -32,6 +32,7 @@ using namespace served::net;
 server::server( const std::string & address
               , const std::string & port
               , multiplexer       & mux
+              , bool              register_signals /* = true */
               )
 	: _io_service()
 	, _signals(_io_service)
@@ -48,11 +49,13 @@ server::server( const std::string & address
 	 * It is safe to register for the same signal multiple times in a program,
 	 * provided all registration for the specified signal is made through Asio.
 	 */
-	_signals.add(SIGINT);
-	_signals.add(SIGTERM);
+	if ( register_signals ) {
+		_signals.add(SIGINT);
+		_signals.add(SIGTERM);
 #if defined(SIGQUIT)
-	_signals.add(SIGQUIT);
+		_signals.add(SIGQUIT);
 #endif // defined(SIGQUIT)
+	}
 
 	do_await_stop();
 
@@ -69,7 +72,7 @@ server::server( const std::string & address
 }
 
 void
-server::run(int n_threads /* = 1 */)
+server::run(int n_threads /* = 1 */, bool block /* = true */)
 {
 	/*
 	 * The io_service::run() call will block until all asynchronous operations
@@ -88,9 +91,16 @@ server::run(int n_threads /* = 1 */)
 		}
 		for ( auto & thread : v_threads )
 		{
-			if ( thread.joinable() )
+			if ( block )
 			{
-				thread.join();
+				if ( thread.joinable() )
+				{
+					thread.join();
+				}
+			}
+			else
+			{
+				thread.detach();
 			}
 		}
 	}
