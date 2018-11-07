@@ -34,18 +34,8 @@ int main(int, char const**)
 {
 	served::multiplexer mux;
 
-	mux.handle("/customers")
-		.get([](served::response & res, const served::request & req) {
-			(void) res;
-			(void) req;
-			// list customers
-		})
-		.post([](served::response & res, const served::request & req) {
-			(void) res;
-			(void) req;
-			// create customer
-		});
-
+	// register a more specialized route first, otherwise all requests with
+	// "/customers" prefix will be routed to "/customers" handlers
 	mux.handle("/customers/{id}")
 		.get([](served::response & res, const served::request & req) {
 			(void) res;
@@ -61,6 +51,18 @@ int main(int, char const**)
 			(void) res;
 			(void) req;
 			// delete customer req.params["id"]
+		});
+
+	mux.handle("/customers")
+		.get([](served::response & res, const served::request & req) {
+			(void) res;
+			(void) req;
+			// list customers
+		})
+		.post([](served::response & res, const served::request & req) {
+			(void) res;
+			(void) req;
+			// create customer
 		});
 
 	served::net::server server("127.0.0.1", "8123", mux);
