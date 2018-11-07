@@ -61,12 +61,14 @@ public:
 	 * @param address the address to bind to for incoming connections
 	 * @param port the port to bind to for incoming connections
 	 * @param mux the multiplexer to be used for forwarding requests to handlers
+	 * @param register_signals specifies whether POSIX signals are captured or not
 	 * @param read_timeout optional parameter that specifies a timeout for reading
 	 * @param write_timeout optional parameter that specifies a timeout for writing
 	 */
 	explicit server( const std::string & address
 	               , const std::string & port
-	               , multiplexer       & mux     );
+	               , multiplexer       & mux
+	               , bool              register_signals = true );
 
 	/*
 	 * A call that prompts the server into listening for HTTP requests.
