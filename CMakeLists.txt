@@ -96,6 +96,12 @@ FOREACH (CONFIGINPUT ${CONFIGINPUTS})
 ENDFOREACH (CONFIGINPUT ${CONFIGINPUTS})
 
 #
+# pkg-config file generator
+#
+CONFIGURE_FILE("install/pkgconfig/served.pc.in" "${LIBRARY_OUTPUT_PATH}/pkgconfig/served.pc" @ONLY)
+INSTALL(FILES "${LIBRARY_OUTPUT_PATH}/pkgconfig/served.pc" DESTINATION lib/pkgconfig )
+
+#
 # Add Build Targets
 #
 IF (SERVED_BUILD_TESTS)
