@@ -1,0 +1,11 @@
+prefix=${pcfiledir}/../../
+libdir=${pcfiledir}/../
+includedir=${prefix}/include
+
+Name: served
+Description: @APPLICATION_NAME@
+URL: https://github.com/meltwater/served
+Version: @APPLICATION_VERSION_STRING@
+Cflags: -I${includedir}
+Libs: -L${libdir} -lserved
+
