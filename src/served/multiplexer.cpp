@@ -129,14 +129,14 @@ multiplexer::handle(const std::string & path, const std::string info /* = "" */,
 	{
 		if ( std::get<2>(*it) == path )
 		{
-				if(overwrite)
-				{
-					it = _handler_candidates.erase(it);
-				}
-				else
-				{
-					return std::get<1>(*it);
-				}
+			if(overwrite)
+			{
+				it = _handler_candidates.erase(it);
+			}
+			else
+			{
+				return std::get<1>(*it);
+			}
 		}
 		else
 		{
