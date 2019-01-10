@@ -139,7 +139,7 @@ public:
 	 *
 	 * @return returns a methods_handler used to specify handlers per HTTP method
 	 */
-	served::methods_handler & handle(const std::string & path, const std::string info = "");
+	served::methods_handler & handle(const std::string & path, const std::string info = "", bool overwrite = true);
 
 	//  ----- request forwarding  -----
 

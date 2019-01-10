@@ -121,14 +121,22 @@ multiplexer::get_segments(const std::string & path)
 //  -----  http request handlers  -----
 
 served::methods_handler &
-multiplexer::handle(const std::string & path, const std::string info /* = "" */)
+multiplexer::handle(const std::string & path, const std::string info /* = "" */, bool overwrite)
 {
+
 	// Remove any duplicates.
 	for ( auto it = _handler_candidates.begin(); it != _handler_candidates.end(); )
 	{
 		if ( std::get<2>(*it) == path )
 		{
-			it = _handler_candidates.erase(it);
+				if(overwrite)
+				{
+					it = _handler_candidates.erase(it);
+				}
+				else
+				{
+					return std::get<1>(*it);
+				}
 		}
 		else
 		{
