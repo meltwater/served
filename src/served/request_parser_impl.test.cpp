@@ -75,6 +75,87 @@ TEST_CASE("request parser impl can parse http requests", "[request_parser_impl]"
 	}
 }
 
+TEST_CASE("request parser read partial http requests", "[request_parser_impl]")
+{
+	const char* full_request =
+		"POST /you/got/served?reason=science#idet HTTP/1.1\r\n"
+		"Host: api.datasift.com\r\n"
+		"Content-Type: text/xml; charset=utf-8\r\n"
+		"Content-Length: 15\r\n"
+		"X-Example-Dup: val1\r\n"
+		"X-Example-Dup: val2\r\n"
+		"X-Example-Dup: val3\r\n"
+		"\r\n"
+		"you got served!";
+
+	// Simulate scenarios where a request headers overpass the size of a single
+	// buffer ( > 8192 bytes ). This might happen arbitrarily if a request header
+	// size > 8192bytes OR if the TCP stack decides to give us the HTTP headers in
+	// two callback calls instead of one.
+	//
+	// This can be exploited as a security vulnerability as an attacker could
+	// craft a malicious HTTP request inside a valid HTTP request (authorized by a
+	// reverse-proxy) if the attacker uses a smart packet split.
+	//
+	// It can also be considered as a conventional bug where every request with a
+	// path > buffer size will trigger arbitrary backend handler with a corrupted
+	// URI path.
+	//
+	std::vector<std::string::size_type> break_points = {{
+		2, 22, 42, 60, 72, 100, 128, 160, 170, 196, 208,
+	}};
+
+	for ( const auto & break_point : break_points )
+	{
+		served::request req;
+		served::request_parser_impl parser(req);
+
+		auto request1 = std::string(full_request, break_point);
+		auto request2 = std::string(full_request+break_point, strlen(full_request)-break_point);
+
+		INFO("Break point: " << break_point);
+
+		auto status = parser.parse(request1.data(), request1.length());
+
+		REQUIRE((
+			status == served::request_parser_impl::READ_HEADER ||
+			status == served::request_parser_impl::READ_BODY
+		));
+
+		status = parser.parse(request2.data(), request2.length());
+
+		REQUIRE(status == served::request_parser_impl::FINISHED);
+
+		SECTION("header is parsed correctly")
+		{
+			SECTION("check request")
+			{
+				CHECK(req.method()       == served::method::POST);
+				CHECK(req.HTTP_version() == "HTTP/1.1");
+				CHECK(req.body()         == "you got served!");
+			}
+			SECTION("check uri")
+			{
+				CHECK(req.url().URI()      == "/you/got/served?reason=science");
+				CHECK(req.url().path()     == "/you/got/served");
+				CHECK(req.url().query()    == "reason=science");
+				CHECK(req.url().fragment() == "idet");
+			}
+			SECTION("check query")
+			{
+				CHECK(req.query["reason"] == "science");
+			}
+			SECTION("check fields")
+			{
+				CHECK(req.header("Host")           == "api.datasift.com");
+				CHECK(req.header("Content-Type")   == "text/xml; charset=utf-8");
+				CHECK(req.header("CONTENT-LENGTH") == "15");
+				CHECK(req.header("X-EXAMPLE-DUP")  == "val1,val2,val3");
+			}
+		}
+	}
+}
+
 TEST_CASE("request parser impl can parse bad requests", "[request_parser_impl]")
 {
 	SECTION("Bad HTTP method")

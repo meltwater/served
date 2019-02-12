@@ -55,6 +55,7 @@ public:
 private:
 	request &         _request;
 	status_type       _status;
+	std::string       _truncated_header_bytes;
 	size_t            _body_expected;
 	std::stringstream _body_stream;
 	size_t            _max_req_size_bytes;
@@ -71,6 +72,7 @@ public:
 		: served::request_parser()
 		, _request(req)
 		, _status(status_type::READ_HEADER)
+		, _truncated_header_bytes()
 		, _body_expected(0)
 		, _body_stream()
 		, _max_req_size_bytes(max_req_size_bytes)

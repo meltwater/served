@@ -53,17 +53,45 @@ request_parser_impl::status_type
 request_parser_impl::parse(const char *data, size_t len)
 {
 	_bytes_parsed += len;
-
 	if ( _max_req_size_bytes > 0 && _bytes_parsed > _max_req_size_bytes )
 	{
 		_status = request_parser_impl::REJECTED_REQUEST_SIZE;
+		return _status;
 	}
-	else if ( _status == status_type::READ_HEADER )
+
+	std::string data_str;
+	if ( _truncated_header_bytes.length() > 0 )
 	{
+		data_str = _truncated_header_bytes;
+		data_str.append(data, len);
+		_truncated_header_bytes = std::string();
+	}
+	else
+	{
+		data_str = std::string(data, len);
+	}
+
+	if ( _status == status_type::READ_HEADER )
+	{
+		auto last_crlf = data_str.find_last_of("\r\n");
+		if ( last_crlf != data_str.length() )
+		{
+			if ( last_crlf == std::string::npos )
+			{
+				_truncated_header_bytes = data_str;
+				return _status;
+			}
+			if ( data_str.find_first_of("\r\n\r\n") == std::string::npos )
+			{
+				_truncated_header_bytes = data_str.substr(last_crlf+1);
+				data_str = data_str.substr(0, last_crlf);
+			}
+		}
+
 		size_t extra_len = 0;
 		try
 		{
-			extra_len = execute(data, len);
+			extra_len = execute(data_str.data(), data_str.length());
 		}
 		catch (...)
 		{
@@ -91,7 +119,7 @@ request_parser_impl::parse(const char *data, size_t len)
 			else if ( 0 != _body_expected )
 			{
 				_status = request_parser_impl::READ_BODY;
-				parse_body(data + extra_len, len - extra_len);
+				parse_body(data_str.data() + extra_len, data_str.length() - extra_len);
 			}
 			else
 			{
@@ -106,7 +134,7 @@ request_parser_impl::parse(const char *data, size_t len)
 	else if ( _status == status_type::EXPECT_CONTINUE
 	       || _status == status_type::READ_BODY       )
 	{
-		parse_body(data, len);
+		parse_body(data_str.data(), data_str.length());
 	}
 
 	return _status;
