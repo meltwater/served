@@ -54,7 +54,7 @@ private:
 	boost::asio::ip::tcp::socket _socket;
 	connection_manager &         _connection_manager;
 	multiplexer        &         _request_handler;
-	std::array<char, 8192>       _buffer;
+	std::array<char, 524288>       _buffer;
 	size_t                       _max_req_size_bytes;
 	int                          _read_timeout;
 	int                          _write_timeout;
