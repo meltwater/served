@@ -95,7 +95,7 @@ response::body_size()
 
 //  -----  serialization  -----
 
-const std::string
+const std::string &
 response::to_buffer()
 {
 	std::stringstream ss;
