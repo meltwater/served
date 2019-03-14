@@ -129,7 +129,7 @@ public:
 	 *
 	 * @return the HTTP response
 	 */
-	const std::string to_buffer();
+	const std::string & to_buffer();
 
 	//  -----  stock reply  -----
 
