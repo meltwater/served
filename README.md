@@ -21,7 +21,7 @@ Features:
 
 ### Requirements
 
-* [Required] - [Boost 1.56](http://www.boost.org/)
+* [Required] - [Boost (1.53 or newer)](http://www.boost.org/)
 * [Optional] - [Ragel](http://www.complang.org/ragel/)
 
 ### Building
