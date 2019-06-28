@@ -54,6 +54,12 @@ public:
 	 * @param path_segment the segment of path the variable should be extracted from
 	 */
 	virtual void get_param(served::parameters & params, const std::string & path_segment) = 0;
+	
+	/*
+	 * Class destructor.
+	 */
+	virtual ~segment_matcher()
+	{ }
 };
 
 typedef std::shared_ptr<segment_matcher> segment_matcher_ptr;
