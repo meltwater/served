@@ -25,6 +25,7 @@
 
 #include <boost/asio.hpp>
 #include <string>
+#include <thread>
 #include <served/net/connection_manager.hpp>
 #include <served/multiplexer.hpp>
 
@@ -49,6 +50,7 @@ class server
 	int                            _read_timeout;
 	int                            _write_timeout;
 	size_t                         _req_max_bytes;
+	std::vector<std::thread>       _threads;
 
 public:
 	server(const server&) = delete;
@@ -69,6 +71,11 @@ public:
 	               , const std::string & port
 	               , multiplexer       & mux
 	               , bool              register_signals = true );
+
+	/*
+	 * Destroys the server.
+	 */
+	~server();
 
 	/*
 	 * A call that prompts the server into listening for HTTP requests.

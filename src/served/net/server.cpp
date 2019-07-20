@@ -22,7 +22,6 @@
 
 #include <signal.h>
 #include <utility>
-#include <thread>
 
 #include <served/net/server.hpp>
 
@@ -71,6 +70,30 @@ server::server( const std::string & address
 	do_accept();
 }
 
+server::~server()
+{
+	_acceptor.close();
+	_connection_manager.stop_all();
+
+	if ( ! _io_service.stopped() )
+	{
+		_io_service.stop();
+	}
+
+	if ( _threads.size() > 0 ) {
+		for ( auto & thread : _threads )
+		{
+			if ( thread.joinable() )
+			{
+				thread.join();
+			}
+		}
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		_threads.clear();
+	}
+}
+
 void
 server::run(int n_threads /* = 1 */, bool block /* = true */)
 {
@@ -82,14 +105,13 @@ server::run(int n_threads /* = 1 */, bool block /* = true */)
 	 */
 	if ( n_threads > 1 )
 	{
-		std::vector<std::thread> v_threads;
-		for ( int i = 0; i < n_threads; i++ )
+		for ( int i = 0; i < 1; i++ )
 		{
-			v_threads.push_back(std::thread([this](){
-				_io_service.run();
-			}));
+			_threads.push_back(std::thread(
+					std::bind(static_cast<size_t(boost::asio::io_service::*)()>(
+						&boost::asio::io_service::run), std::ref(_io_service))));
 		}
-		for ( auto & thread : v_threads )
+		for ( auto & thread : _threads )
 		{
 			if ( block )
 			{
