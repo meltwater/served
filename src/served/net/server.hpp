@@ -77,7 +77,7 @@ public:
 	 * and another param which defines the blocking nature.
 	 *
 	 * @param n_threads the number of threads to pool for request handling
-	 * @param block if n_threads > 0, defines whether this operation is blocking or not
+	 * @param block if n_threads > 1, defines whether this operation is blocking or not
 	 */
 	void run(int n_threads = 1, bool block = true);
 
