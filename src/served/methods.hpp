@@ -26,6 +26,12 @@
 #include <string>
 #include <stdexcept>
 
+#ifdef _MSC_VER
+	// DELETE is also defined as a macro in winnt.h, included through boost::asio
+	#pragma push_macro("DELETE")
+	#undef DELETE
+#endif // _MSC_VER
+
 namespace served {
 
 /*
@@ -115,5 +121,9 @@ method_from_string(const std::string & str)
 }
 
 } // served
+
+#ifdef _MSC_VER
+	#pragma pop_macro("DELETE")
+#endif // _MSC_VER
 
 #endif // SERVED_METHODS_HPP
