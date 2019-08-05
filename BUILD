@@ -49,6 +49,10 @@ cc_library(
         "src/served/net/connection_manager.hpp",
         "src/served/net/server.hpp",
     ],
+    defines = select({
+        "@bazel_tools//src/conditions:windows": ["NOGDI"],
+        "//conditions:default": [],
+    }),
     strip_include_prefix = "src/",
     visibility = ["//visibility:public"],
     deps = [
