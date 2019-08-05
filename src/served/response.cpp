@@ -71,6 +71,12 @@ response::set_body(const std::string & body)
 	_body.str(body);
 }
 
+void response::set_response(const std::shared_ptr<const std::string> &res)
+{
+	respond_with_cache = true;
+	cache = res;
+}
+
 response&
 response::operator<<(std::string const& rhs)
 {
@@ -98,6 +104,10 @@ response::body_size()
 const std::string &
 response::to_buffer()
 {
+
+	if (respond_with_cache)
+		return *cache;
+
 	std::stringstream ss;
 
 	ss << "HTTP/1.1 " << _status << " " << status::status_to_reason(_status) << "\r\n";
