@@ -26,6 +26,8 @@
 #include <sstream>
 #include <iostream>
 #include <map>
+#include <memory>
+#include <string>
 
 #include <served/status.hpp>
 
@@ -51,6 +53,10 @@ class response
 	header_list       _headers;
 	std::stringstream _body;
 	std::string       _buffer;
+
+	bool respond_with_cache{false};
+	std::shared_ptr<const std::string> cache;
+
 
 public:
 	//  -----  constructors  -----
@@ -93,6 +99,15 @@ public:
 	 * @param body the response body
 	 */
 	void set_body(const std::string & body);
+
+	/*
+	 * Set the entire response.
+	 *
+	 * Sets the entire response, discarding any previous data stored in both the headers and the body.
+	 *
+	 * @param res the response buffer
+	 */
+	void set_response(const std::shared_ptr<const std::string> &res);
 
 	/*
 	 * Pipe data to the body of the response.
