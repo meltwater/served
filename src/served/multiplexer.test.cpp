@@ -46,7 +46,7 @@ class path_collecting_functor
 {
 	request_router_story & _story_obj;
 public:
-	path_collecting_functor(request_router_story & story_obj)
+	explicit path_collecting_functor(request_router_story & story_obj)
 		: _story_obj(story_obj) {}
 
 	void operator()(served::response & response, const served::request & request)
