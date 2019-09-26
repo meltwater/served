@@ -166,6 +166,13 @@ public:
 	 */
 	const std::string body() const;
 
+	/*
+	 * Get all headers. Read-only, to be used when one wants to iterate over the headers.
+	 *
+	 * @return header_list as const reference.
+	 */
+	const header_list& get_headers() const;
+
 public:
 	//  -----  public members  -----
 
