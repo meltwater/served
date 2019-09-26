@@ -138,4 +138,10 @@ request::body() const
 	return _body;
 }
 
+const request::header_list&
+request::get_headers() const
+{
+	return _headers;
+}
+
 } // served
