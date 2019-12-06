@@ -83,7 +83,11 @@ connection::start()
 void
 connection::stop()
 {
-	_socket.close();
+    try{
+        _socket.close();
+    }catch(std::exception & e){
+        std::cerr << "Error in connection::stop() " << e.what() << std::endl;
+    }
 }
 
 void
