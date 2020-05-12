@@ -52,7 +52,7 @@ OPTION (SERVED_BUILD_DEB "Build DEB package" OFF)
 SET (CMAKE_VERBOSE_MAKEFILE 0) # Use 1 for debugging, 0 for release
 
 #
-# Generate
+# Generate Compile Commands JSON
 #
 IF(${CMAKE_VERSION} VERSION_GREATER "3.5.2") 
     SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
