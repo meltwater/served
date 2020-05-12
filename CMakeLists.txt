@@ -21,7 +21,7 @@
 #
 # Project Properties
 #
-CMAKE_MINIMUM_REQUIRED (VERSION 2.6.2)
+CMAKE_MINIMUM_REQUIRED (VERSION 2.6.3)
 PROJECT (served)
 SET (APPLICATION_NAME "Served HTTP REST Library")
 SET (APPLICATION_CODENAME "${PROJECT_NAME}")
@@ -50,6 +50,13 @@ OPTION (SERVED_BUILD_DEB "Build DEB package" OFF)
 # Debugging Options
 #
 SET (CMAKE_VERBOSE_MAKEFILE 0) # Use 1 for debugging, 0 for release
+
+#
+# Generate Compile Commands JSON
+#
+IF(${CMAKE_VERSION} VERSION_GREATER "3.5.2") 
+    SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+ENDIF()
 
 #
 # Project Output Paths
