@@ -55,7 +55,7 @@ response::set_header(std::string const& header, std::string const& value)
 
 	std::transform(header.begin(), header.end(), mut_header.begin(), ::tolower);
 
-	_headers[mut_header] = header_pair(header, value);
+	_headers.emplace(std::make_pair(mut_header, header_pair(header, value)));
 }
 
 void

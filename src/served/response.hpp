@@ -47,7 +47,7 @@ namespace served {
 class response
 {
 	typedef std::tuple<std::string, std::string> header_pair;
-	typedef std::map<std::string, header_pair>   header_list;
+	typedef std::multimap<std::string, header_pair>   header_list;
 
 	int               _status;
 	header_list       _headers;
