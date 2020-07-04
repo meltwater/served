@@ -35,7 +35,6 @@ int main(int, char const**)
 	mux.handle("/flat")
 		.get([](served::response & res, const served::request &) {
 			boost::property_tree::ptree root;
-			std::string response;
 			std::stringstream ss;
 
 			// Populate JSON response
