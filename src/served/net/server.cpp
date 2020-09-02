@@ -37,8 +37,8 @@ server::server( const std::string & address
 	: _io_service()
 	, _signals(_io_service)
 	, _acceptor(_io_service)
-	, _connection_manager()
 	, _socket(_io_service)
+	, _connection_manager()
 	, _request_handler(mux)
 	, _read_timeout(0)
 	, _write_timeout(0)
@@ -67,8 +67,14 @@ server::server( const std::string & address
 	_acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
 	_acceptor.bind(endpoint);
 	_acceptor.listen();
-
 	do_accept();
+}
+
+server::~server() {
+  if (_acceptor.is_open()) {
+	_acceptor.close();
+  }
+  stop();
 }
 
 void
@@ -82,25 +88,21 @@ server::run(int n_threads /* = 1 */, bool block /* = true */)
 	 */
 	if ( n_threads > 1 )
 	{
-		std::vector<std::thread> v_threads;
+	  	_threads.reserve(n_threads);
 		for ( int i = 0; i < n_threads; i++ )
 		{
-			v_threads.push_back(std::thread([this](){
+		  _threads.emplace_back([this] {
 				_io_service.run();
-			}));
+			});
 		}
-		for ( auto & thread : v_threads )
+		for ( auto & thread : _threads )
 		{
 			if ( block )
 			{
 				if ( thread.joinable() )
 				{
-					thread.join();
+				  thread.join();
 				}
-			}
-			else
-			{
-				thread.detach();
 			}
 		}
 	}
@@ -133,8 +135,15 @@ server::stop()
 {
 	if ( ! _io_service.stopped() )
 	{
-		_io_service.stop();
+	  _io_service.stop();
 	}
+
+  	for (auto& thread : _threads) {
+  	  if (thread.joinable()) {
+  	    thread.join();
+  	  }
+  	}
+  	_threads.clear();
 }
 
 void
@@ -178,3 +187,4 @@ server::do_await_stop()
 			_connection_manager.stop_all();
 		});
 }
+

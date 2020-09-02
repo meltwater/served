@@ -43,15 +43,17 @@ class server
 	boost::asio::io_service        _io_service;
 	boost::asio::signal_set        _signals;
 	boost::asio::ip::tcp::acceptor _acceptor;
-	connection_manager             _connection_manager;
-	boost::asio::ip::tcp::socket   _socket;
-	multiplexer &                  _request_handler;
+    boost::asio::ip::tcp::socket   _socket;
+    connection_manager             _connection_manager;
+    multiplexer &                  _request_handler;
 	int                            _read_timeout;
 	int                            _write_timeout;
 	size_t                         _req_max_bytes;
+	std::vector<std::thread>	   _threads;
 
 public:
 	server(const server&) = delete;
+	~server();
 
 	server& operator=(const server&) = delete;
 
