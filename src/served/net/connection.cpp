@@ -74,7 +74,7 @@ connection::start()
 		_read_timer.async_wait([this, self](const boost::system::error_code& error) {
 			if ( error.value() != boost::system::errc::operation_canceled )
 			{
-				_connection_manager.stop(shared_from_this());
+				_connection_manager.stop(self);
 			}
 		});
 	}
