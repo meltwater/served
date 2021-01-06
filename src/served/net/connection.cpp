@@ -31,6 +31,15 @@
 using namespace served;
 using namespace served::net;
 
+
+void stop_on_timeout(const boost::system::error_code& error, const connection_ptr & self){
+    if ( error.value() != boost::system::errc::operation_canceled )
+    {
+        self->_connection_manager.stop(self);
+    }
+}
+
+
 connection::connection( boost::asio::io_service &    io_service
                       , boost::asio::ip::tcp::socket socket
                       , connection_manager &         manager
@@ -56,10 +65,10 @@ connection::connection( boost::asio::io_service &    io_service
 void
 connection::start()
 {
-	boost::system::error_code ec;
-	boost::asio::ip::tcp::endpoint endpoint = _socket.remote_endpoint(ec);
-
     connection_ptr self(shared_from_this());
+
+    boost::system::error_code ec;
+	boost::asio::ip::tcp::endpoint endpoint = _socket.remote_endpoint(ec);
 
 	if (ec)
 	{
@@ -74,10 +83,7 @@ connection::start()
 	{
 
         _read_timer.async_wait([self](const boost::system::error_code& error) {
-			if ( error.value() != boost::system::errc::operation_canceled )
-			{
-                self->_connection_manager.stop(self);
-			}
+            stop_on_timeout(error, self);
 		});
 	}
 }
@@ -85,11 +91,19 @@ connection::start()
 void
 connection::stop()
 {
-    try{
-        _socket.close();
-    }catch(std::exception & e){
-        std::cerr << "Error in connection::stop() " << e.what() << std::endl;
+    // use a lock here to avoid any race condition on timeout
+    std::lock_guard _l(_conn_mutex);
+
+    if(_status != status_type::STOPPED){
+
+        _status = status_type::STOPPED;
+        try{
+            _socket.close();
+        }catch(std::exception & e){
+            std::cerr << "Error in connection::stop() " << e.what() << std::endl;
+        }
     }
+
 }
 
 void
@@ -101,6 +115,7 @@ connection::do_read()
         [self](boost::system::error_code ec, std::size_t bytes_transferred) {
 			if (!ec)
 			{
+                std::lock_guard _l(self->_conn_mutex);
 				request_parser_impl::status_type result;
                 result = self->_request_parser.parse(self->_buffer.data(), bytes_transferred);
 
@@ -129,10 +144,7 @@ connection::do_read()
                     if ( self->_write_timeout > 0 )
 					{
                         self->_write_timer.async_wait([self](const boost::system::error_code& error) {
-							if ( error.value() != boost::system::errc::operation_canceled )
-							{
-                                self->_connection_manager.stop(self);
-							}
+                            stop_on_timeout(error, self);
 						});
 					}
                     self->do_write();
@@ -195,13 +207,14 @@ connection::do_write()
         [self](boost::system::error_code ec, std::size_t) {
 			if ( !ec )
 			{
+                std::lock_guard _l(self->_conn_mutex);
                 if ( status_type::READING == self->_status )
 				{
 					// If we're still reading from the client then continue
                     self->do_read();
 					return;
 				}
-				else
+                else if(status_type::DONE == self->_status )
 				{
 					// Initiate graceful connection closure.
 					boost::system::error_code ignored_ec;
