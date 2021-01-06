@@ -69,7 +69,7 @@ connection::start()
 
 	if ( _read_timeout > 0 )
 	{
-		auto self(shared_from_this());
+        connection_ptr self(shared_from_this());
 
 		_read_timer.async_wait([this, self](const boost::system::error_code& error) {
 			if ( error.value() != boost::system::errc::operation_canceled )
@@ -93,7 +93,7 @@ connection::stop()
 void
 connection::do_read()
 {
-	auto self(shared_from_this());
+	connection_ptr self(shared_from_this());
 
 	_socket.async_read_some(boost::asio::buffer(_buffer.data(), _buffer.size()),
 		[this, self](boost::system::error_code ec, std::size_t bytes_transferred) {
@@ -187,7 +187,7 @@ connection::do_read()
 void
 connection::do_write()
 {
-	auto self(shared_from_this());
+	connection_ptr self(shared_from_this());
 
 	boost::asio::async_write(_socket, boost::asio::buffer(_response.to_buffer()),
 		[this, self](boost::system::error_code ec, std::size_t) {
