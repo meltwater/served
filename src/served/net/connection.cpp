@@ -58,6 +58,9 @@ connection::start()
 {
 	boost::system::error_code ec;
 	boost::asio::ip::tcp::endpoint endpoint = _socket.remote_endpoint(ec);
+
+    connection_ptr self(shared_from_this());
+
 	if (ec)
 	{
 		_connection_manager.stop(shared_from_this());
@@ -69,7 +72,6 @@ connection::start()
 
 	if ( _read_timeout > 0 )
 	{
-        connection_ptr self(shared_from_this());
 
 		_read_timer.async_wait([this, self](const boost::system::error_code& error) {
 			if ( error.value() != boost::system::errc::operation_canceled )
