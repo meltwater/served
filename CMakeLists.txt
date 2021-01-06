@@ -77,13 +77,18 @@ FIND_PACKAGE (RAGEL)
 
 FIND_PACKAGE (Threads)
 
-INCLUDE (EnableStdCXX11)
-ENABLE_STDCXX11 ()
+# Enforce C++17
+# This has the advantage to remove an undefined behavior from shared_from_this
+# https://en.cppreference.com/w/cpp/memory/enable_shared_from_this/shared_from_this
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 
 #
 # Enable warnings
 #
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Wno-missing-field-initializers")
+set(CMAKE_CXX_FLAGS "-Wall -pedantic -Wextra -Wno-missing-field-initializers")
 
 #
 # Configure Files

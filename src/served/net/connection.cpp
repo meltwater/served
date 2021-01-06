@@ -63,7 +63,7 @@ connection::start()
 
 	if (ec)
 	{
-		_connection_manager.stop(shared_from_this());
+        _connection_manager.stop(self);
 		return;
 	}
 
@@ -73,10 +73,10 @@ connection::start()
 	if ( _read_timeout > 0 )
 	{
 
-		_read_timer.async_wait([this, self](const boost::system::error_code& error) {
+        _read_timer.async_wait([self](const boost::system::error_code& error) {
 			if ( error.value() != boost::system::errc::operation_canceled )
 			{
-				_connection_manager.stop(self);
+                self->_connection_manager.stop(self);
 			}
 		});
 	}
@@ -98,48 +98,48 @@ connection::do_read()
 	connection_ptr self(shared_from_this());
 
 	_socket.async_read_some(boost::asio::buffer(_buffer.data(), _buffer.size()),
-		[this, self](boost::system::error_code ec, std::size_t bytes_transferred) {
+        [self](boost::system::error_code ec, std::size_t bytes_transferred) {
 			if (!ec)
 			{
 				request_parser_impl::status_type result;
-				result = _request_parser.parse(_buffer.data(), bytes_transferred);
+                result = self->_request_parser.parse(self->_buffer.data(), bytes_transferred);
 
 				if ( request_parser_impl::FINISHED == result )
 				{
 					// Parsing is finished, stop reading and send response.
 
-					_read_timer.cancel();
-					_status = status_type::DONE;
+                    self->_read_timer.cancel();
+                    self->_status = status_type::DONE;
 
 					try
 					{
-						_request_handler.forward_to_handler(_response, _request);
+                        self->_request_handler.forward_to_handler(self->_response, self->_request);
 					}
 					catch (const served::request_error & e)
 					{
-						_response.set_status(e.get_status_code());
-						_response.set_header("Content-Type", e.get_content_type());
-						_response.set_body(e.what());
+                        self->_response.set_status(e.get_status_code());
+                        self->_response.set_header("Content-Type", e.get_content_type());
+                        self->_response.set_body(e.what());
 					}
 					catch (...)
 					{
-						response::stock_reply(status_5XX::INTERNAL_SERVER_ERROR, _response);
+                        response::stock_reply(status_5XX::INTERNAL_SERVER_ERROR, self->_response);
 					}
 
-					if ( _write_timeout > 0 )
+                    if ( self->_write_timeout > 0 )
 					{
-						_write_timer.async_wait([this, self](const boost::system::error_code& error) {
+                        self->_write_timer.async_wait([self](const boost::system::error_code& error) {
 							if ( error.value() != boost::system::errc::operation_canceled )
 							{
-								_connection_manager.stop(self);
+                                self->_connection_manager.stop(self);
 							}
 						});
 					}
-					do_write();
+                    self->do_write();
 
 					try
 					{
-						_request_handler.on_request_handled(_response, _request);
+                        self->_request_handler.on_request_handled(self->_response, self->_request);
 					}
 					catch (...)
 					{
@@ -149,38 +149,38 @@ connection::do_read()
 				{
 					// The client is expecting a 100-continue, so we serve it and continue reading.
 
-					response::stock_reply(served::status_1XX::CONTINUE, _response);
-					do_write();
+                    response::stock_reply(served::status_1XX::CONTINUE, self->_response);
+                    self->do_write();
 				}
 				else if ( request_parser_impl::READ_HEADER == result
 				       || request_parser_impl::READ_BODY   == result )
 				{
 					// Not finished reading response, continue.
 
-					do_read();
+                    self->do_read();
 				}
 				else if ( request_parser_impl::REJECTED_REQUEST_SIZE == result )
 				{
 					// The request is too large and has been rejected
 
-					_status = status_type::DONE;
+                    self->_status = status_type::DONE;
 
-					response::stock_reply(served::status_4XX::REQ_ENTITY_TOO_LARGE, _response);
-					do_write();
+                    response::stock_reply(served::status_4XX::REQ_ENTITY_TOO_LARGE, self->_response);
+                    self->do_write();
 				}
 				else if ( request_parser_impl::ERROR == result )
 				{
 					// Error occurred while parsing, respond with BAD_REQUEST
 
-					_status = status_type::DONE;
+                    self->_status = status_type::DONE;
 
-					response::stock_reply(served::status_4XX::BAD_REQUEST, _response);
-					do_write();
+                    response::stock_reply(served::status_4XX::BAD_REQUEST, self->_response);
+                    self->do_write();
 				}
 			}
 			else if (ec != boost::asio::error::operation_aborted)
 			{
-				_connection_manager.stop(self);
+                self->_connection_manager.stop(self);
 			}
 		}
 	);
@@ -192,26 +192,26 @@ connection::do_write()
 	connection_ptr self(shared_from_this());
 
 	boost::asio::async_write(_socket, boost::asio::buffer(_response.to_buffer()),
-		[this, self](boost::system::error_code ec, std::size_t) {
+        [self](boost::system::error_code ec, std::size_t) {
 			if ( !ec )
 			{
-				if ( status_type::READING == _status )
+                if ( status_type::READING == self->_status )
 				{
 					// If we're still reading from the client then continue
-					do_read();
+                    self->do_read();
 					return;
 				}
 				else
 				{
 					// Initiate graceful connection closure.
 					boost::system::error_code ignored_ec;
-					_socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, ignored_ec);
+                    self->_socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both, ignored_ec);
 				}
 			}
 
 			if ( ec != boost::asio::error::operation_aborted )
 			{
-				_connection_manager.stop(self);
+                self->_connection_manager.stop(self);
 			}
 		}
 	);
