@@ -25,6 +25,7 @@
 
 #include <boost/asio.hpp>
 #include <string>
+#include <thread>
 #include <served/net/connection_manager.hpp>
 #include <served/multiplexer.hpp>
 
@@ -49,6 +50,7 @@ class server
 	int                            _read_timeout;
 	int                            _write_timeout;
 	size_t                         _req_max_bytes;
+	std::vector<std::thread>       _threads;
 
 public:
 	server(const server&) = delete;
@@ -71,13 +73,18 @@ public:
 	               , bool              register_signals = true );
 
 	/*
+	 * Destroys the server.
+	 */
+	~server();
+
+	/*
 	 * A call that prompts the server into listening for HTTP requests.
 	 *
 	 * This call accepts a value for how large the thread pool should be for distributing requests
 	 * and another param which defines the blocking nature.
 	 *
 	 * @param n_threads the number of threads to pool for request handling
-	 * @param block if n_threads > 0, defines whether this operation is blocking or not
+	 * @param block if n_threads > 1, defines whether this operation is blocking or not
 	 */
 	void run(int n_threads = 1, bool block = true);
 

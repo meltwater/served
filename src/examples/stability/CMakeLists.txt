@@ -18,14 +18,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-ADD_SUBDIRECTORY (binary_data)
-ADD_SUBDIRECTORY (form_data)
-ADD_SUBDIRECTORY (handlers)
-ADD_SUBDIRECTORY (hello_world)
-ADD_SUBDIRECTORY (hello_world_no_blocking)
-ADD_SUBDIRECTORY (json_data)
-ADD_SUBDIRECTORY (query_params)
-ADD_SUBDIRECTORY (list_endpoints)
-ADD_SUBDIRECTORY (request_logger_plugin)
-ADD_SUBDIRECTORY (rest_resource)
-ADD_SUBDIRECTORY (stability)
+#
+# Locate project sources
+#
+FILE (GLOB_RECURSE eg_stability_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp ${CMAKE_CURRENT_SOURCE_DIR}/*.hpp)
+
+#
+# Configure common project settings
+#
+SET (eg_stability_LIBS ${PROJECT_NAME} ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+
+#
+# Executable build rules
+#
+ADD_EXECUTABLE (eg_stability ${eg_stability_SRCS})
+TARGET_LINK_LIBRARIES (eg_stability ${eg_stability_LIBS})
+INSTALL (TARGETS eg_stability DESTINATION bin)
