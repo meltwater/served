@@ -36,6 +36,8 @@
 namespace served { namespace net {
 
 class connection_manager;
+class connection;
+
 
 /*
  * Manages the lifecycle of a single HTTP connection.
@@ -46,15 +48,14 @@ class connection
 	: public std::enable_shared_from_this<connection>
 {
 public:
-	enum status_type { READING = 0, DONE };
+    enum status_type { READING = 0, DONE, STOPPED };
 
-private:
 	boost::asio::io_service &    _io_service;
 	status_type                  _status;
 	boost::asio::ip::tcp::socket _socket;
 	connection_manager &         _connection_manager;
 	multiplexer        &         _request_handler;
-	std::array<char, 8192>       _buffer;
+	std::array<char, 524288>       _buffer;
 	size_t                       _max_req_size_bytes;
 	int                          _read_timeout;
 	int                          _write_timeout;
@@ -63,6 +64,7 @@ private:
 	response                     _response;
 	boost::asio::deadline_timer  _read_timer;
 	boost::asio::deadline_timer  _write_timer;
+    std::mutex _conn_mutex;
 
 public:
 	connection& operator=(const connection&) = delete;
@@ -112,7 +114,9 @@ private:
 	void do_write();
 };
 
+
 typedef std::shared_ptr<connection> connection_ptr;
+
 
 } } // net, served
 
